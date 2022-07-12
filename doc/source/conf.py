@@ -150,11 +150,11 @@ sphinx_gallery_conf = {
 
 
 # -- Options for HTML output -------------------------------------------------
-html_short_title = html_title = "PyFluent"
+html_short_title = html_title = "PyFluent Examples"
 html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pyfluent",
+    "github_url": "https://github.com/pyansys/pyfluent-examples",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
@@ -166,7 +166,7 @@ html_theme_options = {
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "pyfluentdoc"
+htmlhelp_basename = "pyfluent-examples-doc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -178,7 +178,7 @@ latex_elements = {}
 latex_documents = [
     (
         master_doc,
-        f"pyfluent-Documentation-{__version__}.tex",
+        f"pyfluent-examples-Documentation-{__version__}.tex",
         "ansys.fluent.core Documentation",
         author,
         "manual",
