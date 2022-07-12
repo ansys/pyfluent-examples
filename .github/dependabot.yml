@@ -1,7 +1,13 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"directory: "/requirements"schedule:
+  - package-ecosystem: "pip" # See documentation for possible values
+    directory: "/requirements" # Location of package manifests
+    insecure-external-code-execution: allow
+    schedule:
       interval: "daily"
     labels:
-      - "maintenance"
-      - "dependencies"
+      - "Maintenance"
+      - "Dependencies"
+    ignore:
+      - dependency-name: "vtk"
+      - dependency-name: "grpcio"
