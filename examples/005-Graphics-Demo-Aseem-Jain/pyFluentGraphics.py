@@ -14,7 +14,7 @@
 # For graphics pyVista Library is used.
 
 # Plots
-# At presnt only XY plots are supported.
+# At present only XY plots are supported.
 # For plots matplotlib Library is used.
 # In addition animationS are also supported
 
@@ -25,15 +25,15 @@ from ansys.fluent.visualization import set_config
 set_config(blocking=True, set_view_on_display="isometric")
 
 # Connect to session
-session = pyfluent.launch_fluent(show_gui=True)
+session = pyfluent.launch_fluent(mode="solver")
 
 # Read case and Data
-session.solver.tui.file.read_case("elbow1")
+session.tui.file.read_case("elbow1")
 
-# session.solver.tui.file.read_case(case_file_name='elbow1').result()
+# session.tui.file.read_case(case_file_name='elbow1').result()
 
 # Initialize workflow
-session.solver.tui.solve.initialize.initialize_flow()
+session.tui.solve.initialize.initialize_flow()
 
 # Import modules
 
@@ -106,17 +106,17 @@ contour2.display("contour-2")
 # Plot properties
 p = pyvista_windows_manager.get_plotter("contour-1")
 p.view_isometric()
-p.add_axes()
+# p.add_axes()
 p.add_floor(offset=1, show_edges=True)
 p.add_title("Contour Velocity on Solid", font="courier", color="grey", font_size=10)
 
 contour1.display("contour-1_2")
 p2 = pyvista_windows_manager.get_plotter("contour-1_2")
-p2.add_axes(box=True)
+# p2.add_axes(box=True)
 p2.view_isometric()
 
 # Save the plot
-pyvista_windows_manager.save_graphic("contour-1", "svg")
+# pyvista_windows_manager.save_graphic("contour-1", "svg")
 
 # Create and set iso surface properties
 surface1 = graphics_session1.Surfaces["surface-1"]
@@ -125,7 +125,7 @@ surface1.definition.iso_surface.rendering = "contour"
 surface1.definition.iso_surface.iso_value = 0.3
 
 # Display surface
-surface1.display("surface-1")
+# surface1.display("surface-1")
 
 # Create Mesh
 mesh1 = graphics_session1.Meshes["mesh-1"]
@@ -133,7 +133,7 @@ mesh1.show_edges = True
 mesh1.surfaces_list = ["wall"]
 
 # Display Mesh
-mesh1.display("mesh-1")
+# mesh1.display("mesh-1")
 
 # Create and set iso vector properties
 vector1 = graphics_session1.Vectors["vector-1"]
@@ -145,7 +145,7 @@ vector1.skip = 4
 vector1.display("vector-1")
 
 # plot sessions
-get_ipython().run_line_magic("matplotlib", "notebook")
+# get_ipython().run_line_magic("matplotlib", "notebook")
 plots_session1 = Plots(session)
 p1 = plots_session1.XYPlots["p1"]
 p1.surfaces_list = ["symmetry"]
@@ -153,7 +153,7 @@ p1.y_axis_function = "temperature"
 p1.plot("p1")
 
 # Save plot
-matplot_windows_manager.save_graphic("p1", "png")
+# matplot_windows_manager.save_graphic("p1", "png")
 
 p1.surfaces_list = ["symmetry"]
 p1.y_axis_function = "pressure"
@@ -236,23 +236,23 @@ from ansys.fluent.core.utils.async_execution import asynchronous
 
 @asynchronous
 def iterate(count):
-    session.solver.tui.solve.iterate(count)
+    session.tui.solve.iterate(count)
 
 
 iterate(100)
 
-# session.solver.tui.solve.iterate(100)
+# session.tui.solve.iterate(100)
 # session.tui.solver.solve.dual_time_iterate(20, 20).result()
 
 # Close plotter to write animations
 pyvista_windows_manager.close_windows()
 
 # Play animation by loading gif file
-from IPython.display import Image
+# from IPython.display import Image
 
-Image(filename="contour-1.gif")
+# Image(filename="contour-1.gif")
 
-Image(filename="contour-2.gif")
+# Image(filename="contour-2.gif")
 
 # End current session
 session.exit()
