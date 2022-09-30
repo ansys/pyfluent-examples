@@ -10,7 +10,7 @@ set_config(blocking=True, set_view_on_display="isometric")
 
 # session = pyfluent.launch_fluent(version='3d', precision='double',
 # processor_count=6, meshing_mode=True)
-session = pyfluent.launch_fluent(mode="meshing", show_gui=True)
+session = pyfluent.launch_fluent(mode="meshing")
 
 """
 This api command used to connect live session of fluent on cluster or local
@@ -111,7 +111,7 @@ session.tui.define.parameters.output_parameters.create("report-definition", "cd-
 session.tui.solve.report_plots.add("cd-mon1", "report-defs", "cd-mon1", "()", "q")
 
 # set number of iterations
-session.tui.solve.set.number_of_iterations(3)  # 600
+session.tui.solve.set.number_of_iterations(2)  # 600
 
 # Initialize solver workflow
 session.tui.solve.initialize.initialize_flow()
@@ -124,24 +124,24 @@ session.tui.solve.iterate()
 # mid-palne for post-processing
 session.tui.surface.iso_surface("x-coordinate", "xmid", "()", "()", 0, "()")
 
-try:
-    import ansys.fluent.visualization.pyvista as pv
-except ImportError:
-    import ansys.fluent.post.pyvista as pv
-
-# Plot - contour field - velocity-magnitude
-graphics_session1 = pv.Graphics(session)
-contour1 = graphics_session1.Contours["contour-1"]
-contour1.field = "velocity-magnitude"
-contour1.surfaces_list = ["xmid"]
-contour1.display("window-1")
-
-# Plot - contour field - pressure-coefficient
-contour2 = graphics_session1.Contours["contour-2"]
-contour2.field.allowed_values
-contour1.field = "pressure-coefficient"
-contour1.surfaces_list = ["xmid"]
-contour1.display("window-2")
+# try:
+#     import ansys.fluent.visualization.pyvista as pv
+# except ImportError:
+#     import ansys.fluent.post.pyvista as pv
+#
+# # Plot - contour field - velocity-magnitude
+# graphics_session1 = pv.Graphics(session)
+# contour1 = graphics_session1.Contours["contour-1"]
+# contour1.field = "velocity-magnitude"
+# contour1.surfaces_list = ["xmid"]
+# contour1.display("window-1")
+#
+# # Plot - contour field - pressure-coefficient
+# contour2 = graphics_session1.Contours["contour-2"]
+# contour2.field.allowed_values
+# contour1.field = "pressure-coefficient"
+# contour1.surfaces_list = ["xmid"]
+# contour1.display("window-2")
 
 # Write and save the case file
 session.tui.file.write_case_data("ahmed_body_final.cas.h5")
