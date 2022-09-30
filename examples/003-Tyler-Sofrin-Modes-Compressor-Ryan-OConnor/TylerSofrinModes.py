@@ -46,7 +46,7 @@
 import ansys.fluent.core as pyfluent
 
 # Create a session object
-session = pyfluent.launch_fluent(show_gui=True)
+session = pyfluent.launch_fluent(mode="solver")
 
 # Check server status
 session.check_health()
@@ -77,7 +77,7 @@ m_inc = 2
 # The dat file should correspond to the already completed DFT simulation.
 
 # Read a case file
-session.solver.tui.file.read_case_data(
+session.tui.file.read_case_data(
     "axial_comp_fullWheel_DFT.cas.h5"
 )  # The dat file containing the DFT results
 
@@ -88,7 +88,7 @@ import math
 for angle in range(0, 360, dtheta):
     x = math.cos(math.radians(angle)) * r
     y = math.sin(math.radians(angle)) * r
-    session.solver.tui.surface.point_surface("point-" + str(angle), x, y, z)
+    session.tui.surface.point_surface("point-" + str(angle), x, y, z)
 
 
 # Compute An and Bn at each monitor point
@@ -97,28 +97,28 @@ import numpy as np
 An = np.zeros((len(varname), int(360 / dtheta)))
 Bn = np.zeros((len(varname), int(360 / dtheta)))
 
-# Create a root object
-root = session.solver.root
-root.solution.report_definitions.surface["mag-report"] = {
+session.solution.report_definitions.surface["mag-report"] = {
     "report_type": "surface-vertexmax"
 }
-root.solution.report_definitions.surface["phase-report"] = {
+session.solution.report_definitions.surface["phase-report"] = {
     "report_type": "surface-vertexmax"
 }
 
 for angle_ind, angle in enumerate(range(0, 360, dtheta)):
     for n_ind, variable in enumerate(varname):
-        root.solution.report_definitions.surface["mag-report"] = {
+        session.solution.report_definitions.surface["mag-report"] = {
             "surface_names": ["point-" + str(angle)],
             "field": str(variable) + "-mag",
         }
-        mag = root.solution.report_definitions.compute(report_defs=["mag-report"])
+        mag = session.solution.report_definitions.compute(report_defs=["mag-report"])
         mag = mag[0]["mag-report"][0]
-        root.solution.report_definitions.surface["phase-report"] = {
+        session.solution.report_definitions.surface["phase-report"] = {
             "surface_names": ["point-" + str(angle)],
             "field": str(variable) + "-phase",
         }
-        phase = root.solution.report_definitions.compute(report_defs=["phase-report"])
+        phase = session.solution.report_definitions.compute(
+            report_defs=["phase-report"]
+        )
         phase = phase[0]["phase-report"][0]
         An[n_ind][angle_ind] = mag * math.cos(phase)
         Bn[n_ind][angle_ind] = -mag * math.sin(phase)
