@@ -14,16 +14,16 @@ reynolds_number = np.zeros((len(omega), len(visc)))
 
 # Create a session
 session = pyfluent.launch_fluent(
-    version="3d", precision="double", processor_count=6, show_gui=True
+    version="3d", precision="double", processor_count=6, mode="solver"
 )
 
 # Read case file
-session.solver.tui.file.read_case("test-laminar-visc.cas.h5")
+session.tui.file.read_case("test-laminar-visc.cas.h5")
 
 # DOE
 for i in range(len(omega)):
     for j in range(len(visc)):
-        session.solver.tui.define.materials.change_create(
+        session.tui.define.materials.change_create(
             "water-liquid",
             "water-liquid",
             "no",
@@ -36,16 +36,16 @@ for i in range(len(omega)):
             "no",
             "no",
         )
-        session.solver.tui.define.boundary_conditions.set.fluid(
+        session.tui.define.boundary_conditions.set.fluid(
             ["fluid_mrf*"], "mrf-omega", "no", omega[i], "q"
         )
-        session.solver.tui.define.boundary_conditions.set.wall(
+        session.tui.define.boundary_conditions.set.wall(
             ["wall_shaft*"], "omega", "no", omega[i], "q"
         )
-        session.solver.tui.solve.set.number_of_iterations(2)  # 5000
-        session.solver.tui.solve.initialize.initialize_flow()
-        session.solver.tui.solve.iterate()
-        results_list = session.solver.root.solution.report_definitions.compute(
+        session.tui.solve.set.number_of_iterations(2)  # 5000
+        session.tui.solve.initialize.initialize_flow()
+        session.tui.solve.iterate()
+        results_list = session.solution.report_definitions.compute(
             report_defs=["torque"]
         )
         val = results_list[0]["torque"][0]
