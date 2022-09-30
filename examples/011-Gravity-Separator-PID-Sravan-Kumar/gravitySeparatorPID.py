@@ -5,11 +5,11 @@ import numpy as np
 
 # Create a session and launch the fluent
 session = pyfluent.launch_fluent(
-    version="2d", precision="double", processor_count=6, show_gui=True
+    version="2d", precision="double", processor_count=6, mode="solver"
 )
 
 # Read a case file
-session.solver.tui.file.read_case_data("2d-separator.cas.h5")
+session.tui.file.read_case_data("2d-separator.cas.h5")
 
 pid_kp = 2.0
 pid_ti = 0.01
@@ -55,9 +55,8 @@ delta_t = 1
 n = int(total_iterations / pid_update_frequency)
 water_level = np.zeros(int(total_iterations / pid_update_frequency))
 water_pressure = np.zeros(int(total_iterations / pid_update_frequency))
-root = session.solver.root
 for i in range(n):
-    session.solver.tui.solve.iterate(pid_update_frequency)
+    session.tui.solve.iterate(pid_update_frequency)
     current_water_level = eval(
         session.scheme_eval.exec(
             (
@@ -76,7 +75,7 @@ for i in range(n):
     )
     water_pressure[i] = control_value
     error_old = error
-    root.setup.boundary_conditions.pressure_outlet["water_outlet"].phase[
+    session.setup.boundary_conditions.pressure_outlet["water_outlet"].phase[
         "mixture"
     ].gauge_pressure = control_value
 
@@ -97,7 +96,7 @@ plt.xlabel("Iterations")
 plt.show()
 
 # Write and save the case file
-session.solver.tui.file.write_case_data("2d-separator-final.cas.h5")
+session.tui.file.write_case_data("2d-separator-final.cas.h5")
 
 # End current session
 session.exit()
