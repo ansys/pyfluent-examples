@@ -7,50 +7,50 @@ pyfluent.set_log_level("INFO")
 
 # Create a session
 session = pyfluent.launch_fluent(
-    version="3d", precision="double", processor_count=6, show_gui=True
+    version="3d", precision="double", processor_count=6, mode="solver"
 )
 
 # Fluent Solver Setup
 # Read case file
-session.solver.tui.file.read_case("oil_separator.msh.h5")
+session.tui.file.read_case("oil_separator.msh.h5")
 
 # Set gravity
-session.solver.tui.define.operating_conditions.gravity("Yes", 0, -9.81, 0)
+session.tui.define.operating_conditions.gravity("Yes", 0, -9.81, 0)
 
 # Set viscous parameters
-session.solver.tui.define.models.viscous.ke_realizable("yes")
+session.tui.define.models.viscous.ke_realizable("yes")
 
 # Set boundary condition
-session.solver.tui.define.boundary_conditions.list_zones()
+session.tui.define.boundary_conditions.list_zones()
 
 # Set velocity inlet
-session.solver.tui.define.boundary_conditions.inlet = "velocity-inlet"
+session.tui.define.boundary_conditions.inlet = "velocity-inlet"
 
-# session.solver.tui.define.boundary_conditions.set.velocity_inlet(
+# session.tui.define.boundary_conditions.set.velocity_inlet(
 #                           'inlet','yes','yes','no',0.0002,'no',0,'no','yes','no','no','yes',5,10
 #                            )
 
-session.solver.tui.solve.set.p_v_coupling(20)
+session.tui.solve.set.p_v_coupling(20)
 
 # Set all discretization scheme constants
-session.solver.tui.solve.set.discretization_scheme("pressure", 14)
-session.solver.tui.solve.set.discretization_scheme("k", 1)
-session.solver.tui.solve.set.discretization_scheme("epsilon", 1)
+session.tui.solve.set.discretization_scheme("pressure", 14)
+session.tui.solve.set.discretization_scheme("k", 1)
+session.tui.solve.set.discretization_scheme("epsilon", 1)
 
 # Set all relaxation constants
-session.solver.tui.solve.set.under_relaxation("pressure", 0.5)
-session.solver.tui.solve.set.under_relaxation("mom", 0.3)
-session.solver.tui.solve.set.under_relaxation("k", 0.6)
-session.solver.tui.solve.set.under_relaxation("epsilon", 0.6)
-session.solver.tui.solve.set.under_relaxation("turb-viscosity", 0.6)
+session.tui.solve.set.under_relaxation("pressure", 0.5)
+session.tui.solve.set.under_relaxation("mom", 0.3)
+session.tui.solve.set.under_relaxation("k", 0.6)
+session.tui.solve.set.under_relaxation("epsilon", 0.6)
+session.tui.solve.set.under_relaxation("turb-viscosity", 0.6)
 
 # Define convergence criteria
-session.solver.tui.solve.monitors.residual.convergence_criteria(
+session.tui.solve.monitors.residual.convergence_criteria(
     0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001
 )
 
 # Define injection properties
-session.solver.tui.define.injections(
+session.tui.define.injections(
     "create-injection",
     "injection-0",
     "no",
@@ -76,10 +76,10 @@ session.solver.tui.define.injections(
 )
 
 # Setup boundary conditions
-session.solver.root.setup.boundary_conditions.wall["wall_trap"].dpm_bc_type = "trap"
+session.setup.boundary_conditions.wall["wall_trap"].dpm_bc_type = "trap"
 
 # Add report definitions
-session.solver.tui.solve.report_definitions.add(
+session.tui.solve.report_definitions.add(
     "vol-avg-vel",
     "volume-average",
     "field",
@@ -91,12 +91,12 @@ session.solver.tui.solve.report_definitions.add(
 )
 
 # Add report plots
-session.solver.tui.solve.report_plots.add(
+session.tui.solve.report_plots.add(
     "vol-avg-vel", "report-defs", "vol-avg-vel", "()", "q"
 )
 
 # Add report files
-session.solver.tui.solve.report_files.add(
+session.tui.solve.report_files.add(
     "vol-avg-vel",
     "report-defs",
     "vol-avg-vel",
@@ -108,65 +108,64 @@ session.solver.tui.solve.report_files.add(
 
 # Run Settings
 # Set number of iterations
-session.solver.tui.solve.set.number_of_iterations(25)  # 1000
+session.tui.solve.set.number_of_iterations(25)  # 1000
 
 # In[26]:
 
 # Initialize solver workflow
-session.solver.tui.solve.initialize.initialize_flow()
+session.tui.solve.initialize.initialize_flow()
 
 # Start iterations
-session.solver.tui.solve.iterate()
+session.tui.solve.iterate()
 
 # Postprocessing
 # Define iso surface
-session.solver.tui.surface.iso_surface("z-coordinate", "zmid", "()", "()", 0, "()")
+session.tui.surface.iso_surface("z-coordinate", "zmid", "()", "()", 0, "()")
 
 # Define plane surface
-session.solver.tui.surface.plane_surface("midplane", "xy-plane", 0)
-root = session.solver.root
+session.tui.surface.plane_surface("midplane", "xy-plane", 0)
 
 # Set contour properties
-root.results.graphics.contour["contour-1"] = {}
-root.results.graphics.contour["contour-1"].surfaces_list = ["zmid"]
-root.results.graphics.contour["contour-1"].surfaces_list()
-root.results.graphics.contour["contour-1"].field = "velocity-magnitude"
+session.results.graphics.contour["contour-1"] = {}
+session.results.graphics.contour["contour-1"].surfaces_list = ["zmid"]
+session.results.graphics.contour["contour-1"].surfaces_list()
+session.results.graphics.contour["contour-1"].field = "velocity-magnitude"
 
 # Display contour
-session.solver.tui.display.objects.display("contour-1")
+session.tui.display.objects.display("contour-1")
 
 # Set views properties
-session.solver.tui.display.views.restore_view("front")
-session.solver.tui.display.views.auto_scale()
+session.tui.display.views.restore_view("front")
+session.tui.display.views.auto_scale()
 
 # Set windows resolution
-session.solver.tui.display.set.picture.use_window_resolution("no")
+session.tui.display.set.picture.use_window_resolution("no")
 
 # Set x axis resolution
-session.solver.tui.display.set.picture.x_resolution(600)
+session.tui.display.set.picture.x_resolution(600)
 
 # Set y axis resolution
-session.solver.tui.display.set.picture.y_resolution(600)
+session.tui.display.set.picture.y_resolution(600)
 
 # Save the contour image
-session.solver.tui.display.save_picture("vel-contour.png")
+session.tui.display.save_picture("vel-contour.png")
 
 # Adding graphics properties
-root.results.graphics.lic["lic-1"] = {}
-root.results.graphics.lic["lic-1"].surfaces_list = ["midplane"]
-root.results.graphics.lic["lic-1"].field = "velocity-magnitude"
-# root.results.graphics.lic['lic-1'].lic_image_filter='Strong Sharpen'
-root.results.graphics.lic["lic-1"].lic_intensity_factor = 10
-root.results.graphics.lic["lic-1"].texture_size = 10
+session.results.graphics.lic["lic-1"] = {}
+session.results.graphics.lic["lic-1"].surfaces_list = ["midplane"]
+session.results.graphics.lic["lic-1"].field = "velocity-magnitude"
+# session.results.graphics.lic['lic-1'].lic_image_filter='Strong Sharpen'
+session.results.graphics.lic["lic-1"].lic_intensity_factor = 10
+session.results.graphics.lic["lic-1"].texture_size = 10
 
 # Display graphics object
-session.solver.tui.display.objects.display("lic-1")
+session.tui.display.objects.display("lic-1")
 
 # Save the graphics object
-session.solver.tui.display.save_picture("lic-vel.png")
+session.tui.display.save_picture("lic-vel.png")
 
 # Write and save case data
-session.solver.tui.file.write_case_data("oil_separator.cas.h5")
+session.tui.file.write_case_data("oil_separator.cas.h5")
 
 
 # Velocity on Mid Plane
@@ -189,7 +188,7 @@ eff = np.zeros((len(oil_mf), len(dia)))
 
 for i in range(len(oil_mf)):
     for j in range(len(dia)):
-        session.solver.tui.define.injections(
+        session.tui.define.injections(
             "set-injection-properties",
             "injection-0",
             "injection-0",
@@ -212,9 +211,7 @@ for i in range(len(oil_mf)):
             (oil_mf[i] / density * area),
             oil_mf[i],
         )
-        session.solver.tui.report.dpm_sample(
-            "injection-0", "()", "outlet", "()", "()", "no"
-        )
+        session.tui.report.dpm_sample("injection-0", "()", "outlet", "()", "()", "no")
         data = 0
         k = -1
         with open("outlet.dpm", "r") as datafile:
