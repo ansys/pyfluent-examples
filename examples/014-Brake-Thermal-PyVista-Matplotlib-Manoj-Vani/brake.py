@@ -22,11 +22,7 @@ pyfluent.set_log_level("DEBUG")
 
 # Open Fluent in GUI mode
 session = pyfluent.launch_fluent(
-    version="3ddp",
-    precision="double",
-    processor_count=2,
-    mode="meshing",
-    show_gui=True,
+    version="3ddp", precision="double", processor_count=2, mode="solver"
 )
 
 # Check server status
@@ -233,7 +229,7 @@ session.tui.solve.animate.objects.create(
 session.tui.solve.set.transient_controls.time_step_size(0.01)
 
 # Set number of iterations
-session.tui.solve.dual_time_iterate(20, 5)  # 200, 5
+session.tui.solve.dual_time_iterate(10, 5)  # 200, 5
 
 # Write and save case file data
 session.tui.file.write_case_data("brake-final")
@@ -272,7 +268,7 @@ contour1.range.option = "auto-range-off"
 contour1()
 contour1.range.auto_range_off.minimum = 300
 contour1.range.auto_range_off.maximum = 400
-contour1.display()
+# contour1.display()
 
 
 import csv
