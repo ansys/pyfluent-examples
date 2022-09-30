@@ -7,60 +7,58 @@ pyfluent.set_log_level("INFO")
 
 # Create a session
 session = pyfluent.launch_fluent(
-    version="3d", precision="double", processor_count=6, show_gui=True
+    version="3d", precision="double", processor_count=6, mode="solver"
 )
 
 # Read case file
-session.solver.tui.file.read_case("vortex-mixingtank.msh.h5")
+session.tui.file.read_case("vortex-mixingtank.msh.h5")
 
-root = session.solver.root
-
-# Get active objects in root class
-root.setup.get_active_child_names()
+# Get active objects in session class
+session.setup.get_active_child_names()
 
 # Copy air and set density and viscosity
-# root.setup.materials.copy_database_material_by_name.fluid='air'
-mat1 = root.setup.materials.fluid["air"]
+# session.setup.materials.copy_database_material_by_name.fluid='air'
+mat1 = session.setup.materials.fluid["air"]
 mat1.density.value = 1000
 mat1.viscosity.value = 0.001
 
 # Turn on Gravity and Create Input Parameter Expression for Agitation Speed
-session.solver.tui.define.operating_conditions.gravity("Yes", 0, 0, -9.81)
-session.solver.tui.define.parameters.enable_in_TUI("yes")
-session.solver.tui.define.named_expressions.add(
+session.tui.define.operating_conditions.gravity("Yes", 0, 0, -9.81)
+session.tui.define.parameters.enable_in_TUI("yes")
+session.tui.define.named_expressions.add(
     "agitation_speed", "definition", '"240 [rev/min]"', "input-parameter", "yes", "q"
 )
 
 # Set MRF zone parameters
-root.setup.cell_zone_conditions.fluid["mrf"].mrf_motion = True
-cell_zc = root.setup.cell_zone_conditions.fluid["mrf"]
+session.setup.cell_zone_conditions.fluid["mrf"].mrf_motion = True
+cell_zc = session.setup.cell_zone_conditions.fluid["mrf"]
 cell_zc.mrf_omega.value = "agitation_speed"
 
 # Following mrf_ak is not available in latest API, hence it is commented out.
-# root.setup.cell_zone_conditions.fluid['mrf'].mrf_ak = {
+# session.setup.cell_zone_conditions.fluid['mrf'].mrf_ak = {
 #    'option': 'constant or expression',
 #    'constant': -1 }
 
 # Set Rotating Wall BC parameters
 # Set wall boundary conditions
-root.setup.boundary_conditions.wall["shaft_mrf"].motion_bc = "Moving Wall"
-root.setup.boundary_conditions.wall["shaft_mrf"].relative = False
-root.setup.boundary_conditions.wall["shaft_mrf"].rotating = True
-wall_bc = root.setup.boundary_conditions.wall["shaft_mrf"]
+session.setup.boundary_conditions.wall["shaft_mrf"].motion_bc = "Moving Wall"
+session.setup.boundary_conditions.wall["shaft_mrf"].relative = False
+session.setup.boundary_conditions.wall["shaft_mrf"].rotating = True
+wall_bc = session.setup.boundary_conditions.wall["shaft_mrf"]
 wall_bc.omega.value = "agitation_speed"
-# root.setup.boundary_conditions.wall['shaft_mrf'].ak=-1
+# session.setup.boundary_conditions.wall['shaft_mrf'].ak=-1
 
 # Set Physical Models: VOF & Turbulence Parameters
-root.setup.models.viscous.options.curvature_correction = "yes"
-root.setup.models.multiphase.models = "vof"
+session.setup.models.viscous.options.curvature_correction = "yes"
+session.setup.models.multiphase.models = "vof"
 
 # Define models and phases properties
-session.solver.tui.define.models.multiphase.volume_fraction_parameters = (
+session.tui.define.models.multiphase.volume_fraction_parameters = (
     "implicit",
     1e-6,
 )
-session.solver.tui.define.models.multiphase.body_force_formulation("yes")
-session.solver.tui.define.phases.set_domain_properties.phase_domains = (
+session.tui.define.models.multiphase.body_force_formulation("yes")
+session.tui.define.phases.set_domain_properties.phase_domains = (
     "phase-2",
     "material",
     "yes",
@@ -68,20 +66,18 @@ session.solver.tui.define.phases.set_domain_properties.phase_domains = (
     "q",
     "q",
 )
-session.solver.tui.define.phases.set_domain_properties.change_phases_names(
-    "water", "air"
-)
-session.solver.tui.define.models.steady("yes")
+session.tui.define.phases.set_domain_properties.change_phases_names("water", "air")
+session.tui.define.models.steady("yes")
 
 # Set initial solve conditions
-solve = session.solver.tui.solve
+solve = session.tui.solve
 solve.set.multiphase_numerics.solution_stabilization.execute_settings_optimization(
     "yes"
 )
-session.solver.tui.solve.initialize.reference_frame("absolute")
-session.solver.tui.solve.initialize.set_defaults("mixture", "k", 0.001)
-session.solver.tui.solve.initialize.mp_localized_turb_init.enable("no")
-session.solver.tui.solve.cell_registers.add(
+session.tui.solve.initialize.reference_frame("absolute")
+session.tui.solve.initialize.set_defaults("mixture", "k", 0.001)
+session.tui.solve.initialize.mp_localized_turb_init.enable("no")
+session.tui.solve.cell_registers.add(
     "liquid_patch",
     "type",
     "hexahedron",
@@ -96,42 +92,38 @@ session.solver.tui.solve.cell_registers.add(
     "q",
     "q",
 )
-session.solver.tui.solve.initialize.initialize_flow()
-session.solver.tui.solve.patch("water", "()", "liquid_patch", "()", "mp", 1)
+session.tui.solve.initialize.initialize_flow()
+session.tui.solve.patch("water", "()", "liquid_patch", "()", "mp", 1)
 
 # Setting up objects for postprocessing
-session.solver.tui.surface.iso_surface(
-    "water", "vof", "freesurface", "()", "()", 0.5, "()"
-)
-session.solver.tui.surface.iso_surface(
-    "mixture", "y-coordinate", "ymid", "()", "()", 0, "()"
-)
+session.tui.surface.iso_surface("water", "vof", "freesurface", "()", "()", 0.5, "()")
+session.tui.surface.iso_surface("mixture", "y-coordinate", "ymid", "()", "()", 0, "()")
 
 # set graphics mesh properties
-root.results.graphics.mesh["internals"] = {}
-root.results.graphics.mesh["internals"].surfaces_list = [
+session.results.graphics.mesh["internals"] = {}
+session.results.graphics.mesh["internals"].surfaces_list = [
     "wall_impeller",
     "shaft_mrf",
     "shaft_tank",
 ]
-root.results.graphics.mesh["internals"].surfaces_list()
-root.results.graphics.mesh["tank"] = {}
-root.results.graphics.mesh["tank"].surfaces_list = ["wall_tank"]
-root.results.graphics.mesh["tank"].surfaces_list()
+session.results.graphics.mesh["internals"].surfaces_list()
+session.results.graphics.mesh["tank"] = {}
+session.results.graphics.mesh["tank"].surfaces_list = ["wall_tank"]
+session.results.graphics.mesh["tank"].surfaces_list()
 
 # set graphics contour properties
-root.results.graphics.contour["contour-1"] = {}
-root.results.graphics.contour["contour-1"].surfaces_list = ["ymid"]
-root.results.graphics.contour["contour-1"].surfaces_list()
-root.results.graphics.contour["contour-1"].field = "water-vof"
+session.results.graphics.contour["contour-1"] = {}
+session.results.graphics.contour["contour-1"].surfaces_list = ["ymid"]
+session.results.graphics.contour["contour-1"].surfaces_list()
+session.results.graphics.contour["contour-1"].field = "water-vof"
 
 # set graphics mesh properties
-root.results.graphics.mesh["fs"] = {}
-root.results.graphics.mesh["fs"].surfaces_list = ["freesurface"]
-root.results.graphics.mesh["fs"].surfaces_list()
+session.results.graphics.mesh["fs"] = {}
+session.results.graphics.mesh["fs"].surfaces_list = ["freesurface"]
+session.results.graphics.mesh["fs"].surfaces_list()
 
 # Create graphic object
-session.solver.tui.display.objects.create(
+session.tui.display.objects.create(
     "scene",
     "scene-1",
     "graphics-objects",
@@ -155,7 +147,7 @@ session.solver.tui.display.objects.create(
 )
 
 # Create animations
-session.solver.tui.solve.animate.objects.create(
+session.tui.solve.animate.objects.create(
     "animation-2",
     "animate-on",
     "scene-1",
@@ -170,81 +162,81 @@ session.solver.tui.solve.animate.objects.create(
 )
 
 # # Set views properties
-session.solver.tui.display.views.restore_view("top")
-session.solver.tui.display.views.auto_scale()
+session.tui.display.views.restore_view("top")
+session.tui.display.views.auto_scale()
 
 # Set windows resolution
-session.solver.tui.display.set.picture.use_window_resolution("no")
+session.tui.display.set.picture.use_window_resolution("no")
 
 # Set x-axis resolution
-session.solver.tui.display.set.picture.x_resolution(600)
+session.tui.display.set.picture.x_resolution(600)
 
 # Set y-axis resolution
-session.solver.tui.display.set.picture.y_resolution(600)
+session.tui.display.set.picture.y_resolution(600)
 
 # Save Initial Files & Run Calculation
-session.solver.tui.file.write_case_data("vortex_init.cas.h5")
+session.tui.file.write_case_data("vortex_init.cas.h5")
 
 # Set number of iterations
-session.solver.tui.solve.set.number_of_iterations(25)  # 1500
+session.tui.solve.set.number_of_iterations(25)  # 1500
 
 # Stat iterations
-session.solver.tui.solve.iterate()
+session.tui.solve.iterate()
 
 
 # LIC Setup
-session.solver.tui.surface.plane_surface("midplane", "zx-plane", 0)
+session.tui.surface.plane_surface("midplane", "zx-plane", 0)
 
 # Set lic properties
-root.results.graphics.lic["lic-1"] = {}
-root.results.graphics.lic["lic-1"].surfaces_list = ["midplane"]
-root.results.graphics.lic["lic-1"].surfaces_list()
-root.results.graphics.lic["lic-1"].field = "velocity-magnitude"
-# root.results.graphics.lic['lic-1'].lic_image_filter='Strong Sharpen'
-root.results.graphics.lic["lic-1"].lic_intensity_factor = 10
-root.results.graphics.lic["lic-1"].texture_size = 10
+session.results.graphics.lic["lic-1"] = {}
+session.results.graphics.lic["lic-1"].surfaces_list = ["midplane"]
+session.results.graphics.lic["lic-1"].surfaces_list()
+session.results.graphics.lic["lic-1"].field = "velocity-magnitude"
+# session.results.graphics.lic['lic-1'].lic_image_filter='Strong Sharpen'
+session.results.graphics.lic["lic-1"].lic_intensity_factor = 10
+session.results.graphics.lic["lic-1"].texture_size = 10
 
 # Display object
-session.solver.tui.display.objects.display("lic-1")
+session.tui.display.objects.display("lic-1")
 
 # Set views properties
-session.solver.tui.display.views.restore_view("top")
-session.solver.tui.display.views.auto_scale()
+session.tui.display.views.restore_view("top")
+session.tui.display.views.auto_scale()
 
 # Set windows resolution
-session.solver.tui.display.set.picture.use_window_resolution("no")
+session.tui.display.set.picture.use_window_resolution("no")
 
 # Set x-axis resolution
-session.solver.tui.display.set.picture.x_resolution(600)
+session.tui.display.set.picture.x_resolution(600)
 
 # Set y-axis resolution
-session.solver.tui.display.set.picture.y_resolution(600)
+session.tui.display.set.picture.y_resolution(600)
 
 # Save vortex picture
-session.solver.tui.display.save_picture("lic-1.png")
+session.tui.display.save_picture("lic-1.png")
 
 # Save Final Vortex Shape
 # Display vortex
-session.solver.tui.display.objects.display("scene-1")
+session.tui.display.objects.display("scene-1")
 
 # Set views properties
-session.solver.tui.display.views.restore_view("top")
-session.solver.tui.display.views.auto_scale()
+session.tui.display.views.restore_view("top")
+session.tui.display.views.auto_scale()
 
 # Set windows resolution
-session.solver.tui.display.set.picture.use_window_resolution("no")
+session.tui.display.set.picture.use_window_resolution("no")
 
 # Set x-axis resolution
-session.solver.tui.display.set.picture.x_resolution(600)
+session.tui.display.set.picture.x_resolution(600)
 
 # Set y-axis resolution
-session.solver.tui.display.set.picture.y_resolution(600)
+session.tui.display.set.picture.y_resolution(600)
 
 # Save vortex picture
-session.solver.tui.display.save_picture("vortex.png")
+session.tui.display.save_picture("vortex.png")
 
 # Save and write case data
-session.solver.tui.file.write_case_data("vortex_final.cas.h5")
+session.tui.file.write_case_data("vortex_final.cas.h5")
 
 # End current session
 session.exit()
