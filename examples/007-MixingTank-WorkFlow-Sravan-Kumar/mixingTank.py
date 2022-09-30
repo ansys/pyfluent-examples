@@ -206,7 +206,7 @@ session.tui.define.parameters.output_parameters.create(
 
 # Run Settings
 # Initialize workflow and set itertaions
-session.tui.solve.set.number_of_iterations(500)
+session.tui.solve.set.number_of_iterations(50)  # 500
 session.tui.solve.initialize.initialize_flow()
 session.tui.solve.iterate()
 
