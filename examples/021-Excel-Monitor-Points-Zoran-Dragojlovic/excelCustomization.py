@@ -22,19 +22,19 @@ listCoordY = dataset["Y"]
 listCoordZ = dataset["Z"]
 
 # Launch fluent
-session = pyfluent.launch_fluent(show_gui=True)
+session = pyfluent.launch_fluent(mode="solver")
 
 # Set server status
 session.check_health()
 
 # Read case file
-session.solver.tui.file.read_case("glycerol_filling_mixing_init.cas.h5")
+session.tui.file.read_case("glycerol_filling_mixing_init.cas.h5")
 
 # Read case data
-session.solver.tui.file.read_data("glycerol_filling_mixing_init.dat.h5")
+session.tui.file.read_data("glycerol_filling_mixing_init.dat.h5")
 
 # for index in range(len(listNames)):
-#     session.solver.tui.surface.point_surface(name=
+#     session.tui.surface.point_surface(name=
 #     listNames[index], x=listCoordX[index], y=listCoordY[index], z=listCoordZ[index])
 
 # Display tank slice
