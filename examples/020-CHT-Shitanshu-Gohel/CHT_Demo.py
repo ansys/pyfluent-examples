@@ -33,13 +33,13 @@ pyfluent.set_log_level("INFO")
 
 # Set Working Directory; Launch Fluent on 4 Cores; Meshing Mode
 
-workDir = r"D:\ExamplesNew\Examples\020 CHT - Shitanshu Gohel"
+# workDir = r"D:\ExamplesNew\Examples\020 CHT - Shitanshu Gohel"
 
 geomName = "cht_fin_htc_new.scdoc"
 
-geomFilePath = os.path.join(os.getcwd(), workDir, geomName)
+geomFilePath = os.path.join(os.getcwd(), geomName)
 
-os.chdir(os.path.join(os.getcwd(), workDir))
+os.chdir(os.path.join(os.getcwd()))
 
 session = pyfluent.launch_fluent(mode="meshing", processor_count=4, show_gui=False)
 
