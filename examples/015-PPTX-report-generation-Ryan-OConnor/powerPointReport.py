@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Create PowerPoint Report with Fluent Results
 # This script automatically generates a PPTX report based on Fluent results.
 # The PPTX contains a title slide, a table of computed report definitions,
@@ -233,4 +242,4 @@ else:
 prs.save(case_filename + "_report.pptx")
 
 # End current session
-session.exit()
+# session.exit()

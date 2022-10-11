@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # PID Controller for Gravity Separator
 
 import ansys.fluent.core as pyfluent
@@ -99,4 +108,4 @@ plt.show()
 session.tui.file.write_case_data("2d-separator-final.cas.h5")
 
 # End current session
-session.exit()
+# session.exit()

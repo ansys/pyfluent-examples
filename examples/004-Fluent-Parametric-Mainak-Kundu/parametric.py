@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Import modules
 try:
     from ansys.fluent.parametric import ParametricSession
@@ -46,6 +55,6 @@ study2.delete_design_points([dp1, dp2])
 # Parametric session starting with a project file
 # session2 = ParametricSession(project_filepath="ab.flprj", start_transcript=True)
 
-# End sessions
-session1.exit()
-# session2.exit()
+# # End sessions
+# session1.exit()
+# # session2.exit()

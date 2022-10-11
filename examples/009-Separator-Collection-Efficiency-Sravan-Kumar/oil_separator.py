@@ -1,9 +1,18 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Oil Separator: Plot Collection Efficiency
 # Import pyfluent module
 import ansys.fluent.core as pyfluent
 
 # Set log level to info
-pyfluent.set_log_level("INFO")
+# pyfluent.set_log_level("INFO")
 
 # Create a session
 session = pyfluent.launch_fluent(

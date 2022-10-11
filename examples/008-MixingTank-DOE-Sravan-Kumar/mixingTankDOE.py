@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Stirred Tank: DOE and Plotting 3D Surface Plot using Plotly
 import ansys.fluent.core as pyfluent
 import numpy as np
@@ -59,7 +68,7 @@ for i in range(len(omega)):
         )
 
 # End current session
-session.exit()
+# session.exit()
 
 # Torque and power list
 print(torq)

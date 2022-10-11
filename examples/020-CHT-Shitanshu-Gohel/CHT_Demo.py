@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Import Python Packages
 # get_ipython().run_line_magic('matplotlib', 'notebook')
 from ansys.fluent.visualization import set_config
@@ -29,7 +38,7 @@ import ansys.fluent.visualization as viz
 viz.__version__
 
 # Streaming of Transcript to this Notebook
-pyfluent.set_log_level("INFO")
+# pyfluent.set_log_level("INFO")
 
 # Set Working Directory; Launch Fluent on 4 Cores; Meshing Mode
 
@@ -741,4 +750,4 @@ session.tui.surface.iso_surface(
 # p1.plot("p1")
 
 # Exit Fluent Session
-session.exit()
+# session.exit()

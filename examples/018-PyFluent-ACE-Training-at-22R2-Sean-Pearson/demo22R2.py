@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Start by importing PyFluent
 
 import ansys.fluent.core as fluent
@@ -541,4 +550,4 @@ p1.y_axis_function = "velocity-magnitude"
 p1.plot("p1")
 
 # Exit new solver_ession
-new_solver_session.exit()
+# new_solver_session.exit()

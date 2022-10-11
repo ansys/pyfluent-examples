@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Post processing in PyFluent
 
 # Fluent data post processing can be categorised in two parts
@@ -255,4 +264,4 @@ pyvista_windows_manager.close_windows()
 # Image(filename="contour-2.gif")
 
 # End current session
-session.exit()
+# session.exit()

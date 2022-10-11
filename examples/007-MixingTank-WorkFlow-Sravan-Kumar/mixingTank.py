@@ -1,7 +1,16 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Stirred Tank: Fluent Meshing, Fluent Solver and Postprocessing
 import ansys.fluent.core as pyfluent
 
-pyfluent.set_log_level("INFO")
+# pyfluent.set_log_level("INFO")
 
 # Fluent Meshing
 session = pyfluent.launch_fluent(
@@ -268,4 +277,4 @@ with open("vol-avg-vel.out", "r") as datafile:
     plt.show()
 
 # End current session
-session.exit()
+# session.exit()

@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Import modules
 import ansys.fluent.core as pyfluent
 from ansys.fluent.visualization import set_config
@@ -272,4 +281,4 @@ contour1.surfaces_list = ["mid_plane"]
 contour1.display()
 
 # End current session
-session.exit()
+# session.exit()

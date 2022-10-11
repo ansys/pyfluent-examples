@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Import modules
 import ansys.fluent.core as pyfluent
 import matplotlib.pyplot as plt  # noqa: F401
@@ -55,7 +64,7 @@ for idx1, coldVel in np.ndenumerate(coldVelArr):
         resArr[idx1][idx2] = output[0]["outlet-temp-avg"][0]
 
 # End current session
-session.exit()
+# session.exit()
 
 # # Define Manual DOE as numpy arrays
 # coldVelArr = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])

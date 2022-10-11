@@ -1,9 +1,18 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Prediction of Vortex Depth in a Stirred Tank
 # Import pyfluent module
 import ansys.fluent.core as pyfluent
 
 # set log level to info
-pyfluent.set_log_level("INFO")
+# pyfluent.set_log_level("INFO")
 
 # Create a session
 session = pyfluent.launch_fluent(
@@ -239,7 +248,7 @@ session.tui.display.save_picture("vortex.png")
 session.tui.file.write_case_data("vortex_final.cas.h5")
 
 # End current session
-session.exit()
+# session.exit()
 
 
 # GIF Animation: Vortex Formation

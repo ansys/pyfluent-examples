@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Ahmed Body Simulation using PyFluent
 # This example demonstrate pyfluent api for Ahmed Body Simulation
 
@@ -147,4 +156,4 @@ session.tui.surface.iso_surface("x-coordinate", "xmid", "()", "()", 0, "()")
 session.tui.file.write_case_data("ahmed_body_final.cas.h5")
 
 # End current session
-session.exit()
+# session.exit()

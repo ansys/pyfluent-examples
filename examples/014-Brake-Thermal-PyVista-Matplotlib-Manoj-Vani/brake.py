@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
 
 # Brake Thermal Example
 
@@ -18,7 +24,7 @@
 import ansys.fluent.core as pyfluent
 
 # Set log level
-pyfluent.set_log_level("DEBUG")
+# pyfluent.set_log_level("DEBUG")
 
 # Open Fluent in GUI mode
 session = pyfluent.launch_fluent(
@@ -297,4 +303,4 @@ with open("report-file-0.out", "r") as datafile:
     plt.show()
 
 # End current session
-session.exit()
+# session.exit()

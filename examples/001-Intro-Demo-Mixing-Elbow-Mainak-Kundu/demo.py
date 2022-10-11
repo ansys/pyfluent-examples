@@ -74,4 +74,4 @@ inlet.vmag.value = 1.2
 session.solution.initialization()
 
 # End current session
-session.exit()
+# session.exit()

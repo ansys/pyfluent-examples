@@ -1,3 +1,12 @@
+"""
+Simulation Examples
+===================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+"""
+
 # Load Settings from Excel Spreadsheet
 # Import modules
 # get_ipython().run_line_magic('matplotlib', 'inline')
@@ -50,3 +59,6 @@ contourVF = graphics_session.Contours["contour-vf"]
 contourVF.field = "liquid-vof"
 contourVF.surfaces_list = ["tank-slice"]
 contourVF.display("window-2")
+
+# End current session
+# session.exit()
