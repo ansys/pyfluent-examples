@@ -12,7 +12,8 @@ import ansys.fluent.core as pyfluent
 import matplotlib.pyplot as plt  # noqa: F401
 import numpy as np
 import pandas as pd  # noqa: F401
-import plotly.graph_objects as go  # noqa: F401
+
+# import plotly.graph_objects as go  # noqa: F401
 import seaborn as sns  # noqa: F401
 
 # Create a session object

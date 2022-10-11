@@ -41,7 +41,7 @@ session.tui.define.named_expressions.add(
 # Set MRF zone parameters
 session.setup.cell_zone_conditions.fluid["mrf"].mrf_motion = True
 cell_zc = session.setup.cell_zone_conditions.fluid["mrf"]
-cell_zc.mrf_omega.value = "agitation_speed"
+# cell_zc.mrf_omega.value = "agitation_speed"
 
 # Following mrf_ak is not available in latest API, hence it is commented out.
 # session.setup.cell_zone_conditions.fluid['mrf'].mrf_ak = {
@@ -54,7 +54,7 @@ session.setup.boundary_conditions.wall["shaft_mrf"].motion_bc = "Moving Wall"
 session.setup.boundary_conditions.wall["shaft_mrf"].relative = False
 session.setup.boundary_conditions.wall["shaft_mrf"].rotating = True
 wall_bc = session.setup.boundary_conditions.wall["shaft_mrf"]
-wall_bc.omega.value = "agitation_speed"
+# wall_bc.omega.value = "agitation_speed"
 # session.setup.boundary_conditions.wall['shaft_mrf'].ak=-1
 
 # Set Physical Models: VOF & Turbulence Parameters

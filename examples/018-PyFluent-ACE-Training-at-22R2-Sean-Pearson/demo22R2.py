@@ -41,13 +41,13 @@ from ansys.fluent.core import launch_fluent
 
 # help(launch_fluent)
 
-session = launch_fluent(show_gui=True)
+session = launch_fluent()
 
 # Run a health check on the Fluent connection
 session.check_health()
 
 # Exit the first session
-session.exit()
+# session.exit()
 
 # Run another health check after exiting
 session.check_health()
@@ -84,7 +84,7 @@ dir_filtered(session)
 # help(session.solver)
 
 # Launch fluent in meshing mode
-meshing_session = launch_fluent(show_gui=True, meshing_mode=True)
+meshing_session = launch_fluent(meshing_mode=True)
 
 # help(meshing_session)
 
@@ -242,10 +242,10 @@ case_file = "demo.cas"
 meshing_session.meshing.tui.file.write_case(case_file)
 
 # End meshing session
-meshing_session.exit()
+# meshing_session.exit()
 
 # Launch fluent in solvution mode
-solver_session = launch_fluent(show_gui=True)
+solver_session = launch_fluent()
 
 # Access the underlying solver API objects
 solver = solver_session.solver.root
@@ -451,10 +451,10 @@ results_dict = solver.solution.report_definitions.compute(
 results_dict
 
 # End solver session
-solver_session.exit()
+# solver_session.exit()
 
 # Launch another solver
-new_solver_session = launch_fluent(show_gui=True)
+new_solver_session = launch_fluent()
 
 solver = new_solver_session.solver.root
 

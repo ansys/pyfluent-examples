@@ -10,6 +10,8 @@ postprocessing capabilities.
 # Import Pyfluent module
 import ansys.fluent.core as pyfluent
 
+# case_filepath=examples.download_file("mixer-ran_2019r3.cas.gz", "pyfluent/optislang")
+
 # Pyfluent log level
 pyfluent.set_log_level("DEBUG")
 

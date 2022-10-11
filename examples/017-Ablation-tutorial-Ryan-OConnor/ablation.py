@@ -256,7 +256,7 @@ session.results.graphics.contour["contour_pressure"] = {
 }
 
 # Display contour
-session.results.graphics.contour.display(object_name="contour_pressure")
+# session.results.graphics.contour.display(object_name="contour_pressure")
 
 # Define contour properties
 session.results.graphics.contour["contour_mach"] = {
@@ -265,7 +265,7 @@ session.results.graphics.contour["contour_mach"] = {
 }
 
 # Display contour
-session.results.graphics.contour.display(object_name="contour_mach")
+# session.results.graphics.contour.display(object_name="contour_mach")
 
 
 # Post-Process with PyVista
@@ -278,7 +278,7 @@ graphics_session1 = Graphics(session)
 contour1 = graphics_session1.Contours["contour-1"]
 contour1.field = "pressure"
 contour1.surfaces_list = ["mid_plane"]
-contour1.display()
+# contour1.display()
 
 # End current session
 # session.exit()
