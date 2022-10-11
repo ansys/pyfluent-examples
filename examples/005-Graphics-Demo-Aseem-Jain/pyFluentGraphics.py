@@ -108,9 +108,9 @@ contour2.field = "velocity-magnitude"
 contour2.surfaces_list = ["symmetry"]
 
 # Display contour
-contour1.display("contour-1")
+# contour1.display("contour-1")
 
-contour2.display("contour-2")
+# contour2.display("contour-2")
 
 # Plot properties
 p = pyvista_windows_manager.get_plotter("contour-1")
@@ -119,7 +119,7 @@ p.view_isometric()
 p.add_floor(offset=1, show_edges=True)
 p.add_title("Contour Velocity on Solid", font="courier", color="grey", font_size=10)
 
-contour1.display("contour-1_2")
+# contour1.display("contour-1_2")
 p2 = pyvista_windows_manager.get_plotter("contour-1_2")
 # p2.add_axes(box=True)
 p2.view_isometric()
@@ -151,7 +151,7 @@ vector1.scale = 4.0
 vector1.skip = 4
 
 # Display vector
-vector1.display("vector-1")
+# vector1.display("vector-1")
 
 # plot sessions
 # get_ipython().run_line_magic("matplotlib", "notebook")
