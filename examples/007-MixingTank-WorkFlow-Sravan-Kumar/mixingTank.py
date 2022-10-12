@@ -1,5 +1,5 @@
 """
-Simulation Examples
+007-MixingTank-WorkFlow
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -274,7 +274,7 @@ with open("vol-avg-vel.out", "r") as datafile:
     plt.title("Average Velocity Monitor")
     plt.xlabel("Iterations")
     plt.ylabel("Average Velocity (m/s)")
-    plt.show()
+    # plt.show()
 
 # End current session
 # session.exit()

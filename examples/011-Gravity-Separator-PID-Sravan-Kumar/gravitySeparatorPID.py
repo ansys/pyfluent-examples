@@ -1,5 +1,5 @@
 """
-Simulation Examples
+011-Gravity-Separator-PID
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -96,13 +96,13 @@ plt.plot(X, water_level)
 plt.title("Water Level vs Iterations")
 plt.ylabel("Water Level (m)")
 plt.xlabel("Iterations")
-plt.show()
+# plt.show()
 
 plt.plot(X, water_pressure)
 plt.title("Water Outlet Pressure vs Iterations")
 plt.ylabel("Pressure (Pa)")
 plt.xlabel("Iterations")
-plt.show()
+# plt.show()
 
 # Write and save the case file
 session.tui.file.write_case_data("2d-separator-final.cas.h5")

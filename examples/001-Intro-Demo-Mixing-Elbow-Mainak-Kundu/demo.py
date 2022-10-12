@@ -1,5 +1,5 @@
 """
-Simulation Examples
+001-Intro-Demo-Mixing-Elbow
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -61,7 +61,7 @@ session.tui.display.contour = {
 }
 
 # Display contour
-session.tui.display.objects.display("contour-1")
+# session.tui.display.objects.display("contour-1")
 
 # Save contour
 session.tui.display.save_picture("contour.png")

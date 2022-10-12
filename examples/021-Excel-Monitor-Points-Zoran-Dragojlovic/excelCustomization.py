@@ -1,5 +1,5 @@
 """
-Simulation Examples
+021-Excel-Monitor-Points
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -51,14 +51,14 @@ graphics = Graphics(session=session)
 tankSlice = graphics.Meshes["tank-slice"]
 tankSlice.show_edges = True
 tankSlice.surfaces_list = ["tank-slice"]
-tankSlice.display("window-1")
+# tankSlice.display("window-1")
 
 # Display contour
 graphics_session = Graphics(session)
 contourVF = graphics_session.Contours["contour-vf"]
 contourVF.field = "liquid-vof"
 contourVF.surfaces_list = ["tank-slice"]
-contourVF.display("window-2")
+# contourVF.display("window-2")
 
 # End current session
 # session.exit()

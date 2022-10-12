@@ -1,5 +1,5 @@
 """
-Simulation Examples
+009-Separator-Collection-Efficiency
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -141,7 +141,7 @@ session.results.graphics.contour["contour-1"].surfaces_list()
 session.results.graphics.contour["contour-1"].field = "velocity-magnitude"
 
 # Display contour
-session.tui.display.objects.display("contour-1")
+# session.tui.display.objects.display("contour-1")
 
 # Set views properties
 session.tui.display.views.restore_view("front")
@@ -168,7 +168,7 @@ session.results.graphics.lic["lic-1"].lic_intensity_factor = 10
 session.results.graphics.lic["lic-1"].texture_size = 10
 
 # Display graphics object
-session.tui.display.objects.display("lic-1")
+# session.tui.display.objects.display("lic-1")
 
 # Save the graphics object
 session.tui.display.save_picture("lic-vel.png")
@@ -241,7 +241,7 @@ plt.title("Collection Efficiency Curve")
 plt.xlabel("Droplet Diameter (m)")
 plt.ylabel("Collection Efficiency(%)")
 plt.legend()
-plt.show()
+# plt.show()
 
 # 3D Surface Plot using Plotly
 import plotly.graph_objects as go

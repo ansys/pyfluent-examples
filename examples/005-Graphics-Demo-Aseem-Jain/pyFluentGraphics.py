@@ -1,5 +1,5 @@
 """
-Simulation Examples
+005-Graphics-Demo
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -113,16 +113,16 @@ contour2.surfaces_list = ["symmetry"]
 # contour2.display("contour-2")
 
 # Plot properties
-p = pyvista_windows_manager.get_plotter("contour-1")
-p.view_isometric()
-# p.add_axes()
-p.add_floor(offset=1, show_edges=True)
-p.add_title("Contour Velocity on Solid", font="courier", color="grey", font_size=10)
+# p = pyvista_windows_manager.get_plotter("contour-1")
+# p.view_isometric()
+# # p.add_axes()
+# p.add_floor(offset=1, show_edges=True)
+# p.add_title("Contour Velocity on Solid", font="courier", color="grey", font_size=10)
 
-# contour1.display("contour-1_2")
-p2 = pyvista_windows_manager.get_plotter("contour-1_2")
-# p2.add_axes(box=True)
-p2.view_isometric()
+# # contour1.display("contour-1_2")
+# p2 = pyvista_windows_manager.get_plotter("contour-1_2")
+# # p2.add_axes(box=True)
+# p2.view_isometric()
 
 # Save the plot
 # pyvista_windows_manager.save_graphic("contour-1", "svg")

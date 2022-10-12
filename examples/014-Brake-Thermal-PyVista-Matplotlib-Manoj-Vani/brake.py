@@ -1,5 +1,5 @@
 """
-Simulation Examples
+014-Brake-Thermal-PyVista-Matplotlib
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -207,7 +207,7 @@ session.tui.display.objects.create(
 )
 
 # Select property to display
-session.tui.display.objects.display("temperature")
+# session.tui.display.objects.display("temperature")
 
 # Set views properties
 session.tui.display.views.restore_view("top")
@@ -300,7 +300,7 @@ with open("report-file-0.out", "r") as datafile:
     plt.xlabel("Time (sec)")
     plt.ylabel("Max Temperature (K)")
     plt.legend(loc="lower right", shadow=True, fontsize="x-large")
-    plt.show()
+    # plt.show()
 
 # End current session
 # session.exit()

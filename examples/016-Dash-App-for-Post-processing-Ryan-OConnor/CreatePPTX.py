@@ -1,5 +1,5 @@
 """
-Create PPTX
+016-Part-1-Create-PPTX
 ===================
 These examples show you how you can generate PPTX and use Fluent capabilities
 from Python to perform Fluent simulations. This includes geometry import,
@@ -108,7 +108,7 @@ def generatePPTX(session):
             slide = prs.slides.add_slide(graph_slide_layout)
             title = slide.shapes.title
             title.text = image
-            session.results.graphics.mesh.display(object_name=image)
+            # session.results.graphics.mesh.display(object_name=image)
             session.tui.display.save_picture(image + ".jpg")
             placeholder = slide.placeholders[14]
             pic = placeholder.insert_picture(image + ".jpg")

@@ -1,5 +1,5 @@
 """
-Simulation Examples
+010-Steady-Vortex-VOF
 ===================
 These examples show you how you can use Fluent capabilities from Python to perform
 Fluent simulations. This includes geometry import, Fluent's meshing workflows,
@@ -206,7 +206,7 @@ session.results.graphics.lic["lic-1"].lic_intensity_factor = 10
 session.results.graphics.lic["lic-1"].texture_size = 10
 
 # Display object
-session.tui.display.objects.display("lic-1")
+# session.tui.display.objects.display("lic-1")
 
 # Set views properties
 session.tui.display.views.restore_view("top")
@@ -226,7 +226,7 @@ session.tui.display.save_picture("lic-1.png")
 
 # Save Final Vortex Shape
 # Display vortex
-session.tui.display.objects.display("scene-1")
+# session.tui.display.objects.display("scene-1")
 
 # Set views properties
 session.tui.display.views.restore_view("top")
