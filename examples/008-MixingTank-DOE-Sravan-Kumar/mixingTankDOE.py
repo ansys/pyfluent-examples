@@ -97,7 +97,7 @@ fig.update_layout(
         zaxis_title="Power (W)",
     )
 )
-fig.show()
+# fig.show()
 
 # Plot Power Number vs Re
 import matplotlib.pyplot as plt
@@ -108,4 +108,4 @@ plt.scatter(re, np)
 plt.title("Power Number vs Re")
 plt.xlabel("Impeller Reynolds Number")
 plt.ylabel("Power Number")
-plt.show()
+# plt.show()

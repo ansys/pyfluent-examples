@@ -510,7 +510,7 @@ contour1.field.allowed_values
 # Set up and display the contour
 contour1.field = "temperature"
 contour1.surfaces_list = ["symmetry"]
-contour1.display("plotter-1")
+# contour1.display("plotter-1")
 
 # Set up and display more objects
 # Iso surface
@@ -524,14 +524,14 @@ surface1.definition.iso_surface.iso_value = 0.3
 mesh1 = graphics_session1.Meshes["mesh-1"]
 mesh1.show_edges = True
 mesh1.surfaces_list = ["symmetry", "wall"]
-mesh1.display("plotter-3")
+# mesh1.display("plotter-3")
 
 # Vectors
 vector1 = graphics_session1.Vectors["vector-1"]
 vector1.surfaces_list = ["symmetry"]
 vector1.scale = 4.0
 vector1.skip = 4
-vector1.display("plotter-4")
+# vector1.display("plotter-4")
 
 # Display an x-y plot
 # get_ipython().run_line_magic('matplotlib', 'notebook')
