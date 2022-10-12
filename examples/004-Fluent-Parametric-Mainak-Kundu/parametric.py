@@ -23,7 +23,7 @@ import_filename = examples.download_file(
 )  # noqa: E501
 
 # Parametric session starting with a case file
-session1 = ParametricSession("import_filename", start_transcript=True)
+session1 = ParametricSession(import_filename, start_transcript=True)
 
 # Start study
 study1 = session1.studies["elbow_params_2-Solve"]

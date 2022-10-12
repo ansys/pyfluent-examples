@@ -33,7 +33,7 @@ from ansys.fluent.core import examples
 from ansys.fluent.visualization import set_config
 
 import_filename = examples.download_file(
-    "elbow1", "pyfluent/examples/005-Graphics-Demo-Aseem-Jain"
+    "elbow1.cas", "pyfluent/examples/005-Graphics-Demo-Aseem-Jain"
 )  # noqa: E501
 
 set_config(blocking=True, set_view_on_display="isometric")

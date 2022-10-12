@@ -105,7 +105,6 @@ for angle in range(0, 360, dtheta):
     y = math.sin(math.radians(angle)) * r
     session.tui.surface.point_surface("point-" + str(angle), x, y, z)
 
-
 # Compute An and Bn at each monitor point
 import numpy as np
 
