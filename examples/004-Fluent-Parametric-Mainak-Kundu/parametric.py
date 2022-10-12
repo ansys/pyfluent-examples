@@ -13,8 +13,17 @@ try:
 except ImportError:
     from ansys.fluent.addons.parametric import ParametricSession
 
+from pathlib import Path  # noqa: F401
+
+import ansys.fluent.core as pyfluent  # noqa: F401
+from ansys.fluent.core import examples
+
+import_filename = examples.download_file(
+    "elbow_params_2.cas.h5", "pyfluent/examples/004-Fluent-Parametric-Mainak-Kundu"
+)  # noqa: E501
+
 # Parametric session starting with a case file
-session1 = ParametricSession("elbow_params_2.cas.h5", start_transcript=True)
+session1 = ParametricSession("import_filename", start_transcript=True)
 
 # Start study
 study1 = session1.studies["elbow_params_2-Solve"]
@@ -49,11 +58,14 @@ dp2 = study2.duplicate_design_point(dp1)
 study2.delete_design_points([dp1, dp2])
 
 # Save the project
-# session1.project.save_as(
-# "D:\Examples (1)\Examples\004 Fluent Parametric - Mainak Kundu\abLatest.flprj")
+# project_filepath_save_as = str(
+#     Path(pyfluent.EXAMPLES_PATH) / "fluent_parametric_study_save_as.flprj"
+# )
+# session1.project.save_as(project_filepath=project_filepath_save_as)
 
 # Parametric session starting with a project file
-# session2 = ParametricSession(project_filepath="ab.flprj", start_transcript=True)
+# project_filepath_read = str(Path(pyfluent.EXAMPLES_PATH) / "fluent_parametric_study_save_as.flprj") # noqa: E501
+# session2 = ParametricSession(project_filepath=project_filepath_read, start_transcript=True) # noqa: E501
 
 # # End sessions
 # session1.exit()

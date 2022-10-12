@@ -9,8 +9,11 @@ postprocessing capabilities.
 
 # Import Pyfluent module
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 
-# case_filepath=examples.download_file("mixer-ran_2019r3.cas.gz", "pyfluent/optislang")
+import_filename = examples.download_file(
+    "elbow.cas.gz", "pyfluent/examples/001-Intro-Demo-Mixing-Elbow-Mainak-Kundu"
+)  # noqa: E501
 
 # Pyfluent log level
 pyfluent.set_log_level("DEBUG")
@@ -22,7 +25,7 @@ session = pyfluent.launch_fluent(mode="solver")
 session.check_health()
 
 # Read a case file
-session.tui.file.read_case("elbow.cas.gz")
+session.tui.file.read_case(import_filename)
 
 # Initialize a workflow
 session.tui.solve.initialize.initialize_flow()

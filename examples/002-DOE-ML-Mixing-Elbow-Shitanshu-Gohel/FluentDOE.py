@@ -9,12 +9,17 @@ postprocessing capabilities.
 
 # Import modules
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 import matplotlib.pyplot as plt  # noqa: F401
 import numpy as np
 import pandas as pd  # noqa: F401
 
 # import plotly.graph_objects as go  # noqa: F401
 import seaborn as sns  # noqa: F401
+
+import_filename = examples.download_file(
+    "elbow.cas.h5", "pyfluent/examples/002-DOE-ML-Mixing-Elbow-Shitanshu-Gohel"
+)  # noqa: E501
 
 # Create a session object
 session = pyfluent.launch_fluent(mode="solver")
@@ -23,7 +28,7 @@ session = pyfluent.launch_fluent(mode="solver")
 session.check_health()
 
 # Read a case file
-session.tui.file.read_case("elbow.cas.h5")
+session.tui.file.read_case(import_filename)
 
 # Define Manual DOE as numpy arrays
 coldVelArr = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])

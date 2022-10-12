@@ -53,6 +53,12 @@ postprocessing capabilities.
 
 # Import Pyfluent module
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
+
+import_filename = examples.download_file(
+    "axial_comp_fullWheel_DFT.cas.h5",
+    "pyfluent/examples/003-Tyler-Sofrin-Modes-Compressor-Ryan-OConnor",
+)  # noqa: E501
 
 # Create a session object
 session = pyfluent.launch_fluent(mode="solver")
