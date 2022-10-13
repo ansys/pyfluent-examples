@@ -93,7 +93,7 @@ m_inc = 2
 
 # Read a case file
 session.tui.file.read_case_data(
-    "axial_comp_fullWheel_DFT.cas.h5"
+    import_filename
 )  # The dat file containing the DFT results
 
 

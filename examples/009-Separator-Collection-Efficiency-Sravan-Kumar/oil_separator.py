@@ -19,9 +19,16 @@ session = pyfluent.launch_fluent(
     version="3d", precision="double", processor_count=6, mode="solver"
 )
 
+from ansys.fluent.core import examples
+
+import_filename = examples.download_file(
+    "oil_separator.msh.h5",
+    "pyfluent/examples/009-Separator-Collection-Efficiency-Sravan-Kumar",
+)  # noqa: E501
+
 # Fluent Solver Setup
 # Read case file
-session.tui.file.read_case("oil_separator.msh.h5")
+session.tui.file.read_case(import_filename)
 
 # Set gravity
 session.tui.define.operating_conditions.gravity("Yes", 0, -9.81, 0)

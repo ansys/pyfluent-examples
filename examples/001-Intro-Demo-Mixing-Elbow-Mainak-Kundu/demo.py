@@ -15,9 +15,6 @@ import_filename = examples.download_file(
     "elbow.cas.gz", "pyfluent/examples/001-Intro-Demo-Mixing-Elbow-Mainak-Kundu"
 )  # noqa: E501
 
-# Pyfluent log level
-pyfluent.set_log_level("DEBUG")
-
 # Create a session object
 session = pyfluent.launch_fluent(mode="solver")
 

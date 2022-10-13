@@ -11,6 +11,18 @@ postprocessing capabilities.
 # Import modules
 # get_ipython().run_line_magic('matplotlib', 'inline')
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
+
+import_case_filename = examples.download_file(
+    "glycerol_filling_mixing_init.cas.h5",
+    "pyfluent/examples/021-Excel-Monitor-Points-Zoran-Dragojlovic",
+)  # noqa: E501
+
+import_data_filename = examples.download_file(
+    "glycerol_filling_mixing_init.dat.h5",
+    "pyfluent/examples/021-Excel-Monitor-Points-Zoran-Dragojlovic",
+)  # noqa: E501
+
 
 # sphinx_gallery_thumbnail_number = -5
 from ansys.fluent.visualization import set_config
@@ -37,10 +49,10 @@ session = pyfluent.launch_fluent(mode="solver")
 session.check_health()
 
 # Read case file
-session.tui.file.read_case("glycerol_filling_mixing_init.cas.h5")
+session.tui.file.read_case(import_case_filename)
 
 # Read case data
-session.tui.file.read_data("glycerol_filling_mixing_init.dat.h5")
+session.tui.file.read_data(import_data_filename)
 
 # for index in range(len(listNames)):
 #     session.tui.surface.point_surface(name=

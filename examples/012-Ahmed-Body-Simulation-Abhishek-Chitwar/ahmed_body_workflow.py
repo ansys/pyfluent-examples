@@ -10,6 +10,8 @@ postprocessing capabilities.
 # Ahmed Body Simulation using PyFluent
 # This example demonstrate pyfluent api for Ahmed Body Simulation
 
+from pathlib import Path
+
 # Import the pyfluent, std libraries etc
 import ansys.fluent.core as pyfluent
 from ansys.fluent.visualization import set_config
@@ -153,7 +155,8 @@ session.tui.surface.iso_surface("x-coordinate", "xmid", "()", "()", 0, "()")
 # contour1.display("window-2")
 
 # Write and save the case file
-session.tui.file.write_case_data("ahmed_body_final.cas.h5")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "ahmed_body_final.cas.h5")
+session.tui.file.write_case_data(save_case_data_as)
 
 # End current session
 # session.exit()

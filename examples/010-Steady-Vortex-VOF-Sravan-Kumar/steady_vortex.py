@@ -7,9 +7,16 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+from pathlib import Path
+
 # Prediction of Vortex Depth in a Stirred Tank
 # Import pyfluent module
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
+
+import_filename = examples.download_file(
+    "vortex-mixingtank.msh.h5", "pyfluent/examples/010-Steady-Vortex-VOF-Sravan-Kumar"
+)  # noqa: E501
 
 # set log level to info
 # pyfluent.set_log_level("INFO")
@@ -20,7 +27,7 @@ session = pyfluent.launch_fluent(
 )
 
 # Read case file
-session.tui.file.read_case("vortex-mixingtank.msh.h5")
+session.tui.file.read_case(import_filename)
 
 # Get active objects in session class
 session.setup.get_active_child_names()
@@ -184,7 +191,8 @@ session.tui.display.set.picture.x_resolution(600)
 session.tui.display.set.picture.y_resolution(600)
 
 # Save Initial Files & Run Calculation
-session.tui.file.write_case_data("vortex_init.cas.h5")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "vortex_init.cas.h5")
+session.tui.file.write_case_data(save_case_data_as)
 
 # Set number of iterations
 session.tui.solve.set.number_of_iterations(25)  # 1500
@@ -245,7 +253,8 @@ session.tui.display.set.picture.y_resolution(600)
 session.tui.display.save_picture("vortex.png")
 
 # Save and write case data
-session.tui.file.write_case_data("vortex_final.cas.h5")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "vortex_final.cas.h5")
+session.tui.file.write_case_data(save_case_data_as)
 
 # End current session
 # session.exit()

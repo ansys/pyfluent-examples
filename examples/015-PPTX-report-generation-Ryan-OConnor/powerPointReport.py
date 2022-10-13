@@ -79,16 +79,14 @@ def analyze_ppt(input, output):
 analyze_ppt(template_filename, "labelled_template.pptx")
 
 # Load Fluent Model
-session = pyfluent.launch_fluent()
+session = pyfluent.launch_fluent(mode="solver")
 
 # Check server status
 session.check_health()
 
 # Read case file and data
-session.solver.tui.file.read_case(case_filename)
-session.solver.tui.file.read_data(data_filename)
-
-root = session.solver.root
+session.tui.file.read_case(case_filename)
+session.tui.file.read_data(data_filename)
 
 # Open PPTX Template
 prs = Presentation(template_filename)
@@ -110,10 +108,10 @@ subtitle.text = "CFD Simulation Results"
 # Collect Report Definition Data
 repdef = []
 repcalc = []
-reportList = root.solution.report_definitions.surface.get_object_names()
+reportList = session.solution.report_definitions.surface.get_object_names()
 
 for report in reportList:
-    for key, value in root.solution.report_definitions.compute(report_defs=[report])[
+    for key, value in session.solution.report_definitions.compute(report_defs=[report])[
         0
     ].items():
         repdef.append(key)
@@ -172,14 +170,14 @@ def adjust_picture_to_fit(picture):
 # Dictionary corresponding to graphics objects.
 # Once scenes are enabled with the Settings API they can be added here.
 Images = {
-    "mesh": root.results.graphics.mesh.get_object_names(),
-    "contour": root.results.graphics.contour.get_object_names(),
-    "vector": root.results.graphics.vector.get_object_names(),
-    "pathlines": root.results.graphics.pathline.get_object_names(),
-    "particletracks": root.results.graphics.particle_track.get_object_names(),
+    "mesh": session.results.graphics.mesh.get_object_names(),
+    "contour": session.results.graphics.contour.get_object_names(),
+    "vector": session.results.graphics.vector.get_object_names(),
+    "pathlines": session.results.graphics.pathline.get_object_names(),
+    "particletracks": session.results.graphics.particle_track.get_object_names(),
 }
 
-session.solver.tui.display.set.picture.use_window_resolution("no")
+session.tui.display.set.picture.use_window_resolution("no")
 
 # Loop through the objects of each key in the Images dictionary,
 # save picture, and insert picture into PPTX
@@ -189,14 +187,14 @@ for key, value in Images.items():
         slide = prs.slides.add_slide(graph_slide_layout)
         title = slide.shapes.title
         title.text = image
-        session.solver.tui.display.save_picture(image + ".png")
+        session.tui.display.save_picture(image + ".png")
         placeholder = slide.placeholders[14]
         pic = placeholder.insert_picture(image + ".png")
         adjust_picture_to_fit(pic)
 
 # Add residual plot.
-session.solver.tui.plot.residuals()
-session.solver.tui.display.save_picture("residuals.png")
+session.tui.plot.residuals()
+session.tui.display.save_picture("residuals.png")
 
 graph_slide_layout = prs.slide_layouts[6]
 slide = prs.slides.add_slide(graph_slide_layout)
@@ -208,7 +206,7 @@ pic = placeholder.insert_picture("residuals.png")
 adjust_picture_to_fit(pic)
 
 # Add Report Charts
-session.solver.tui.solve.report_plots.list()
+session.tui.solve.report_plots.list()
 # Add charts for each individual report plot.
 
 # Generate a list of all report plots.
@@ -226,8 +224,8 @@ if reportdefs[0] == "invalid":
     print("There are no report definitions.")
 else:
     for report in reportdefs:
-        session.solver.tui.solve.report_plots.plot(report)
-        session.solver.tui.display.save_picture(report + ".png")
+        session.tui.solve.report_plots.plot(report)
+        session.tui.display.save_picture(report + ".png")
 
         graph_slide_layout = prs.slide_layouts[6]
         slide = prs.slides.add_slide(graph_slide_layout)
@@ -242,4 +240,4 @@ else:
 prs.save(case_filename + "_report.pptx")
 
 # End current session
-# session.exit()
+session.exit()

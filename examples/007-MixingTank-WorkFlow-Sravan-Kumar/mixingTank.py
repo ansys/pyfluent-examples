@@ -7,6 +7,8 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+from pathlib import Path
+
 # Stirred Tank: Fluent Meshing, Fluent Solver and Postprocessing
 import ansys.fluent.core as pyfluent
 
@@ -252,7 +254,8 @@ session.tui.display.save_picture("vel-contour.png")
 # contour1.display()
 
 # Write and save case data
-session.tui.file.write_case_data("final.cas.h5")
+save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "final.cas.h5")
+session.tui.file.write_case_data(save_case_as)
 
 
 import csv

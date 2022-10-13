@@ -9,8 +9,16 @@ postprocessing capabilities.
 
 # PID Controller for Gravity Separator
 
+from pathlib import Path
+
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 import numpy as np
+
+import_filename = examples.download_file(
+    "2d-separator.cas.h5", "pyfluent/examples/011-Gravity-Separator-PID-Sravan-Kumar"
+)  # noqa: E501
+
 
 # Create a session and launch the fluent
 session = pyfluent.launch_fluent(
@@ -18,7 +26,7 @@ session = pyfluent.launch_fluent(
 )
 
 # Read a case file
-session.tui.file.read_case_data("2d-separator.cas.h5")
+session.tui.file.read_case_data(import_filename)
 
 pid_kp = 2.0
 pid_ti = 0.01
@@ -105,7 +113,8 @@ plt.xlabel("Iterations")
 # plt.show()
 
 # Write and save the case file
-session.tui.file.write_case_data("2d-separator-final.cas.h5")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "2d-separator-final.cas.h5")
+session.tui.file.write_case_data(save_case_data_as)
 
 # End current session
 # session.exit()

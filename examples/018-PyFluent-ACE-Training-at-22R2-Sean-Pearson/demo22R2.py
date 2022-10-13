@@ -34,7 +34,7 @@ fluent.version_info()
 
 # help(fluent.set_log_level)
 
-fluent.set_log_level("DEBUG")
+# fluent.set_log_level("DEBUG")
 
 # Find out about launch_fluent and call it
 from ansys.fluent.core import launch_fluent

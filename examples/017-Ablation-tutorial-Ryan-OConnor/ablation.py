@@ -7,8 +7,16 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+from pathlib import Path
+
 # Import modules
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
+
+import_filename = examples.download_file(
+    "ablation.msh.h5", "pyfluent/examples/017-Ablation-tutorial-Ryan-OConnor"
+)  # noqa: E501
+
 from ansys.fluent.visualization import set_config
 
 set_config(blocking=True, set_view_on_display="isometric")
@@ -19,7 +27,7 @@ session = pyfluent.launch_fluent(
 )
 
 # Read Mesh
-session.tui.file.read_case("ablation.msh.h5")
+session.tui.file.read_case(import_filename)
 
 # Setup
 session.tui.define.models.solver.density_based_implicit("yes")
@@ -237,7 +245,8 @@ session.tui.solve.initialize.compute_defaults.pressure_far_field("inlet")
 session.tui.solve.initialize.initialize_flow()
 
 # Save case file
-session.tui.file.write_case("ablation.cas.h5")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "ablation.cas.h5")
+session.tui.file.write_case(save_case_data_as)
 
 # Solve
 
@@ -245,7 +254,11 @@ session.tui.file.write_case("ablation.cas.h5")
 # session.tui.solve.dual_time_iterate('100','20')
 
 # Post-Process
-session.tui.file.read_case_data("ablation_Solved.cas.h5")
+import_data_filename = examples.download_file(
+    "ablation_Solved.cas.h5", "pyfluent/examples/017-Ablation-tutorial-Ryan-OConnor"
+)  # noqa: E501
+
+session.tui.file.read_case_data(import_data_filename)
 
 session.tui.display.surface.plane_surface("mid_plane", "zx-plane", "0")
 

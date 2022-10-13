@@ -20,8 +20,15 @@ postprocessing capabilities.
 # Brake pad wear
 # Braking performance
 
+from pathlib import Path
+
 # import modules
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
+
+import_filename = examples.download_file(
+    "brake.msh", "pyfluent/examples/014-Brake-Thermal-PyVista-Matplotlib-Manoj-Vani"
+)  # noqa: E501
 
 # Set log level
 # pyfluent.set_log_level("DEBUG")
@@ -36,7 +43,7 @@ session.check_health()
 
 
 # Read mesh file
-session.tui.file.read_case("brake.msh")
+session.tui.file.read_case(import_filename)
 
 
 # Define models and material
@@ -238,7 +245,8 @@ session.tui.solve.set.transient_controls.time_step_size(0.01)
 session.tui.solve.dual_time_iterate(10, 5)  # 200, 5
 
 # Write and save case file data
-session.tui.file.write_case_data("brake-final")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "brake-final.cas.h5")
+session.tui.file.write_case_data(save_case_data_as)
 
 
 # PyVista post processing

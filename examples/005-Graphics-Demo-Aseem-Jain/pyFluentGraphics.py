@@ -42,7 +42,7 @@ set_config(blocking=True, set_view_on_display="isometric")
 session = pyfluent.launch_fluent(mode="solver")
 
 # Read case and Data
-session.tui.file.read_case("elbow1")
+session.tui.file.read_case(import_filename)
 
 # session.tui.file.read_case(case_file_name='elbow1').result()
 

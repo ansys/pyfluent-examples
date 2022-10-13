@@ -15,6 +15,7 @@ set_config(blocking=True, set_view_on_display="isometric")
 
 import csv  # noqa: F401
 import os
+from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 
@@ -396,7 +397,8 @@ session.workflow.TaskObject["Improve Volume Mesh"].Arguments.setState(
 session.workflow.TaskObject["Improve Volume Mesh"].Execute()
 
 # Save Mesh File
-session.tui.file.write_mesh("hx-fin-2mm.msh.h5")
+save_mesh_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.msh.h5")
+session.tui.file.write_mesh(save_mesh_as)
 
 # Switch to Solution / solver Mode
 session = session.switch_to_solver()
@@ -605,7 +607,8 @@ session.tui.solve.report_files.add(
 # Hybrid Initialization; Slit Interior between Solid Zones; Save Case
 session.tui.solve.initialize.hyb_initialization()
 session.tui.mesh.modify_zones.slit_interior_between_diff_solids()
-session.tui.file.write_case("hx-fin-2mm.cas.h5")
+save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.cas.h5")
+session.tui.file.write_case(save_case_as)
 session.tui.solve.initialize.hyb_initialization()
 
 # Set Aggressive Length Scale Method; Run Calculation & Save Data
@@ -613,7 +616,8 @@ session.tui.solve.set.pseudo_time_method.global_time_step_settings(
     "yes", "0", "1", "yes", "1"
 )
 session.tui.solve.iterate(10)  # 250
-session.tui.file.write_case_data("hx-fin-2mm.dat.h5")
+save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.dat.h5")
+session.tui.file.write_case_data(save_case_data_as)
 
 # Post-Processing
 # dataName = 'hx-fin-2mm.dat.h5'

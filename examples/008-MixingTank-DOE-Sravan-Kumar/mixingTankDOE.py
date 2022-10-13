@@ -9,6 +9,7 @@ postprocessing capabilities.
 
 # Stirred Tank: DOE and Plotting 3D Surface Plot using Plotly
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 import numpy as np
 
 # Defining constants
@@ -26,8 +27,13 @@ session = pyfluent.launch_fluent(
     version="3d", precision="double", processor_count=6, mode="solver"
 )
 
+import_filename = examples.download_file(
+    "test-laminar-visc.cas.h5", "pyfluent/examples/008-MixingTank-DOE-Sravan-Kumar"
+)  # noqa: E501
+
+
 # Read case file
-session.tui.file.read_case("test-laminar-visc.cas.h5")
+session.tui.file.read_case(import_filename)
 
 # DOE
 for i in range(len(omega)):
