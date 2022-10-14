@@ -1,12 +1,6 @@
-.. _ref_example_gallery:
-
-========
-Examples
-========
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-
-.. 00-intro/README.txt
-.. 01-DOE-ML/README.txt
+Simulation Examples
+=====================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
