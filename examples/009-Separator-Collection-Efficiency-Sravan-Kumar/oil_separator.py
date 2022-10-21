@@ -7,6 +7,8 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+from pathlib import Path
+
 # Oil Separator: Plot Collection Efficiency
 # Import pyfluent module
 import ansys.fluent.core as pyfluent
@@ -181,7 +183,8 @@ session.results.graphics.lic["lic-1"].texture_size = 10
 session.tui.display.save_picture("lic-vel.png")
 
 # Write and save case data
-session.tui.file.write_case_data("oil_separator.cas.h5")
+save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "oil_separator.cas.h5")
+session.tui.file.write_case_data(save_case_as)
 
 
 # Velocity on Mid Plane

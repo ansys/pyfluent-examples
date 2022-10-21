@@ -26,6 +26,17 @@ case_filename = "elbow.cas.h5"
 data_filename = "elbow.dat.h5"
 template_filename = "templatePyAnsys.pptx"
 
+import_case_filename = examples.download_file(
+    "elbow.cas.h5",
+    "pyfluent/examples/015-PPTX-report-generation-Ryan-OConnor",
+)  # noqa: E501
+
+import_data_filename = examples.download_file(
+    "elbow.dat.h5",
+    "pyfluent/examples/015-PPTX-report-generation-Ryan-OConnor",
+)  # noqa: E501
+
+
 # Determine Placeholder Index for Given PPTX Template
 # Analyze_ppt is taken from
 # https://github.com/chris1610/pbpython/blob/master/code/analyze_ppt.pyhttps:
@@ -85,8 +96,8 @@ session = pyfluent.launch_fluent(mode="solver")
 session.check_health()
 
 # Read case file and data
-session.tui.file.read_case(case_filename)
-session.tui.file.read_data(data_filename)
+session.tui.file.read_case(import_case_filename)
+session.tui.file.read_data(import_data_filename)
 
 # Open PPTX Template
 prs = Presentation(template_filename)

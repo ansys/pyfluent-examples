@@ -9,7 +9,10 @@ postprocessing capabilities.
 
 # Start by importing PyFluent
 
+from pathlib import Path
+
 import ansys.fluent.core as fluent
+from ansys.fluent.core import examples
 from ansys.fluent.visualization import set_config
 
 set_config(blocking=True, set_view_on_display="isometric")
@@ -239,7 +242,8 @@ case_file = "demo.cas"
 
 # help(meshing_session.meshing.tui.file.write_case)
 
-meshing_session.meshing.tui.file.write_case(case_file)
+save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "demo.cas")
+meshing_session.meshing.tui.file.write_case(save_case_as)
 
 # End meshing session
 # meshing_session.exit()
@@ -256,8 +260,12 @@ tui = solver_session.solver.tui
 dir_filtered(solver.file)
 
 # help(solver.file.read)
+import_case_filename = examples.download_file(
+    "demo.cas.h5",
+    "pyfluent/examples/018-PyFluent-ACE-Training-at-22R2-Sean-Pearson",
+)  # noqa: E501
 
-solver.file.read_case(file_name="demo.cas.h5")
+solver.file.read_case(import_case_filename)
 
 # Assign air density two ways
 
@@ -461,7 +469,11 @@ solver = new_solver_session.solver.root
 case_file = "elbow1.cas"
 
 # Read case file
-solver.file.read_case(file_name=case_file)
+read_case_filename = examples.download_file(
+    "elbow1.cas",
+    "pyfluent/examples/018-PyFluent-ACE-Training-at-22R2-Sean-Pearson",
+)  # noqa: E501
+solver.file.read_case(read_case_filename)
 
 # Initialize iterations
 solver.solution.initialization.hybrid_initialize()
