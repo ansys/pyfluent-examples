@@ -12,6 +12,7 @@ import os
 
 import CreatePPTX  # noqa: F401
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 import dash  # noqa: F401
 from dash import Input, Output, State, dash_table, dcc, html  # noqa: F401
 import dash_bootstrap_components as dbc  # noqa: F401
@@ -21,7 +22,11 @@ session = pyfluent.launch_fluent(mode="solver")
 tabularData = []
 
 # Read case file
-session.tui.file.read_case_data("elbow.cas.h5")
+import_case_filename = examples.download_file(
+    "elbow.cas.h5",
+    "pyfluent/examples/016-Dash-App-for-Post-processing-Ryan-OConnor",
+)  # noqa: E501
+session.tui.file.read_case_data(import_case_filename)
 
 if os.path.exists("transcript.txt"):
     os.remove("transcript.txt")
