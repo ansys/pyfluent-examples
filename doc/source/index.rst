@@ -86,7 +86,3 @@ software. The use of the interactive control of PyFluent requires a legally
 licensed local copy of Ansys Fluent. For more information about Ansys Fluent,
 visit the Ansys Fluent page on the Ansys website.
 
-Project Index
--------------
-
-* :ref:`genindex`
