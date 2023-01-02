@@ -2,7 +2,7 @@ ansys-fluent-core
 ansys-fluent-parametric
 ansys-fluent-visualization
 Sphinx==6.0.0
-numpydoc==1.4.0
+numpydoc==1.5.0
 ansys-sphinx-theme==0.8.0
 sphinx-copybutton==0.5
 matplotlib
