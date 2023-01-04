@@ -87,7 +87,7 @@ dir_filtered(session)
 # help(session.solver)
 
 # Launch fluent in meshing mode
-meshing_session = launch_fluent(meshing_mode=True)
+meshing_session = launch_fluent(mode="meshing")
 
 # help(meshing_session)
 
@@ -98,9 +98,9 @@ dir_filtered(meshing)
 # help(meshing)
 
 # Use the workflow object for task-based meshing
-workflow = meshing.workflow
+workflow = meshing_session.workflow
 
-assert workflow is meshing_session.meshing.workflow
+assert workflow is meshing_session.workflow
 
 # help(workflow)
 
@@ -144,9 +144,12 @@ import_geometry.help()
 
 import_geometry()
 
-import_geometry.Arguments.update_dict(
-    {"FileName": "demo_geometry.scdoc.pmdb", "AppendMesh": False}
+geom_filename = examples.download_file(
+    "demo_geometry.scdoc.pmdb",
+    "pyfluent/examples/018-PyFluent-ACE-Training-at-22R2-Sean-Pearson",
 )
+
+import_geometry.Arguments.update_dict({"FileName": geom_filename, "AppendMesh": False})
 
 import_geometry.Execute()
 
@@ -242,8 +245,8 @@ case_file = "demo.cas"
 
 # help(meshing_session.meshing.tui.file.write_case)
 
-save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "demo.cas")
-meshing_session.meshing.tui.file.write_case(save_case_as)
+save_case_as = str(Path(fluent.EXAMPLES_PATH) / "demo.cas")
+meshing_session.tui.file.write_case(save_case_as)
 
 # End meshing session
 # meshing_session.exit()
@@ -252,8 +255,8 @@ meshing_session.meshing.tui.file.write_case(save_case_as)
 solver_session = launch_fluent()
 
 # Access the underlying solver API objects
-solver = solver_session.solver.root
-tui = solver_session.solver.tui
+solver = solver_session
+tui = solver_session.tui
 
 # Access the file object and read case
 
@@ -265,7 +268,7 @@ import_case_filename = examples.download_file(
     "pyfluent/examples/018-PyFluent-ACE-Training-at-22R2-Sean-Pearson",
 )  # noqa: E501
 
-solver.file.read_case(import_case_filename)
+solver.file.read(file_type="case", file_name=import_case_filename)
 
 # Assign air density two ways
 
@@ -295,7 +298,10 @@ solver.setup.materials.fluid["air"].density.get_state()
 
 density = 1.25
 
-solver.setup.materials.fluid["air"].density = {"option": "constant", "value": density}
+solver.setup.materials.fluid["air"].density = {
+    "option": "constant",
+    "value": density,
+}
 
 solver.setup.materials.fluid["air"].density()
 
@@ -338,14 +344,14 @@ reynolds = (density * inlet_velocity * hydraulic_diameter) / 1.7894e-5
 turb_intensity = 0.16 * pow(reynolds, -0.125)
 inlet = solver.setup.boundary_conditions.velocity_inlet["velocityinlet"]
 inlet.turb_intensity = turb_intensity
-inlet.vmag.value = inlet_velocity
+inlet.vmag = inlet_velocity
 
 outlet = solver.setup.boundary_conditions.pressure_outlet["pressureoutlet"]
 outlet.turb_intensity = turb_intensity
 
 outlet.turb_intensity()
 
-inlet.vmag.value()
+inlet.vmag()
 
 # Observe effects
 energy_is_active = solver.setup.models.energy.enabled()
@@ -464,7 +470,7 @@ results_dict
 # Launch another solver
 new_solver_session = launch_fluent()
 
-solver = new_solver_session.solver.root
+solver = new_solver_session
 
 case_file = "elbow1.cas"
 
@@ -473,7 +479,7 @@ read_case_filename = examples.download_file(
     "elbow1.cas",
     "pyfluent/examples/018-PyFluent-ACE-Training-at-22R2-Sean-Pearson",
 )  # noqa: E501
-solver.file.read_case(read_case_filename)
+solver.file.read(file_type="case", file_name=read_case_filename)
 
 # Initialize iterations
 solver.solution.initialization.hybrid_initialize()

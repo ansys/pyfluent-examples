@@ -41,10 +41,10 @@ for idx1, coldVel in np.ndenumerate(coldVelArr):
     for idx2, hotVel in np.ndenumerate(hotVelArr):
 
         inlet1 = session.setup.boundary_conditions.velocity_inlet["cold-inlet"]
-        inlet1.vmag.value = coldVel
+        inlet1.vmag = coldVel
 
         inlet2 = session.setup.boundary_conditions.velocity_inlet["hot-inlet"]
-        inlet2.vmag.value = hotVel
+        inlet2.vmag = hotVel
 
         session.solution.initialization()
         session.tui.solve.iterate(5)  # 200

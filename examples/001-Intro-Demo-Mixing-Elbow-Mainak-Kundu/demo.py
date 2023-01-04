@@ -79,7 +79,7 @@ print(session.tui.define.models.energy)
 inlet = session.setup.boundary_conditions.velocity_inlet["inlet1"]
 
 # Set velocity magnitude
-inlet.vmag.value = 1.2
+inlet.vmag = 1.2
 
 # Initialize solutin mode
 session.solution.initialization()

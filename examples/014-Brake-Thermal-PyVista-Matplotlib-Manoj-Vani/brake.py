@@ -152,12 +152,16 @@ session.tui.solve.report_plots.add(
     "max-disc-temperature",
     "()",
 )
+
+report_file = str(Path(pyfluent.EXAMPLES_PATH) / "max-temperature.out")
 session.tui.solve.report_files.add(
     "max-temperature",
     "report-defs",
     "max-pad-temperature",
     "max-disc-temperature",
     "()",
+    "file-name",
+    report_file,
 )
 
 # Set contour properties
@@ -294,7 +298,7 @@ X = []
 Y = []
 Z = []
 i = -1
-with open("report-file-0.out", "r") as datafile:
+with open(report_file, "r") as datafile:
     plotting = csv.reader(datafile, delimiter=" ")
     for rows in plotting:
         i = i + 1

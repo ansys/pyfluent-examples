@@ -157,7 +157,7 @@ session.tui.display.views.restore_view("front")
 session.tui.display.views.auto_scale()
 
 # Set windows resolution
-session.tui.display.set.picture.use_window_resolution("no")
+# session.tui.display.set.picture.use_window_resolution("no")
 
 # Set x axis resolution
 session.tui.display.set.picture.x_resolution(600)

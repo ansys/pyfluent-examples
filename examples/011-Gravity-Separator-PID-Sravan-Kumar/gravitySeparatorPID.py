@@ -15,10 +15,12 @@ import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import numpy as np
 
-import_filename = examples.download_file(
+case_filename = examples.download_file(
     "2d-separator.cas.h5", "pyfluent/examples/011-Gravity-Separator-PID-Sravan-Kumar"
-)  # noqa: E501
-
+)
+data_filename = examples.download_file(
+    "2d-separator.dat.h5", "pyfluent/examples/011-Gravity-Separator-PID-Sravan-Kumar"
+)
 
 # Create a session and launch the fluent
 session = pyfluent.launch_fluent(
@@ -26,7 +28,7 @@ session = pyfluent.launch_fluent(
 )
 
 # Read a case file
-session.tui.file.read_case_data(import_filename)
+session.tui.file.read_case_data(case_filename)
 
 pid_kp = 2.0
 pid_ti = 0.01

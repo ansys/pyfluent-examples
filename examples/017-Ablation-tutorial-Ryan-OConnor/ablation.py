@@ -255,7 +255,7 @@ session.tui.file.write_case(save_case_data_as)
 
 # Post-Process
 import_data_filename = examples.download_file(
-    "ablation_Solved.cas.h5", "pyfluent/examples/017-Ablation-tutorial-Ryan-OConnor"
+    "ablation_Solved.dat.h5", "pyfluent/examples/017-Ablation-tutorial-Ryan-OConnor"
 )  # noqa: E501
 
 session.tui.file.read_case_data(import_data_filename)

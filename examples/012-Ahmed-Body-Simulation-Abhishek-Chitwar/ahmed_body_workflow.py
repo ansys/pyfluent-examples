@@ -10,13 +10,16 @@ postprocessing capabilities.
 # Ahmed Body Simulation using PyFluent
 # This example demonstrate pyfluent api for Ahmed Body Simulation
 
+import os
 from pathlib import Path
 
 # Import the pyfluent, std libraries etc
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 from ansys.fluent.visualization import set_config
 
 set_config(blocking=True, set_view_on_display="isometric")
+os.chdir(pyfluent.EXAMPLES_PATH)
 # Launch the session
 
 # session = pyfluent.launch_fluent(version='3d', precision='double',
@@ -41,7 +44,16 @@ session.check_health()
 # This is meshing workflow using existing .wft file.
 # session.tui.solver.switch_to_meshing_mode("Yes")
 workflow = session.workflow
-workflow.LoadWorkflow(FilePath="ahmed_standard_poly_boi.wft")
+
+workflow_filename = examples.download_file(
+    "ahmed_standard_poly_boi.wft",
+    "pyfluent/examples/012-Ahmed-Body-Simulation-Abhishek-Chitwar",
+)
+pmdb_filename = examples.download_file(
+    "ahmed_body_00_0degree_boi.pmdb",
+    "pyfluent/examples/012-Ahmed-Body-Simulation-Abhishek-Chitwar",
+)
+workflow.LoadWorkflow(FilePath=workflow_filename)
 workflow.TaskObject["Import Geometry"].Execute()
 workflow.TaskObject["Add Local Sizing"].Execute()
 workflow.TaskObject["Generate the Surface Mesh"].Execute()
@@ -73,7 +85,7 @@ session.tui.define.models.viscous.curvature_correction("yes")
 # Set velocity inlet boundary conditions
 inlet = session.setup.boundary_conditions.velocity_inlet["inlet"]
 inlet.turb_intensity = 0.05
-inlet.vmag.value = inlet_velocity
+inlet.vmag = inlet_velocity
 inlet.turb_viscosity_ratio = 5
 
 # Set velocity outlet boundary conditions

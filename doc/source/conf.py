@@ -1,5 +1,6 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
+import os
 import platform
 import subprocess
 
@@ -107,21 +108,24 @@ copybutton_prompt_text = r">>> ?|\.\.\. "
 copybutton_prompt_is_regexp = True
 
 
-def _stop_fluent_container(gallery_conf, fname):
-    try:
-        is_linux = platform.system() == "Linux"
-        container_names = (
-            subprocess.check_output(
-                "docker container ls --format {{.Names}}", shell=is_linux
+def _reset_module_cb(gallery_conf, fname, when):
+    if when == "before":
+        os.environ["PYFLUENT_TEST_NAME"] = fname
+    elif when == "after":
+        try:
+            is_linux = platform.system() == "Linux"
+            container_names = (
+                subprocess.check_output(
+                    "docker container ls --format {{.Names}}", shell=is_linux
+                )
+                .decode("utf-8")
+                .strip()
+                .split()
             )
-            .decode("utf-8")
-            .strip()
-            .split()
-        )
-        for container_name in container_names:
-            subprocess.run(f"docker stop {container_name}", shell=is_linux)
-    except Exception:
-        pass
+            for container_name in container_names:
+                subprocess.run(f"docker stop {container_name}", shell=is_linux)
+        except Exception:
+            pass
 
 
 # -- Sphinx Gallery Options ---------------------------------------------------
@@ -142,10 +146,16 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-fluent-core",
-    "ignore_pattern": "flycheck*",
+    # Following tests are excluded:
+    #   003-Tyler-Sofrin-Modes-Compressor-Ryan-OConnor
+    #   008-MixingTank-DOE-Sravan-Kumar
+    #   010-Steady-Vortex-VOF-Sravan-Kumar
+    #   012-Ahmed-Body-Simulation-Abhishek-Chitwar
+    #   016-Dash-App-for-Post-processing-Ryan-OConnor
+    "ignore_pattern": r"TylerSofrinModes\.py|mixingTankDOE\.py|steady_vortex\.py|ahmed_body_workflow\.py|CreatePPTX\.py|DashApp\.py",  # noqa: E501
     "thumbnail_size": (350, 350),
-    "reset_modules_order": "after",
-    "reset_modules": (_stop_fluent_container),
+    "reset_modules_order": "both",
+    "reset_modules": (_reset_module_cb),
 }
 
 

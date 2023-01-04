@@ -11,6 +11,7 @@ from pathlib import Path
 
 # Stirred Tank: Fluent Meshing, Fluent Solver and Postprocessing
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 
 # pyfluent.set_log_level("INFO")
 
@@ -24,9 +25,11 @@ session.check_health()
 
 # Initialize Workflow
 session.workflow.InitializeWorkflow(WorkflowType="Watertight Geometry")
-session.workflow.TaskObject["Import Geometry"].Arguments = dict(
-    FileName="StirredTank.scdoc"
+geom_filename = examples.download_file(
+    "StirredTank.scdoc",
+    "pyfluent/examples/007-MixingTank-WorkFlow-Sravan-Kumar",
 )
+session.workflow.TaskObject["Import Geometry"].Arguments = dict(FileName=geom_filename)
 session.workflow.TaskObject["Import Geometry"].Execute()
 session.workflow.TaskObject["Generate the Surface Mesh"].Execute()
 session.workflow.TaskObject["Describe Geometry"].Arguments = dict(

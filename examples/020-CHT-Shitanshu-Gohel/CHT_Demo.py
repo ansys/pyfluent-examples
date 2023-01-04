@@ -14,10 +14,10 @@ from ansys.fluent.visualization import set_config
 set_config(blocking=True, set_view_on_display="isometric")
 
 import csv  # noqa: F401
-import os
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 
 # from ansys.fluent.visualization.matplotlib import Plots, matplot_windows_manager
 from ansys.fluent.visualization.pyvista import (  # noqa: F401
@@ -45,12 +45,6 @@ viz.__version__
 
 # workDir = r"D:\ExamplesNew\Examples\020 CHT - Shitanshu Gohel"
 
-geomName = "cht_fin_htc_new.scdoc"
-
-geomFilePath = os.path.join(os.getcwd(), geomName)
-
-os.chdir(os.path.join(os.getcwd()))
-
 session = pyfluent.launch_fluent(mode="meshing", processor_count=4, show_gui=False)
 
 # PyFluent Session Health
@@ -60,8 +54,12 @@ session.check_health()
 # Read Geometry File; Create Surface Mesh; Describe Geometry
 session.workflow.InitializeWorkflow(WorkflowType=r"Watertight Geometry")
 
+geom_filename = examples.download_file(
+    "cht_fin_htc_new.scdoc",
+    "pyfluent/examples/020-CHT-Shitanshu-Gohel",
+)
 session.workflow.TaskObject["Import Geometry"].Arguments.update_dict(
-    {"FileName": geomFilePath}
+    {"FileName": geom_filename}
 )
 session.workflow.TaskObject["Import Geometry"].Execute()
 

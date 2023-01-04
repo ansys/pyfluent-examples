@@ -15,7 +15,10 @@ postprocessing capabilities.
 # images of charts (residuals and report plots).
 # It can be easily modified to work with any PowerPoint template.
 
+from pathlib import Path
+
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 
 # Impoer modules
 from pptx import Presentation
@@ -188,7 +191,7 @@ Images = {
     "particletracks": session.results.graphics.particle_track.get_object_names(),
 }
 
-session.tui.display.set.picture.use_window_resolution("no")
+# session.tui.display.set.picture.use_window_resolution("no")
 
 # Loop through the objects of each key in the Images dictionary,
 # save picture, and insert picture into PPTX
@@ -198,9 +201,10 @@ for key, value in Images.items():
         slide = prs.slides.add_slide(graph_slide_layout)
         title = slide.shapes.title
         title.text = image
-        session.tui.display.save_picture(image + ".png")
+        img_path = str(Path(pyfluent.EXAMPLES_PATH) / (image + ".png"))
+        session.tui.display.save_picture(img_path)
         placeholder = slide.placeholders[14]
-        pic = placeholder.insert_picture(image + ".png")
+        pic = placeholder.insert_picture(img_path)
         adjust_picture_to_fit(pic)
 
 # Add residual plot.
