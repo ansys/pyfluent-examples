@@ -44,27 +44,6 @@ Ansys Fluent session to create your own customized workspace. In addition, you
 can use PyFluent to enhance your productivity with highly configurable,
 customized scripts.
 
-Features
---------
-The primary package, ``ansys-fluent-core``, provides features such as:
-
-- Ability to launch the Fluent solver in serial or parallel and connect to
-  already running Fluent sessions using the :ref:`ref_launcher_launcher` module.
-- Scripting of Fluent's meshing capabilities. See the :ref:`ref_meshing` module
-  for more information.
-- Scripting using all of Fluent's TUI commands. See the :ref:`ref_solver_tui`
-  module for more information about the available commands.
-- Ability to run more than one Fluent session asynchronously.  See the
-  :ref:`ref_utils` module for more information.
-- Ability to retrieve Fluent field data as numpy arryas for custom post
-  processing using standard Python libraries such as matplotlib.  See the
-  :ref:`ref_field_data` module for more information.
-- Ability to register function callbacks on Fluent solver events such as when a
-  case or data file is read, or the Fluent solver completes an iteration.  See
-  the :ref:`ref_events` module for more information.
-- Ability to retrieve solver monitors such as residuals using the
-  :ref:`ref_monitors` module.
-
 Documentation and Issues
 ------------------------
 
