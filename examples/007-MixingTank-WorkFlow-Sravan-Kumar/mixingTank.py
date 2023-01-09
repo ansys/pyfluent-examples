@@ -26,10 +26,12 @@ session.check_health()
 # Initialize Workflow
 session.workflow.InitializeWorkflow(WorkflowType="Watertight Geometry")
 geom_filename = examples.download_file(
-    "StirredTank.scdoc",
+    "StirredTank.scdoc.pmdb",
     "pyfluent/examples/007-MixingTank-WorkFlow-Sravan-Kumar",
 )
-session.workflow.TaskObject["Import Geometry"].Arguments = dict(FileName=geom_filename)
+session.workflow.TaskObject["Import Geometry"].Arguments = dict(
+    FileName=geom_filename
+)  # noqa: E501
 session.workflow.TaskObject["Import Geometry"].Execute()
 session.workflow.TaskObject["Generate the Surface Mesh"].Execute()
 session.workflow.TaskObject["Describe Geometry"].Arguments = dict(
@@ -146,13 +148,14 @@ session.tui.solve.report_plots.add(
 session.tui.solve.report_files.add(
     "torque", "report-defs", "torque", "()", "file-name", "torque.out", "q"
 )
+vol_avg_vel_out_filepath = str(Path(pyfluent.EXAMPLES_PATH) / "vol-avg-vel.out")
 session.tui.solve.report_files.add(
     "vol-avg-vel",
     "report-defs",
     "vol-avg-vel",
     "()",
     "file-name",
-    "vol-avg-vel.out",
+    vol_avg_vel_out_filepath,
     "q",
 )
 session.tui.solve.report_definitions.add(
@@ -269,7 +272,7 @@ import matplotlib.pyplot as plt
 X = []
 Y = []
 i = -1
-with open("vol-avg-vel.out", "r") as datafile:
+with open(vol_avg_vel_out_filepath, "r") as datafile:
     plotting = csv.reader(datafile, delimiter=" ")
     for rows in plotting:
         i = i + 1

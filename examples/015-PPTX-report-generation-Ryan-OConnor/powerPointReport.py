@@ -125,7 +125,9 @@ repcalc = []
 reportList = session.solution.report_definitions.surface.get_object_names()
 
 for report in reportList:
-    for key, value in session.solution.report_definitions.compute(report_defs=[report])[
+    for key, value in session.solution.report_definitions.compute(
+        report_defs=[report]
+    )[  # noqa: E501
         0
     ].items():
         repdef.append(key)

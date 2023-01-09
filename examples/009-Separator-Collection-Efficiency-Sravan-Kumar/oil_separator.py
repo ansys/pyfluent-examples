@@ -45,7 +45,7 @@ session.tui.define.boundary_conditions.list_zones()
 session.tui.define.boundary_conditions.inlet = "velocity-inlet"
 
 # session.tui.define.boundary_conditions.set.velocity_inlet(
-#                           'inlet','yes','yes','no',0.0002,'no',0,'no','yes','no','no','yes',5,10
+#                           'inlet','yes','yes','no',0.0002,'no',0,'no','yes','no','no','yes',5,10 # noqa: E501
 #                            )
 
 session.tui.solve.set.p_v_coupling(20)
@@ -120,7 +120,7 @@ session.tui.solve.report_files.add(
     "vol-avg-vel",
     "()",
     "file-name",
-    "vol-avg-vel.out",
+    str(Path(pyfluent.EXAMPLES_PATH) / "vol-avg-vel.out"),
     "q",
 )
 
@@ -233,7 +233,7 @@ for i in range(len(oil_mf)):
         session.tui.report.dpm_sample("injection-0", "()", "outlet", "()", "()", "no")
         data = 0
         k = -1
-        with open("outlet.dpm", "r") as datafile:
+        with open(str(Path(pyfluent.EXAMPLES_PATH) / "outlet.dpm"), "r") as datafile:
             plotting = csv.reader(datafile, delimiter=" ", dialect="skip_space")
             for rows in plotting:
                 k = k + 1
@@ -242,7 +242,7 @@ for i in range(len(oil_mf)):
         eff[i][j] = 100.0 * (1.0 - data / oil_mf[i])
 
 # End current session
-session.exit()
+# session.exit()
 
 # 2D Plot using Matplotlib
 plt.scatter(dia, eff[0], label="mass flow=0.05kg/s")

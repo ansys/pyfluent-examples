@@ -89,7 +89,7 @@ contour1.surfaces_list.allowed_values
 
 contour1.field.allowed_values
 
-contour1.surfaces_list._type
+# contour1.surfaces_list._type
 
 try:
     contour1.surfaces_list = 1

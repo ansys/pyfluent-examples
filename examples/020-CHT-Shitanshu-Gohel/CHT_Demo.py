@@ -76,7 +76,9 @@ session.workflow.TaskObject["Generate the Surface Mesh"].Arguments.update_dict(
 )
 session.workflow.TaskObject["Generate the Surface Mesh"].Execute()
 
-session.workflow.TaskObject["Describe Geometry"].UpdateChildTasks(SetupTypeChanged=True)
+session.workflow.TaskObject["Describe Geometry"].UpdateChildTasks(
+    SetupTypeChanged=True
+)  # noqa: E501
 session.workflow.TaskObject["Describe Geometry"].Arguments.setState(
     {
         r"CappingRequired": r"No",

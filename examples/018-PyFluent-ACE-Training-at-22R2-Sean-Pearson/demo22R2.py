@@ -149,7 +149,9 @@ geom_filename = examples.download_file(
     "pyfluent/examples/018-PyFluent-ACE-Training-at-22R2-Sean-Pearson",
 )
 
-import_geometry.Arguments.update_dict({"FileName": geom_filename, "AppendMesh": False})
+import_geometry.Arguments.update_dict(
+    {"FileName": geom_filename, "AppendMesh": False}
+)  # noqa: E501
 
 import_geometry.Execute()
 
