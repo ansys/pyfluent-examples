@@ -8,9 +8,8 @@ on:
 jobs:
   nightly_docs_build:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-          image-tag: [latest]
+    env:
+      DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
 
     steps:
       - uses: actions/checkout@v3
@@ -28,9 +27,6 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install pyfluent-parametric
-        run: make install
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -41,7 +37,7 @@ jobs:
       - name: Pull Fluent docker image
         run: make docker-pull
         env:
-          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
+          FLUENT_IMAGE_TAG: ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
 
       - name: Generate the documentation
         run: make build-doc
@@ -49,14 +45,13 @@ jobs:
           ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
-          DOCS_CNAME: dev.fluentparametric.docs.pyansys.com
-          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
+          DOCS_CNAME: fluentexamples.docs.pyansys.com
+          FLUENT_IMAGE_TAG: ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
 
       - name: Deploy
-        if: ${{ matrix.image-tag == 'latest'}}
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
-          repository-name: pyansys/pyfluent-parametric-dev-docs
+          repository-name: pyansys/pyfluent-examples-docs
           token: ${{ steps.get_workflow_token.outputs.token }}
           BRANCH: gh-pages
           FOLDER: doc/_build/html

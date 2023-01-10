@@ -16,7 +16,7 @@ sphinx-notfound-page==0.8.3
 sphinxcontrib-websupport==1.2.4
 sphinxemoji==0.2.0
 numpy
-pandas
+pandas==1.5.2
 seaborn
 python-pptx
 plotly
