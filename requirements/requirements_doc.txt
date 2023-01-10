@@ -1,4 +1,4 @@
-ansys-fluent-core~=0.12.dev12
+ansys-fluent-core~=0.12.dev14
 ansys-fluent-parametric~=0.6.dev0
 ansys-fluent-visualization~=0.6.dev4
 Sphinx==6.1.2
