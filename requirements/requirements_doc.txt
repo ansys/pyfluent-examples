@@ -1,7 +1,7 @@
 ansys-fluent-parametric~=0.6.dev1
 ansys-fluent-core~=0.12.dev14
 ansys-fluent-visualization~=0.6.dev4
-Sphinx==6.1.2
+Sphinx==6.1.3
 jupyter_sphinx==0.4.0
 numpydoc==1.5.0
 matplotlib==3.6.2
