@@ -146,19 +146,7 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-fluent-core",
-    # Following tests are excluded:
-    #   003-Tyler-Sofrin-Modes-Compressor-Ryan-OConnor
-    #   006-Wind-Loading-Sean-Pearson
-    #   007-MixingTank-WorkFlow-Sravan-Kumar
-    #   008-MixingTank-DOE-Sravan-Kumar
-    #   009-Separator-Collection-Efficiency-Sravan-Kumar
-    #   010-Steady-Vortex-VOF-Sravan-Kumar
-    #   012-Ahmed-Body-Simulation-Abhishek-Chitwar
-    #   015-PPTX-report-generation-Ryan-OConnor
-    #   016-Dash-App-for-Post-processing-Ryan-OConnor
-    #   018-PyFluent-ACE-Training-at-22R2-Sean-Pearson
-    #   020-CHT-Shitanshu-Gohel
-    "ignore_pattern": r"TylerSofrinModes\.py|mixingTankDOE\.py|steady_vortex\.py|ahmed_body_workflow\.py|CreatePPTX\.py|DashApp\.py|windload_end_to_end\.py|mixingTank\.py|oil_separator\.py|powerPointReport\.py|demo22R2\.py|CHT_Demo\.py",  # noqa: E501
+    "ignore_pattern": r"steady_vortex\.py|TylerSofrinModes\.py|ahmed_body_workflow\.py|CreatePPTX\.py|DashApp\.py|windload_end_to_end\.py|oil_separator\.py|powerPointReport\.py|demo22R2\.py|CHT_Demo\.py",  # noqa: E501
     "thumbnail_size": (350, 350),
     "reset_modules_order": "both",
     "reset_modules": (_reset_module_cb),

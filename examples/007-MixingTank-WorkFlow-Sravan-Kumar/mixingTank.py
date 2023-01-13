@@ -244,7 +244,7 @@ session.results.graphics.contour["contour-1"].field = "velocity-magnitude"
 session.tui.display.objects.display("contour-1")
 session.tui.display.views.restore_view("top")
 session.tui.display.views.auto_scale()
-session.tui.display.set.picture.use_window_resolution("no")
+# session.tui.display.set.picture.use_window_resolution("no")
 session.tui.display.set.picture.x_resolution(600)
 session.tui.display.set.picture.y_resolution(600)
 session.tui.display.save_picture("vel-contour.png")
