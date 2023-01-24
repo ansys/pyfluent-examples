@@ -2,7 +2,7 @@ ansys-fluent-parametric==0.6.0
 ansys-fluent-core==0.12.3
 ansys-fluent-visualization==0.6.0
 numpy
-pandas==1.5.2
+pandas==1.5.3
 seaborn
 python-pptx
 plotly
