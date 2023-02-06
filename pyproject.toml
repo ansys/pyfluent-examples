@@ -25,9 +25,9 @@ classifiers = [
 ]
 dependencies = [
     "importlib-metadata >=4.0",
-    "ansys-fluent-core == 0.11.0",
-    "ansys-fluent-parametric ==0.4.0",
-    "ansys-fluent-visualization ==0.4.0"
+    "ansys-fluent-core == 0.12.*",
+    "ansys-fluent-parametric == 0.6.*",
+    "ansys-fluent-visualization ==0.6.*"
 ]
 
 [tool.flit.module]
