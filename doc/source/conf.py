@@ -149,7 +149,7 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-fluent-core",
-    "ignore_pattern": r"steady_vortex\.py|TylerSofrinModes\.py|ahmed_body_workflow\.py|CreatePPTX\.py|DashApp\.py|windload_end_to_end\.py|oil_separator\.py|powerPointReport\.py|demo22R2\.py|CHT_Demo\.py",  # noqa: E501
+    "ignore_pattern": r"steady_vortex\.py|ahmed_body_workflow\.py|CreatePPTX\.py|DashApp\.py|windload_end_to_end\.py|oil_separator\.py|powerPointReport\.py|demo22R2\.py|CHT_Demo\.py",  # noqa: E501
     "thumbnail_size": (350, 350),
     "reset_modules_order": "both",
     "reset_modules": (_reset_module_cb),

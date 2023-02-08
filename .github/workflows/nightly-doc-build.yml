@@ -11,23 +11,15 @@ env:
 
 jobs:
   nightly_docs_build:
-    runs-on: ubuntu-20.04
-    
+    runs-on: [self-hosted, pyfluent]
+
     steps:
       - uses: actions/checkout@v3
-
-      # used for documentation deployment
-      - name: Get Bot Application Token
-        id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v1
-        with:
-          application_id: ${{ secrets.BOT_APPLICATION_ID }}
-          application_private_key: ${{ secrets.BOT_APPLICATION_PRIVATE_KEY }}
 
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -54,7 +46,6 @@ jobs:
         with:
           name: HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
           path: doc/_build/html
-
           retention-days: 7
 
       - name: Deploy

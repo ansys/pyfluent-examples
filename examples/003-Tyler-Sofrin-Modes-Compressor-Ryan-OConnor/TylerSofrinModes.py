@@ -60,6 +60,11 @@ import_filename = examples.download_file(
     "pyfluent/examples/003-Tyler-Sofrin-Modes-Compressor-Ryan-OConnor",
 )  # noqa: E501
 
+examples.download_file(
+    "axial_comp_fullWheel_DFT.dat.h5",
+    "pyfluent/examples/003-Tyler-Sofrin-Modes-Compressor-Ryan-OConnor",
+)
+
 # Create a session object
 session = pyfluent.launch_fluent(mode="solver")
 
@@ -141,21 +146,21 @@ for angle_ind, angle in enumerate(range(0, 360, dtheta)):
 # Write Fourier Coefficients to File
 #
 # This step is only required if data is to be processed outside of this script.
-file1 = open("FourierCoefficients.txt", "w")
-file1.write("n theta An Bn \n")
+with open("FourierCoefficients.txt", "w") as f:
+    f.write("n theta An Bn \n")
 
-for n_ind, variable in enumerate(varname):
-    for ind, x in enumerate(An[n_ind, :]):
-        file1.write(
-            str(n_mode[n_ind])
-            + ","
-            + str(ind * dtheta)
-            + ","
-            + str(An[n_ind, ind])
-            + ","
-            + str(Bn[n_ind, ind])
-            + "\n"
-        )
+    for n_ind, variable in enumerate(varname):
+        for ind, x in enumerate(An[n_ind, :]):
+            f.write(
+                str(n_mode[n_ind])
+                + ","
+                + str(ind * dtheta)
+                + ","
+                + str(An[n_ind, ind])
+                + ","
+                + str(Bn[n_ind, ind])
+                + "\n"
+            )
 
 
 # Calculating Pnm
