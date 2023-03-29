@@ -137,6 +137,8 @@ sphinx_gallery_conf = {
     # "pypandoc": True,
     # path to your examples scripts
     "examples_dirs": ["../../examples/"],
+    # build gallery without executing examples
+    "plot_gallery": "False",
     # path where to save gallery generated examples
     "gallery_dirs": ["examples"],
     # Patter to search for example files
@@ -149,7 +151,7 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-fluent-core",
-    "ignore_pattern": r"steady_vortex\.py|ahmed_body_workflow\.py|CreatePPTX\.py|DashApp\.py|windload_end_to_end\.py|oil_separator\.py|powerPointReport\.py|demo22R2\.py|CHT_Demo\.py",  # noqa: E501
+    # "ignore_pattern": r"demo22R2\.py",  # noqa: E501
     "thumbnail_size": (350, 350),
     "reset_modules_order": "both",
     "reset_modules": (_reset_module_cb),
