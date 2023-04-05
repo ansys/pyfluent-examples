@@ -45,6 +45,6 @@ jobs:
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
         with:
-          name: HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
+          name: HTML-Documentation-with-examples-run-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
           path: doc/_build/html
           retention-days: 7
