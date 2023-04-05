@@ -137,8 +137,6 @@ sphinx_gallery_conf = {
     # "pypandoc": True,
     # path to your examples scripts
     "examples_dirs": ["../../examples/"],
-    # build gallery without executing examples
-    "plot_gallery": "False",
     # path where to save gallery generated examples
     "gallery_dirs": ["examples"],
     # Patter to search for example files
@@ -157,6 +155,9 @@ sphinx_gallery_conf = {
     "reset_modules": (_reset_module_cb),
 }
 
+if not os.getenv("RUN_EXAMPLES"):
+    # build gallery without executing examples
+    sphinx_gallery_conf["plot_gallery"] = "False"
 
 # -- Options for HTML output -------------------------------------------------
 html_short_title = html_title = "PyFluent Examples"
