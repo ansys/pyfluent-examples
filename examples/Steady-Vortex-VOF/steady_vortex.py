@@ -7,6 +7,7 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+import os
 from pathlib import Path
 
 # Prediction of Vortex Depth in a Stirred Tank
@@ -14,12 +15,30 @@ from pathlib import Path
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+os.chdir(save_path)
+
 import_filename = examples.download_file(
-    "vortex-mixingtank.msh.h5", "pyfluent/examples/Steady-Vortex-VOF"
+    "vortex-mixingtank.msh.h5",
+    "pyfluent/examples/Steady-Vortex-VOF",
+    save_path=save_path,
 )  # noqa: E501
 
 # Create a session
-session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
+session = pyfluent.launch_fluent(
+    version="3d",
+    precision="double",
+    processor_count=12,
+    show_gui=True,
+    product_version="23.2.0",
+    cwd=save_path,
+)
 
 # Read case file
 session.tui.file.read_case(import_filename)
@@ -181,11 +200,11 @@ session.tui.display.set.picture.x_resolution(600)
 session.tui.display.set.picture.y_resolution(600)
 
 # Save Initial Files & Run Calculation
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "vortex_init.cas.h5")
+save_case_data_as = str(save_path / "vortex_init.cas.h5")
 session.tui.file.write_case_data(save_case_data_as)
 
 # Set number of iterations
-session.tui.solve.set.number_of_iterations(25)  # 1500
+session.tui.solve.set.number_of_iterations(100)  # 1500
 
 # Stat iterations
 session.tui.solve.iterate()
@@ -242,7 +261,7 @@ session.tui.display.set.picture.y_resolution(600)
 session.tui.display.save_picture("vortex.png")
 
 # Save and write case data
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "vortex_final.cas.h5")
+save_case_data_as = str(save_path / "vortex_final.cas.h5")
 session.tui.file.write_case_data(save_case_data_as)
 
 # GIF Animation: Vortex Formation
@@ -259,6 +278,5 @@ for file_name in sorted(os.listdir(png_dir)):
 imageio.mimsave("vortex.gif", images)
 
 # Load animation
-from IPython.display import Image
-
-Image(filename="vortex.gif")
+# from IPython.display import Image
+# Image(filename="vortex.gif")

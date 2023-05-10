@@ -7,6 +7,9 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+import os
+from pathlib import Path
+
 # Import modules
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
@@ -16,12 +19,23 @@ import pandas as pd  # noqa: F401
 import plotly.graph_objects as go  # noqa: F401
 import seaborn as sns  # noqa: F401
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+os.chdir(save_path)
+
 import_filename = examples.download_file(
-    "elbow.cas.h5", "pyfluent/examples/DOE-ML-Mixing-Elbow"
+    "elbow.cas.h5",
+    "pyfluent/examples/DOE-ML-Mixing-Elbow",
+    save_path=save_path,
 )  # noqa: E501
 
 # Create a session object
-session = pyfluent.launch_fluent()
+session = pyfluent.launch_fluent(show_gui=True, cwd=save_path)
 
 # Check server status
 session.check_health()
@@ -95,12 +109,13 @@ fig.update_layout(
         yaxis_title="Hot Inlet Vel (m/s)",
         zaxis_title="Average Outlet Temperature (K)",
     ),
-    width=600,
-    height=600,
+    width=1400,
+    height=1400,
     margin=dict(l=80, r=80, b=80, t=80),
 )
 # Show figure
-fig.show()
+fig.write_image(save_path / "fig1.png")  # requires 'pip install kaleido'
+# fig.show()
 
 # Create a dataframe
 df = pd.DataFrame(columns=["coldVel", "hotVel", "Result"])
@@ -209,7 +224,8 @@ def fit_and_predict(model):
     plt.ylabel("Predictions", fontsize=12)
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig(save_path / "fig2.png")
+    # plt.show()
 
 
 # Define model object
@@ -280,7 +296,8 @@ print(history.params)
 # Plot figures based on model history
 pd.DataFrame(history.history).plot(figsize=(8, 5))
 plt.grid(True)
-plt.show()
+plt.savefig(save_path / "fig3.png")
+# plt.show()
 
 # Define train test predictions
 train_predictions = model.predict(X_train)
@@ -309,4 +326,5 @@ plt.xlabel("Ground Truth", fontsize=12)
 plt.ylabel("Predictions", fontsize=12)
 
 plt.tight_layout()
-plt.show()
+plt.savefig(save_path / "fig4.png")
+# plt.show()

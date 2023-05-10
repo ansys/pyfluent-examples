@@ -8,6 +8,8 @@ postprocessing capabilities.
 """
 
 # Import Python Packages
+import os
+
 from ansys.fluent.visualization import set_config
 
 set_config(blocking=True, set_view_on_display="isometric")
@@ -37,10 +39,31 @@ import ansys.fluent.visualization as viz
 
 viz.__version__
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+os.chdir(save_path)
+
+geom_filename = examples.download_file(
+    "cht_fin_htc_new.scdoc",
+    "pyfluent/examples/CHT",
+    save_path=save_path,
+)
+
 # Streaming of Transcript to this Notebook
 # pyfluent.set_log_level("INFO")
 
-session = pyfluent.launch_fluent(mode="meshing", processor_count=4, show_gui=False)
+session = pyfluent.launch_fluent(
+    mode="meshing",
+    processor_count=4,
+    product_version="23.1.0",
+    cwd=save_path,
+    show_gui=True,
+)
 
 # PyFluent Session Health
 session.check_health()
@@ -49,10 +72,6 @@ session.check_health()
 # Read Geometry File; Create Surface Mesh; Describe Geometry
 session.workflow.InitializeWorkflow(WorkflowType="Watertight Geometry")
 
-geom_filename = examples.download_file(
-    "cht_fin_htc_new.scdoc",
-    "pyfluent/examples/CHT",
-)
 session.workflow.TaskObject["Import Geometry"].Arguments = dict(
     FileName=geom_filename
 )  # noqa: E501
@@ -383,7 +402,7 @@ session.workflow.TaskObject["Improve Volume Mesh"].Arguments = {
 session.workflow.TaskObject["Improve Volume Mesh"].Execute()
 
 # Save Mesh File
-save_mesh_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.msh.h5")
+save_mesh_as = save_path / "hx-fin-2mm.msh.h5"
 session.tui.file.write_mesh(save_mesh_as)
 
 # Switch to Solution / solver Mode
@@ -582,7 +601,7 @@ session.tui.solve.report_files.add(
 # Hybrid Initialization; Slit Interior between Solid Zones; Save Case
 session.tui.solve.initialize.hyb_initialization()
 session.tui.mesh.modify_zones.slit_interior_between_diff_solids()
-save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.cas.h5")
+save_case_as = save_path / "hx-fin-2mm.cas.h5"
 session.tui.file.write_case(save_case_as)
 session.tui.solve.initialize.hyb_initialization()
 
@@ -591,7 +610,7 @@ session.tui.solve.set.pseudo_time_method.global_time_step_settings(
     "yes", "0", "1", "yes", "1"
 )
 session.tui.solve.iterate(10)  # 250
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.dat.h5")
+save_case_data_as = save_path / "hx-fin-2mm.dat.h5"
 session.tui.file.write_case_data(save_case_data_as)
 
 # Mass Balance Report

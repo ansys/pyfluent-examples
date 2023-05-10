@@ -7,6 +7,9 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+import os
+from pathlib import Path
+
 # Stirred Tank: DOE and Plotting 3D Surface Plot using Plotly
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
@@ -22,11 +25,22 @@ power = np.zeros((len(omega), len(visc)))
 power_number = np.zeros((len(omega), len(visc)))
 reynolds_number = np.zeros((len(omega), len(visc)))
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+os.chdir(save_path)
+
 # Create a session
-session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
+session = pyfluent.launch_fluent(
+    version="3d", precision="double", processor_count=12, show_gui=True, cwd=save_path
+)
 
 import_filename = examples.download_file(
-    "test-laminar-visc.cas.h5", "pyfluent/examples/MixingTank-DOE"
+    "test-laminar-visc.cas.h5", "pyfluent/examples/MixingTank-DOE", save_path=save_path
 )  # noqa: E501
 
 
@@ -83,8 +97,8 @@ fig = go.Figure(data=[go.Surface(z=power, x=omega, y=visc)])
 fig.update_layout(
     title="Mixing Tank Power Response Surface",
     autosize=False,
-    width=700,
-    height=700,
+    width=1000,
+    height=1000,
     margin=dict(l=80, r=80, b=80, t=80),
 )
 fig.update_layout(
@@ -94,7 +108,8 @@ fig.update_layout(
         zaxis_title="Power (W)",
     )
 )
-fig.show()
+fig.write_image(save_path / "fig1.png")  # requires 'pip install kaleido'
+# fig.show()
 
 # Plot Power Number vs Re
 import matplotlib.pyplot as plt
@@ -105,4 +120,5 @@ plt.scatter(re, np)
 plt.title("Power Number vs Re")
 plt.xlabel("Impeller Reynolds Number")
 plt.ylabel("Power Number")
-plt.show()
+plt.savefig(save_path / "fig2.png")
+# plt.show()
