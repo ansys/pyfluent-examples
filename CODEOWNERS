@@ -5,7 +5,7 @@ examples/Brake-Thermal-PyVista-Matplotlib/  @mkvani
 examples/CHT/                               @PySRG
 examples/Dash-App-for-Post-processing/      @rploconnor
 examples/DOE-ML-Mixing-Elbow/               @PySRG
-examples/Excel-Monitor-Points/              zoran.dragojlovic@ansys.com
+examples/Excel-Monitor-Points/              @zorandragojlovic
 examples/Fluent-Parametric/                 @mkundu1
 examples/Graphics-Demo/                     @ajain-work
 examples/Gravity-Separator-PID/             @sravanansys
