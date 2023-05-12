@@ -30,7 +30,7 @@ reynolds_number = np.zeros((len(omega), len(visc)))
 # save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
-save_path = Path("E:/pyfluent-examples-tests")  # Path(pyfluent.EXAMPLES_PATH)
+save_path = Path(pyfluent.EXAMPLES_PATH)
 
 # Create a session
 session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=12)
