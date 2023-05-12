@@ -52,7 +52,7 @@ from ansys.fluent.visualization import set_config
 
 ###############################################################################
 # Specifying save path
-# ~~~~~~~~~~~~~~~~~~~~
+# ====================
 # save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
