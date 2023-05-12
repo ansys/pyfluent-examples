@@ -30,7 +30,7 @@ import_filename = examples.download_file(
 )  # noqa: E501
 
 # Create a session
-session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=12)
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
 
 # Read case file
 session.tui.file.read_case(import_filename)

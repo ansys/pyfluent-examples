@@ -33,7 +33,7 @@ reynolds_number = np.zeros((len(omega), len(visc)))
 save_path = Path(pyfluent.EXAMPLES_PATH)
 
 # Create a session
-session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=12)
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
 
 import_filename = examples.download_file(
     "test-laminar-visc.cas.h5", "pyfluent/examples/MixingTank-DOE", save_path=save_path
