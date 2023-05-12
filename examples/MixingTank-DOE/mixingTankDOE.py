@@ -7,7 +7,6 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
-import os
 from pathlib import Path
 
 # Stirred Tank: DOE and Plotting 3D Surface Plot using Plotly
@@ -31,13 +30,10 @@ reynolds_number = np.zeros((len(omega), len(visc)))
 # save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
-save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
+save_path = Path("E:/pyfluent-examples-tests")  # Path(pyfluent.EXAMPLES_PATH)
 
 # Create a session
-session = pyfluent.launch_fluent(
-    version="3d", precision="double", processor_count=12, show_gui=True, cwd=save_path
-)
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=12)
 
 import_filename = examples.download_file(
     "test-laminar-visc.cas.h5", "pyfluent/examples/MixingTank-DOE", save_path=save_path
@@ -122,3 +118,6 @@ plt.xlabel("Impeller Reynolds Number")
 plt.ylabel("Power Number")
 plt.savefig(save_path / "fig2.png")
 # plt.show()
+
+# Properly close open Fluent session
+session.exit()

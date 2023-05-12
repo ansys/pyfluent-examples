@@ -7,7 +7,6 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
-import os
 from pathlib import Path
 
 # Import modules
@@ -21,7 +20,6 @@ from ansys.fluent.core import examples
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
 import_filename = examples.download_file(
     "ablation.msh.h5", "pyfluent/examples/Ablation-tutorial", save_path=save_path
@@ -32,14 +30,7 @@ from ansys.fluent.visualization import set_config
 set_config(blocking=True, set_view_on_display="isometric")
 
 # Launch fluent
-session = pyfluent.launch_fluent(
-    version="3d",
-    precision="double",
-    processor_count=4,
-    show_gui=True,
-    cwd=save_path,
-    product_version="23.1.0",
-)
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=4)
 
 # Read Mesh
 session.tui.file.read_case(import_filename)
@@ -277,3 +268,6 @@ contour1 = graphics_session1.Contours["contour-1"]
 contour1.field = "pressure"
 contour1.surfaces_list = ["mid_plane"]
 contour1.display()
+
+# Properly close open Fluent session
+session.exit()

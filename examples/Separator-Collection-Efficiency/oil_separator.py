@@ -7,7 +7,6 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
-import os
 from pathlib import Path
 
 # Oil Separator: Plot Collection Efficiency
@@ -26,7 +25,6 @@ from ansys.fluent.core import examples
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
 import_filename = examples.download_file(
     "oil_separator.msh.h5",
@@ -35,14 +33,7 @@ import_filename = examples.download_file(
 )  # noqa: E501
 
 # Create a session
-session = pyfluent.launch_fluent(
-    version="3d",
-    precision="double",
-    processor_count=6,
-    cwd=save_path,
-    show_gui=True,
-    product_version="23.1.0",
-)
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
 
 # Fluent Solver Setup
 # Read case file
@@ -279,3 +270,6 @@ fig.write_image(
     save_path / "collection-efficiency-surface.png"
 )  # requires 'pip install kaleido'
 # fig.show()
+
+# Properly close open Fluent session
+session.exit()

@@ -20,7 +20,6 @@ postprocessing capabilities.
 # Brake pad wear
 # Braking performance
 
-import os
 from pathlib import Path
 
 # import modules
@@ -34,7 +33,6 @@ from ansys.fluent.core import examples
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
 import_filename = examples.download_file(
     "brake.msh",
@@ -46,14 +44,7 @@ import_filename = examples.download_file(
 # pyfluent.set_log_level("DEBUG")
 
 # Open Fluent in GUI mode
-session = pyfluent.launch_fluent(
-    version="3ddp",
-    precision="double",
-    processor_count=2,
-    product_version="23.1.0",
-    cwd=save_path,
-    show_gui=True,
-)
+session = pyfluent.launch_fluent(version="3ddp", precision="double", processor_count=2)
 
 # Check server status
 session.check_health()
@@ -331,3 +322,6 @@ with open(report_file_path, "r") as datafile:
     plt.legend(loc="lower right", shadow=True, fontsize="x-large")
     plt.savefig(save_path / "max-temperature.png")
     # plt.show()
+
+# Properly close open Fluent session
+session.exit()

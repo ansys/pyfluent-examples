@@ -7,7 +7,6 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
-import os
 from pathlib import Path
 
 # Import modules
@@ -26,7 +25,6 @@ import seaborn as sns  # noqa: F401
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
 import_filename = examples.download_file(
     "elbow.cas.h5",
@@ -35,7 +33,7 @@ import_filename = examples.download_file(
 )  # noqa: E501
 
 # Create a session object
-session = pyfluent.launch_fluent(show_gui=True, cwd=save_path)
+session = pyfluent.launch_fluent()
 
 # Check server status
 session.check_health()
@@ -328,3 +326,6 @@ plt.ylabel("Predictions", fontsize=12)
 plt.tight_layout()
 plt.savefig(save_path / "fig4.png")
 # plt.show()
+
+# Properly close open Fluent session
+session.exit()

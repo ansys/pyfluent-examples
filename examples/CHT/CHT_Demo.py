@@ -8,7 +8,6 @@ postprocessing capabilities.
 """
 
 # Import Python Packages
-import os
 
 from ansys.fluent.visualization import set_config
 
@@ -46,7 +45,6 @@ viz.__version__
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
 geom_filename = examples.download_file(
     "cht_fin_htc_new.scdoc",
@@ -57,13 +55,7 @@ geom_filename = examples.download_file(
 # Streaming of Transcript to this Notebook
 # pyfluent.set_log_level("INFO")
 
-session = pyfluent.launch_fluent(
-    mode="meshing",
-    processor_count=4,
-    product_version="23.1.0",
-    cwd=save_path,
-    show_gui=True,
-)
+session = pyfluent.launch_fluent(mode="meshing", processor_count=4)
 
 # PyFluent Session Health
 session.check_health()
@@ -639,3 +631,6 @@ print("Net Imbalance (Watt): ", htr)
 session.tui.surface.iso_surface(
     "x-coordinate", "x=0.012826", "()", "()", "0.012826", "()"
 )
+
+# Properly close open Fluent session
+session.exit()

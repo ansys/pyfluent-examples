@@ -37,7 +37,6 @@ simulation. which includes typical workflow of CFD Simulation as follows:
 # Import required libraries/modules
 # ==================================================================================
 
-import os
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
@@ -57,7 +56,6 @@ from ansys.fluent.visualization import set_config
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
 ####################################################################################
 # Configure specific settings for this example
@@ -67,13 +65,7 @@ set_config(blocking=True, set_view_on_display="isometric")
 ####################################################################################
 # Launch Fluent session with meshing mode
 # ==================================================================================
-session = pyfluent.launch_fluent(
-    mode="meshing",
-    show_gui=True,
-    cleanup_on_exit=True,
-    product_version="23.1.0",
-    cwd=save_path,
-)
+session = pyfluent.launch_fluent(mode="meshing", cleanup_on_exit=True)
 session.check_health()
 
 ####################################################################################
@@ -355,7 +347,7 @@ session.tui.file.write_case_data(save_case_data_as)
 ####################################################################################
 # Close the session
 # ==================================================================================
-# session.exit()
+session.exit()
 
 
 #######################################################################################

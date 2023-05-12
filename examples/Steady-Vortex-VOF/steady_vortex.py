@@ -7,7 +7,6 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
-import os
 from pathlib import Path
 
 # Prediction of Vortex Depth in a Stirred Tank
@@ -22,8 +21,8 @@ from ansys.fluent.core import examples
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
-os.chdir(save_path)
 
+# Downloading example files
 import_filename = examples.download_file(
     "vortex-mixingtank.msh.h5",
     "pyfluent/examples/Steady-Vortex-VOF",
@@ -31,14 +30,7 @@ import_filename = examples.download_file(
 )  # noqa: E501
 
 # Create a session
-session = pyfluent.launch_fluent(
-    version="3d",
-    precision="double",
-    processor_count=12,
-    show_gui=True,
-    product_version="23.2.0",
-    cwd=save_path,
-)
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=12)
 
 # Read case file
 session.tui.file.read_case(import_filename)
@@ -269,7 +261,7 @@ import os
 
 import imageio
 
-png_dir = os.getcwd()
+png_dir = save_path
 images = []
 for file_name in sorted(os.listdir(png_dir)):
     if file_name.startswith("animation") and file_name.endswith(".png"):
@@ -280,3 +272,6 @@ imageio.mimsave("vortex.gif", images)
 # Load animation
 # from IPython.display import Image
 # Image(filename="vortex.gif")
+
+# Properly close open Fluent session
+session.exit()
