@@ -37,7 +37,6 @@ simulation. which includes typical workflow of CFD Simulation as follows:
 # Import required libraries/modules
 # ==================================================================================
 
-import os
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
@@ -50,16 +49,23 @@ except ImportError:
 
 from ansys.fluent.visualization import set_config
 
+###############################################################################
+# Specifying save path
+# ====================
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+
 ####################################################################################
 # Configure specific settings for this example
 # ==================================================================================
 set_config(blocking=True, set_view_on_display="isometric")
-os.chdir(pyfluent.EXAMPLES_PATH)
 
 ####################################################################################
 # Launch Fluent session with meshing mode
 # ==================================================================================
-session = pyfluent.launch_fluent(mode="meshing", show_gui=True, cleanup_on_exit=True)
+session = pyfluent.launch_fluent(mode="meshing", cleanup_on_exit=True)
 session.check_health()
 
 ####################################################################################
@@ -74,6 +80,7 @@ workflow = session.workflow
 geometry_filename = examples.download_file(
     "ahmed_body_20_0degree_boi_half.scdoc",
     "pyfluent/examples/Ahmed-Body-Simulation",
+    save_path=save_path,
 )
 workflow.InitializeWorkflow(WorkflowType="Watertight Geometry")
 workflow.TaskObject["Import Geometry"].Arguments = dict(FileName=geometry_filename)
@@ -334,7 +341,7 @@ contour2.display("window-2")
 # Save the case file
 # ==================================================================================
 
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "ahmed_body_final.cas.h5")
+save_case_data_as = Path(save_path) / "ahmed_body_final.cas.h5"
 session.tui.file.write_case_data(save_case_data_as)
 
 ####################################################################################

@@ -12,19 +12,28 @@ from pathlib import Path
 # Oil Separator: Plot Collection Efficiency
 # Import pyfluent module
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 
 # Set log level to info
 # pyfluent.set_log_level("INFO")
 
-# Create a session
-session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
 
-from ansys.fluent.core import examples
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
 
 import_filename = examples.download_file(
     "oil_separator.msh.h5",
     "pyfluent/examples/Separator-Collection-Efficiency",
+    save_path=save_path,
 )  # noqa: E501
+
+# Create a session
+session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=6)
 
 # Fluent Solver Setup
 # Read case file
@@ -40,7 +49,9 @@ session.tui.define.models.viscous.ke_realizable("yes")
 session.tui.define.boundary_conditions.list_zones()
 
 # Set velocity inlet
-session.tui.define.boundary_conditions.inlet = "velocity-inlet"
+# session.tui.define.boundary_conditions.inlet = "velocity-inlet"
+inlet = session.setup.boundary_conditions.velocity_inlet["inlet"]
+inlet.vmag = 0.1  # m/s
 
 session.tui.solve.set.p_v_coupling(20)
 
@@ -84,7 +95,6 @@ session.tui.define.injections(
     0.0001,
     1,
     0.2,
-    "q",
 )
 
 # Setup boundary conditions
@@ -114,15 +124,13 @@ session.tui.solve.report_files.add(
     "vol-avg-vel",
     "()",
     "file-name",
-    str(Path(pyfluent.EXAMPLES_PATH) / "vol-avg-vel.out"),
+    str(save_path / "vol-avg-vel.out"),
     "q",
 )
 
 # Run Settings
 # Set number of iterations
-session.tui.solve.set.number_of_iterations(25)  # 1000
-
-# In[26]:
+session.tui.solve.set.number_of_iterations(50)  # 1000
 
 # Initialize solver workflow
 session.tui.solve.initialize.initialize_flow()
@@ -173,9 +181,8 @@ session.tui.display.objects.display("lic-1")
 session.tui.display.save_picture("lic-vel.png")
 
 # Write and save case data
-save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "oil_separator.cas.h5")
+save_case_as = str(save_path / "oil_separator.cas.h5")
 session.tui.file.write_case_data(save_case_as)
-
 
 # Velocity on Mid Plane
 
@@ -231,7 +238,6 @@ for i in range(len(oil_mf)):
                     data = data + eval(rows[8])
         eff[i][j] = 100.0 * (1.0 - data / oil_mf[i])
 
-
 # 2D Plot using Matplotlib
 plt.scatter(dia, eff[0], label="mass flow=0.05kg/s")
 plt.scatter(dia, eff[-1], label="mass flow=0.55kg/s")
@@ -239,7 +245,8 @@ plt.title("Collection Efficiency Curve")
 plt.xlabel("Droplet Diameter (m)")
 plt.ylabel("Collection Efficiency(%)")
 plt.legend()
-plt.show()
+plt.savefig(save_path / "collection-efficiency.png")
+# plt.show()
 
 # 3D Surface Plot using Plotly
 import plotly.graph_objects as go
@@ -248,8 +255,8 @@ fig = go.Figure(data=[go.Surface(z=eff, x=dia, y=oil_mf)])
 fig.update_layout(
     title="Separator Collection Efficiency",
     autosize=False,
-    width=700,
-    height=700,
+    width=1000,
+    height=1000,
     margin=dict(l=80, r=80, b=80, t=80),
 )
 fig.update_layout(
@@ -259,4 +266,10 @@ fig.update_layout(
         zaxis_title="Collection Efficiency (%)",
     )
 )
-fig.show()
+fig.write_image(
+    save_path / "collection-efficiency-surface.png"
+)  # requires 'pip install kaleido'
+# fig.show()
+
+# Properly close open Fluent session
+session.exit()

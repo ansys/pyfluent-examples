@@ -13,8 +13,16 @@ from pathlib import Path
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+
 import_filename = examples.download_file(
-    "ablation.msh.h5", "pyfluent/examples/Ablation-tutorial"
+    "ablation.msh.h5", "pyfluent/examples/Ablation-tutorial", save_path=save_path
 )
 
 from ansys.fluent.visualization import set_config
@@ -77,9 +85,8 @@ session.tui.define.dynamic_mesh.zones.create(
     "no",
     "yes",
     "yes",
-    "yes",
-    "yes",
-    "no",
+    "coefficient-based",
+    "0.1",
     "yes",
 )
 session.tui.define.dynamic_mesh.zones.create(
@@ -97,9 +104,8 @@ session.tui.define.dynamic_mesh.zones.create(
     "no",
     "yes",
     "yes",
-    "yes",
-    "yes",
-    "no",
+    "coefficient-based",
+    "0.1",
     "yes",
 )
 session.tui.define.dynamic_mesh.zones.create(
@@ -117,9 +123,8 @@ session.tui.define.dynamic_mesh.zones.create(
     "no",
     "yes",
     "yes",
-    "yes",
-    "yes",
-    "no",
+    "coefficient-based",
+    "0.1",
     "yes",
 )
 session.tui.define.dynamic_mesh.zones.create(
@@ -225,12 +230,12 @@ session.tui.solve.initialize.compute_defaults.pressure_far_field("inlet")
 session.tui.solve.initialize.initialize_flow()
 
 # Save case file
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "ablation.cas.h5")
+save_case_data_as = Path(save_path) / "ablation.cas.h5"
 session.tui.file.write_case(save_case_data_as)
 
 # Post-Process
 import_data_filename = examples.download_file(
-    "ablation_Solved.dat.h5", "pyfluent/examples/Ablation-tutorial"
+    "ablation_Solved.dat.h5", "pyfluent/examples/Ablation-tutorial", save_path=save_path
 )
 
 session.tui.file.read_case_data(import_data_filename)
@@ -255,7 +260,6 @@ session.results.graphics.contour["contour_mach"] = {
 # Display contour
 session.results.graphics.contour.display(object_name="contour_mach")
 
-
 # Post-Process with PyVista
 from ansys.fluent.visualization.pyvista import Graphics
 
@@ -264,3 +268,6 @@ contour1 = graphics_session1.Contours["contour-1"]
 contour1.field = "pressure"
 contour1.surfaces_list = ["mid_plane"]
 contour1.display()
+
+# Properly close open Fluent session
+session.exit()

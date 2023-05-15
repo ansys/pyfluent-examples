@@ -14,8 +14,19 @@ from pathlib import Path
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+
+# Downloading example files
 import_filename = examples.download_file(
-    "vortex-mixingtank.msh.h5", "pyfluent/examples/Steady-Vortex-VOF"
+    "vortex-mixingtank.msh.h5",
+    "pyfluent/examples/Steady-Vortex-VOF",
+    save_path=save_path,
 )  # noqa: E501
 
 # Create a session
@@ -181,11 +192,11 @@ session.tui.display.set.picture.x_resolution(600)
 session.tui.display.set.picture.y_resolution(600)
 
 # Save Initial Files & Run Calculation
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "vortex_init.cas.h5")
+save_case_data_as = str(save_path / "vortex_init.cas.h5")
 session.tui.file.write_case_data(save_case_data_as)
 
 # Set number of iterations
-session.tui.solve.set.number_of_iterations(25)  # 1500
+session.tui.solve.set.number_of_iterations(100)  # 1500
 
 # Stat iterations
 session.tui.solve.iterate()
@@ -242,7 +253,7 @@ session.tui.display.set.picture.y_resolution(600)
 session.tui.display.save_picture("vortex.png")
 
 # Save and write case data
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "vortex_final.cas.h5")
+save_case_data_as = str(save_path / "vortex_final.cas.h5")
 session.tui.file.write_case_data(save_case_data_as)
 
 # GIF Animation: Vortex Formation
@@ -250,7 +261,7 @@ import os
 
 import imageio
 
-png_dir = os.getcwd()
+png_dir = save_path
 images = []
 for file_name in sorted(os.listdir(png_dir)):
     if file_name.startswith("animation") and file_name.endswith(".png"):
@@ -259,6 +270,8 @@ for file_name in sorted(os.listdir(png_dir)):
 imageio.mimsave("vortex.gif", images)
 
 # Load animation
-from IPython.display import Image
+# from IPython.display import Image
+# Image(filename="vortex.gif")
 
-Image(filename="vortex.gif")
+# Properly close open Fluent session
+session.exit()

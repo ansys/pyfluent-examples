@@ -26,8 +26,18 @@ from pathlib import Path
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
+###############################################################################
+# Specifying save path
+# ~~~~~~~~~~~~~~~~~~~~
+# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# Path("~/pyfluent-examples-tests") in Linux.
+save_path = Path(pyfluent.EXAMPLES_PATH)
+
 import_filename = examples.download_file(
-    "brake.msh", "pyfluent/examples/Brake-Thermal-PyVista-Matplotlib"
+    "brake.msh",
+    "pyfluent/examples/Brake-Thermal-PyVista-Matplotlib",
+    save_path=save_path,
 )  # noqa: E501
 
 # Set log level
@@ -151,7 +161,7 @@ session.tui.solve.report_plots.add(
     "()",
 )
 
-report_file = str(Path(pyfluent.EXAMPLES_PATH) / "max-temperature.out")
+report_file_path = Path(save_path) / "max-temperature.out"
 session.tui.solve.report_files.add(
     "max-temperature",
     "report-defs",
@@ -159,7 +169,7 @@ session.tui.solve.report_files.add(
     "max-disc-temperature",
     "()",
     "file-name",
-    report_file,
+    str(report_file_path),
 )
 
 # Set contour properties
@@ -247,7 +257,7 @@ session.tui.solve.set.transient_controls.time_step_size(0.01)
 session.tui.solve.dual_time_iterate(10, 5)  # 200, 5
 
 # Write and save case file data
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "brake-final.cas.h5")
+save_case_data_as = Path(save_path) / "brake-final.cas.h5"
 session.tui.file.write_case_data(save_case_data_as)
 
 
@@ -296,7 +306,7 @@ X = []
 Y = []
 Z = []
 i = -1
-with open(report_file, "r") as datafile:
+with open(report_file_path, "r") as datafile:
     plotting = csv.reader(datafile, delimiter=" ")
     for rows in plotting:
         i = i + 1
@@ -310,4 +320,8 @@ with open(report_file, "r") as datafile:
     plt.xlabel("Time (sec)")
     plt.ylabel("Max Temperature (K)")
     plt.legend(loc="lower right", shadow=True, fontsize="x-large")
+    plt.savefig(save_path / "max-temperature.png")
     # plt.show()
+
+# Properly close open Fluent session
+session.exit()
