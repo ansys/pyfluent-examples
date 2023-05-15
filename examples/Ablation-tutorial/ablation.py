@@ -21,6 +21,7 @@ from ansys.fluent.core import examples
 # Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
 
+# Download example file
 import_filename = examples.download_file(
     "ablation.msh.h5", "pyfluent/examples/Ablation-tutorial", save_path=save_path
 )
@@ -227,7 +228,7 @@ session.tui.solve.report_files.add(
 session.tui.solve.initialize.compute_defaults.pressure_far_field("inlet")
 
 # Initialize solver workflow
-session.tui.solve.initialize.initialize_flow()
+# session.tui.solve.initialize.initialize_flow()
 
 # Save case file
 save_case_data_as = Path(save_path) / "ablation.cas.h5"
@@ -238,7 +239,7 @@ import_data_filename = examples.download_file(
     "ablation_Solved.dat.h5", "pyfluent/examples/Ablation-tutorial", save_path=save_path
 )
 
-session.tui.file.read_case_data(import_data_filename)
+session.tui.file.read_data(import_data_filename)
 
 session.tui.display.surface.plane_surface("mid_plane", "zx-plane", "0")
 
