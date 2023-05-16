@@ -227,9 +227,6 @@ session.tui.solve.report_files.add(
 # Initialize and Save
 session.tui.solve.initialize.compute_defaults.pressure_far_field("inlet")
 
-# Initialize solver workflow
-# session.tui.solve.initialize.initialize_flow()
-
 # Save case file
 save_case_data_as = Path(save_path) / "ablation.cas.h5"
 session.tui.file.write_case(save_case_data_as)
