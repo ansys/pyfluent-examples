@@ -382,7 +382,7 @@ plt.legend(loc="lower right", shadow=True, fontsize="x-large")
 plt.show()
 
 #%%
-# .. image:: ../../_static/maximum_temperature.png
+# .. image:: ../../_static/brake_maximum_temperature.png
 #    :align: center
 #    :alt: Brake Maximum Temperature 
 
