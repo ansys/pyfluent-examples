@@ -6,7 +6,9 @@ Automotive Brake Thermal Analysis
 Objective:
 ==========
 
-Braking surfaces get heated due to frictional heating during braking. High temperature affects the braking performance and life of the braking system. This example demonstrates:
+Braking surfaces get heated due to frictional heating during braking.
+High temperature affects the braking performance and life of the braking system.
+This example demonstrates:
 
 * Fluent setup and simulation using PyFluent
 * Post processing using PyVista (3D Viewer) and Matplotlib (2D graphs)
@@ -17,17 +19,16 @@ Braking surfaces get heated due to frictional heating during braking. High tempe
 # Import required libraries/modules
 # ==================================================================================
 
+import csv
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
 ###############################################################################
-# PyVista 
+# PyVista
 # --------------------
 import ansys.fluent.visualization.pyvista as pv
-
-import csv
 
 ##############################################################################
 # Matplotlib
@@ -52,10 +53,12 @@ import_filename = examples.download_file(
 # ==================================================================================
 
 ####################################################################################
-# Launch Fluent session with solver mode 
+# Launch Fluent session with solver mode
 # --------------------------------------
 
-session = pyfluent.launch_fluent(mode = "solver", show_gui = False, version="3ddp", precision="double", processor_count=2)
+session = pyfluent.launch_fluent(
+    mode="solver", show_gui=False, version="3ddp", precision="double", processor_count=2
+)
 session.check_health()
 
 ####################################################################################
@@ -114,7 +117,8 @@ session.tui.define.boundary_conditions.set.solid(
 ###################################################
 # Apply frictional heating on pad-disc surfaces
 # ----------------------------------------------
-# Wall thickness 0f 2 mm has been assumed and 2e9 w/m3 is the heat generation which has been calculated from kinetic energy change due to braking.
+# Wall thickness 0f 2 mm has been assumed and 2e9 w/m3 is the heat generation which
+# has been calculated from kinetic energy change due to braking.
 
 session.tui.define.boundary_conditions.set.wall(
     "wall_pad-disc1",
@@ -201,7 +205,6 @@ session.tui.solve.report_files.add(
 )
 
 
-
 session.results.graphics.contour["contour-1"] = {
     "boundary_values": True,
     "color_map": {
@@ -276,7 +279,8 @@ session.tui.solve.animate.objects.create(
 # ---------------
 # * Run simulation for 2 seconds flow time
 # * Set time step size
-# * Set number of time steps (total time/time step size) and maximum number of iterations per time step
+# * Set number of time steps (total time/time step size)
+# and maximum number of iterations per time step
 
 session.tui.solve.set.transient_controls.time_step_size(0.01)
 session.tui.solve.dual_time_iterate(200, 5)
@@ -384,7 +388,7 @@ plt.show()
 #%%
 # .. image:: ../../_static/brake_maximum_temperature.png
 #    :align: center
-#    :alt: Brake Maximum Temperature 
+#    :alt: Brake Maximum Temperature
 
 #%%
 #    Brake Maximum Temperature
