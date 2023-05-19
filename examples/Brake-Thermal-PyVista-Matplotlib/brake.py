@@ -279,8 +279,7 @@ session.tui.solve.animate.objects.create(
 # ---------------
 # * Run simulation for 2 seconds flow time
 # * Set time step size
-# * Set number of time steps (total time/time step size)
-# and maximum number of iterations per time step
+# * Set number of time steps and maximum number of iterations per time step
 
 session.tui.solve.set.transient_controls.time_step_size(0.01)
 session.tui.solve.dual_time_iterate(200, 5)
