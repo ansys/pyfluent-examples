@@ -1,34 +1,42 @@
 """
-Brake-Thermal-PyVista-Matplotlib
-================================
-These examples show you how you can use Fluent capabilities from Python to perform
-Fluent simulations. This includes geometry import, Fluent's meshing workflows,
-setting up and running the solver, and reviewing the results using Fluent's
-postprocessing capabilities.
+#################################
+Automotive Brake Thermal Analysis
+#################################
+
+Objective:
+==========
+
+Braking surfaces get heated due to frictional heating during braking. High temperature affects the braking performance and life of the braking system. This example demonstrates:
+
+* Fluent setup and simulation using PyFluent
+* Post processing using PyVista (3D Viewer) and Matplotlib (2D graphs)
+
 """
 
-# Brake Thermal Example
-
-# Objective
-# Demonstrate:
-# Fluent setup and simulation using PyFluent
-# Post processing using PyVista and Matplotlib
-
-# Problem Description
-# Braking surface temperature assessment is vey important for safety
-# Brake fade, Vapor lock
-# Brake pad wear
-# Braking performance
+####################################################################################
+# Import required libraries/modules
+# ==================================================================================
 
 from pathlib import Path
 
-# import modules
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
 ###############################################################################
+# PyVista 
+# --------------------
+import ansys.fluent.visualization.pyvista as pv
+
+import csv
+
+##############################################################################
+# Matplotlib
+# --------------------
+import matplotlib.pyplot as plt
+
+###############################################################################
 # Specifying save path
-# ~~~~~~~~~~~~~~~~~~~~
+# ====================
 # save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
@@ -37,34 +45,40 @@ save_path = Path(pyfluent.EXAMPLES_PATH)
 import_filename = examples.download_file(
     "brake.msh",
     "pyfluent/examples/Brake-Thermal-PyVista-Matplotlib",
-    save_path=save_path,
-)  # noqa: E501
+)
 
-# Set log level
-# pyfluent.set_log_level("DEBUG")
+####################################################################################
+# Fluent Solution Setup
+# ==================================================================================
 
-# Open Fluent in GUI mode
-session = pyfluent.launch_fluent(version="3ddp", precision="double", processor_count=2)
+####################################################################################
+# Launch Fluent session with solver mode 
+# --------------------------------------
 
-# Check server status
+session = pyfluent.launch_fluent(mode = "solver", show_gui = False, version="3ddp", precision="double", processor_count=2)
 session.check_health()
 
+####################################################################################
+# Import mesh
+# ------------
 
-# Read mesh file
 session.tui.file.read_case(import_filename)
 
-
+############################
 # Define models and material
+# --------------------------
 session.tui.define.models.energy("yes", "no", "no", "no", "yes")
 session.tui.define.models.unsteady_2nd_order_bounded("Yes")
 session.tui.define.materials.copy("solid", "steel")
 
-
+#########################################
 # Solve only energy equation (conduction)
+# ---------------------------------------
 session.tui.solve.set.equations("flow", "no", "kw", "no")
 
-
+############################################
 # Define disc rotation
+# --------------------
 # (15.79 rps corresponds to 100 km/h car speed
 # with 0.28 m of axis height from ground)
 session.tui.define.boundary_conditions.set.solid(
@@ -97,10 +111,11 @@ session.tui.define.boundary_conditions.set.solid(
     "q",
 )
 
-# ### Apply frictional heating on pad-disc surfaces
-# (wall thickness 0f 2 mm has been assumed and
-# 2e9 w/m3 is the heat generation which has been
-# calculated from kinetic energy change due to braking)
+###################################################
+# Apply frictional heating on pad-disc surfaces
+# ----------------------------------------------
+# Wall thickness 0f 2 mm has been assumed and 2e9 w/m3 is the heat generation which has been calculated from kinetic energy change due to braking.
+
 session.tui.define.boundary_conditions.set.wall(
     "wall_pad-disc1",
     "wall-pad-disc2",
@@ -113,9 +128,12 @@ session.tui.define.boundary_conditions.set.wall(
     "q",
 )
 
-
+############################################################
+# Apply convection cooling on outer surfaces due to air flow
+# -----------------------------------------------------------
 # Outer surfaces are applied a constant htc of 100 W/(m2 K)
 # and 300 K free stream temperature
+
 session.tui.define.boundary_conditions.set.wall(
     "wall-disc*",
     "wall-geom*",
@@ -129,11 +147,21 @@ session.tui.define.boundary_conditions.set.wall(
     "q",
 )
 
+###############################################
+# Initialize
+# ----------
 # Initialize with 300 K temperature
+
 session.tui.solve.initialize.initialize_flow()
 
+###############################################
+# Post processing setup
+# ---------------------
+# * Report definitions and monitor plots
+# * Set contour plot properties
+# * Set views and camera
+# * Set animation object
 
-# ### Report definitions, monitor plots and animation setup
 session.tui.solve.report_definitions.add(
     "max-pad-temperature",
     "volume-max",
@@ -172,7 +200,8 @@ session.tui.solve.report_files.add(
     str(report_file_path),
 )
 
-# Set contour properties
+
+
 session.results.graphics.contour["contour-1"] = {
     "boundary_values": True,
     "color_map": {
@@ -202,7 +231,6 @@ session.results.graphics.contour["contour-1"] = {
 }
 
 
-# Create a graphic object
 session.tui.display.objects.create(
     "contour",
     "temperature",
@@ -225,17 +253,11 @@ session.tui.display.objects.create(
     "q",
 )
 
-# Select property to display
-# session.tui.display.objects.display("temperature")
 
-# Set views properties
 session.tui.display.views.restore_view("top")
 session.tui.display.views.camera.zoom_camera(2)
-
-# Save the animation
 session.tui.display.views.save_view("animation-view")
 
-# Create animation
 session.tui.solve.animate.objects.create(
     "animate-temperature",
     "animate-on",
@@ -249,36 +271,47 @@ session.tui.solve.animate.objects.create(
     "q",
 )
 
-# Run simulation for 2 seconds flow time
-# Set time step
+###############################################
+# Run simulation
+# ---------------
+# * Run simulation for 2 seconds flow time
+# * Set time step size
+# * Set number of time steps (total time/time step size) and maximum number of iterations per time step
+
 session.tui.solve.set.transient_controls.time_step_size(0.01)
+session.tui.solve.dual_time_iterate(200, 5)
 
-# Set number of iterations
-session.tui.solve.dual_time_iterate(10, 5)  # 200, 5
-
-# Write and save case file data
+###############################################
+# Save simulation data
+# --------------------
+# Write case and data files
 save_case_data_as = Path(save_path) / "brake-final.cas.h5"
 session.tui.file.write_case_data(save_case_data_as)
 
+###############################################
+# Post processing with PyVista (3D visualization)
+# ===============================================
 
-# PyVista post processing
-try:
-    import ansys.fluent.visualization.pyvista as pv
-except ImportError:
-    import ansys.fluent.post.pyvista as pv
-
-
+###############################################
 # Create a graphics session
+# -------------------------
 graphics_session1 = pv.Graphics(session)
 
-# Temperature contour
+###############################################
+# Temperature contour object
+# --------------------------
 contour1 = graphics_session1.Contours["temperature"]
 
+###############################################
+# Check available options for contour object
+# -------------------------------------------
 
-# Following command shows setting/control options available
 contour1()
 
-# Setting contour properties
+###############################################
+# Set contour properties
+# ----------------------
+
 contour1.field = "temperature"
 contour1.surfaces_list = [
     "wall-disc1",
@@ -294,13 +327,28 @@ contour1.range.option = "auto-range-off"
 contour1()
 contour1.range.auto_range_off.minimum = 300
 contour1.range.auto_range_off.maximum = 400
-# contour1.display()
 
+###############################################
+# Display contour
+# ---------------
 
-import csv
+contour1.display()
 
-# Matplotlib: Reads Fluent monitor file and shows imbeded plot
-import matplotlib.pyplot as plt
+#%%
+# .. image:: ../../_static/brake_surface_temperature.png
+#    :align: center
+#    :alt: Brake Surface Temperature Contour
+
+#%%
+#    Brake Surface Temperature
+
+###############################################
+# Post processing with Matplotlib (2D graph)
+# ===============================================
+
+###############################################
+# Read monitor file
+# -----------------
 
 X = []
 Y = []
@@ -314,14 +362,34 @@ with open(report_file_path, "r") as datafile:
             X.append(float(rows[3]))
             Y.append(float(rows[2]))
             Z.append(float(rows[1]))
-    plt.title("Maximum Temperature", fontdict={"color": "darkred", "size": 20})
-    plt.plot(X, Z, label="Max. Pad Temperature", color="red")
-    plt.plot(X, Y, label="Max. Disc Temperature", color="blue")
-    plt.xlabel("Time (sec)")
-    plt.ylabel("Max Temperature (K)")
-    plt.legend(loc="lower right", shadow=True, fontsize="x-large")
-    plt.savefig(save_path / "max-temperature.png")
-    # plt.show()
 
-# Properly close open Fluent session
+###############################################
+# Plot graph
+# ----------
+
+
+plt.title("Maximum Temperature", fontdict={"color": "darkred", "size": 20})
+plt.plot(X, Z, label="Max. Pad Temperature", color="red")
+plt.plot(X, Y, label="Max. Disc Temperature", color="blue")
+plt.xlabel("Time (sec)")
+plt.ylabel("Max Temperature (K)")
+plt.legend(loc="lower right", shadow=True, fontsize="x-large")
+
+###############################################
+# Show graph
+# ----------
+
+plt.show()
+
+#%%
+# .. image:: ../../_static/maximum_temperature.png
+#    :align: center
+#    :alt: Brake Maximum Temperature 
+
+#%%
+#    Brake Maximum Temperature
+
+####################################################################################
+# Close the session
+# ==================================================================================
 session.exit()
