@@ -36,7 +36,7 @@ How to run the examples
 
     .. code:: bash
 
-        python -m pip install -r requirements/requirements_doc.txt
+        python -m pip install -r requirements/requirements.txt
 
 
 #. Example scripts are located within the sub-directories in examples/ directory. Run a script using python. E.g:
