@@ -19,7 +19,7 @@ PyFluent examples
    :alt: pre-commit.ci status
 
 
-This repository contains examples demonstrating usages of pytfluent libraries.
+This repository contains examples demonstrating the usage of PyFluent libraries.
 
 
 How to run the examples
