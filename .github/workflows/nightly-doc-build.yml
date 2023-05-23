@@ -28,11 +28,6 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.REPO_DOWNLOAD_PAT }}
 
-      - name: Pull Fluent docker image
-        run: make docker-pull
-        env:
-          FLUENT_IMAGE_TAG: ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
-
       - name: Generate the documentation
         run: make build-doc
         env:
