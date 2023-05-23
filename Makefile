@@ -3,8 +3,7 @@ style:
 	@pre-commit run --all-files --show-diff-on-failure
 
 docker-pull:
-	@pip install docker
-	@python .ci/pull_fluent_image.py
+	@bash .ci/pull_fluent_image.sh
 
 build-doc:
 	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
