@@ -158,6 +158,8 @@ sphinx_gallery_conf = {
 if not os.getenv("RUN_EXAMPLES"):
     # build gallery without executing examples
     sphinx_gallery_conf["plot_gallery"] = "False"
+else:
+    sphinx_gallery_conf["filename_pattern"] = r"ablation\.py"
 
 # -- Options for HTML output -------------------------------------------------
 html_short_title = html_title = "PyFluent Examples"
