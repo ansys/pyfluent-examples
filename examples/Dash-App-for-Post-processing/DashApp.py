@@ -9,7 +9,7 @@ postprocessing capabilities.
 
 # import modules
 import os
-
+import collections.abc
 import CreatePPTX  # noqa: F401
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
