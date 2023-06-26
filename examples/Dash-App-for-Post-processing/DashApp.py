@@ -7,9 +7,11 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+
 # import modules
+import collections.abc  # noqa: F401
 import os
-import collections.abc
+
 import CreatePPTX  # noqa: F401
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
