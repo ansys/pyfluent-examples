@@ -7,7 +7,9 @@ setting up and running the solver, and reviewing the results using Fluent's
 postprocessing capabilities.
 """
 
+
 # import modules
+import collections.abc  # noqa: F401
 import os
 
 import CreatePPTX  # noqa: F401
