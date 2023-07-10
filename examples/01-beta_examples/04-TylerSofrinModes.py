@@ -23,9 +23,9 @@ postprocessing capabilities.
 #         8-blade rotor interacting with a 6-vane stator
 #         2-lobed pattern turning at (8)(1)/(2) = 4 times shaft speed
 #
-# ![Exampletable](ExampleTable.jpg)
+# ![Exampletable](Tyler-Sofrin-Modes-Compressor/ExampleTable.jpg)
 #
-# ![TSmode](TSmode.jpg)
+# ![TSmode](Tyler-Sofrin-Modes-Compressor/TSmode.jpg)
 
 # Discrete Fourier Transform (DFT)
 # To determine the pressure associated
@@ -75,7 +75,7 @@ session.check_health()
 #
 # The varnames should correspond to the variables writted from the DFT and
 # can be determined by manually inspecting the solution variables as depicted below:
-# ![Varnames](varnames.jpg)
+# ![Varnames](Tyler-Sofrin-Modes-Compressor/varnames.jpg)
 
 n_mode = [0, 1, 2, 3]  # Impeller frequency harmonics
 varname = [
@@ -141,7 +141,7 @@ for angle_ind, angle in enumerate(range(0, 360, dtheta)):
 # Write Fourier Coefficients to File
 #
 # This step is only required if data is to be processed outside of this script.
-with open("FourierCoefficients.txt", "w") as f:
+with open("Tyler-Sofrin-Modes-Compressor/FourierCoefficients.txt", "w") as f:
     f.write("n theta An Bn \n")
 
     for n_ind, variable in enumerate(varname):
@@ -160,7 +160,7 @@ with open("FourierCoefficients.txt", "w") as f:
 
 # Calculating Pnm
 #
-# ![TS_formulas](TS_formulas.jpg)
+# ![TS_formulas](Tyler-Sofrin-Modes-Compressor/TS_formulas.jpg)
 # Create list of m values based on m_max and m_inc
 m_mode = range(-m_max, m_max + m_inc, m_inc)
 

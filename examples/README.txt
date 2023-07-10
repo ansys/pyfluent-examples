@@ -3,10 +3,3 @@
 ========
 Examples
 ========
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-
-.. released_examples/README.txt
-.. beta_examples/README.txt

@@ -27,7 +27,7 @@ from pptx.util import Inches
 # User Inputs
 case_filename = "elbow.cas.h5"
 data_filename = "elbow.dat.h5"
-template_filename = "templatePyAnsys.pptx"
+template_filename = "PPTX-report-generation/templatePyAnsys.pptx"
 
 import_case_filename = examples.download_file(
     "elbow.cas.h5",

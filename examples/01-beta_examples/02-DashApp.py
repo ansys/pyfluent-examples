@@ -69,7 +69,7 @@ app.layout = dbc.Container(
                     dbc.Col(
                         [
                             html.Img(
-                                src="ImgMesh.jpg",
+                                src="Dash-App-for-Post-processing/ImgMesh.jpg",
                                 height=250,
                                 style={
                                     "display": "block",

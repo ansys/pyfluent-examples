@@ -14,7 +14,7 @@ from pptx.util import Inches
 
 # Generate PPTX
 def generatePPTX(session):
-    template_filename = "template.pptx"
+    template_filename = "Dash-App-for-Post-processing/template.pptx"
 
     prs = Presentation(template_filename)
 
