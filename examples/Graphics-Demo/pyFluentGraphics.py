@@ -170,7 +170,7 @@ cb_itr_id = session.events_manager.register_callback(
 # Specify plotters id to animate
 pyvista_windows_manager.animate_windows("", ["contour-1", "contour-2"])
 
-from ansys.fluent.core.utils.async_execution import asynchronous
+from ansys.fluent.core.utils.execution import asynchronous
 
 
 @asynchronous

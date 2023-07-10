@@ -95,8 +95,8 @@ pyfluent.version_info()
 
 # Functions for handling the transfer of mesh from meshing to solver
 
-from ansys.fluent.core.utils.async_execution import asynchronous
 from ansys.fluent.core.utils.data_transfer import transfer_case
+from ansys.fluent.core.utils.execution import asynchronous
 
 
 @asynchronous
@@ -132,12 +132,8 @@ def meshing_image_filename():
 
 meshing_image_filename.index = 0
 
-import os
-import time
-
 
 def update_meshing_display(session, task_name, retry=0):
-
     if task_name == "Import CAD and Part Management" and retry == 0:
         session.scheme_eval.string_eval(
             f'(eval \'(meshing-wf-part-management-draw "{task_name}") tgrid-package)'
@@ -258,7 +254,6 @@ class ExhaustFTMWorkflow:
         return self
 
     def cover_openings(self):
-
         task_name, task, set_task_args, execute_task = self._task(
             "Enclose Fluid Regions (Capping)"
         )  # noqa: E501
@@ -668,9 +663,6 @@ class ExhaustFTMWorkflow:
         return self.workflow.TaskObject[name].Execute()
 
 
-from ansys.fluent.core.utils.async_execution import asynchronous
-
-
 def run_meshing(meshing):
     meshing.import_cad()
     update_meshing_display(meshing.session, "Import CAD and Part Management")
@@ -693,7 +685,6 @@ def async_create_meshing(launcher):
 
 
 # Class to define the details of the solver workflow for the current problem
-from ansys.fluent.core.utils.async_execution import asynchronous
 
 
 class ExhaustFlowSolver:
@@ -868,8 +859,6 @@ for inlet_velocity in inlet_velocities:
 
 # Meanwhile also download exhaust system CAD file from PyFluent examples
 
-from ansys.fluent.core import examples
-
 import_filename = examples.download_file(
     "exhaust_system.fmd", "pyfluent/exhaust_system"
 )
@@ -881,8 +870,6 @@ meshing = meshing.result()
 # And upload CAD file to the meshing instance
 
 import_filename
-
-import os
 
 meshing.session.upload(
     file_path=import_filename, remote_file_name="exhaust_system.fmd"  # noqa: E501
@@ -918,7 +905,6 @@ transfer_case(
     overwrite_previous=False,
 )
 
-
 # Run all solver workflows in parallel
 runs = []
 
@@ -936,7 +922,8 @@ titles = [f"<td>{image[1]}</td>" for image in gallery]
 items = [f"<td><img src={image[0]}></td>" for image in gallery]
 display(
     HTML(
-        f"<table><tr>{titles[0]}{titles[1]}</tr><tr>{items[0]}{items[1]}</tr><tr>{titles[2]}{titles[3]}</tr><tr>{items[2]}{items[3]}</tr></table>"  # noqa: E501
+        f"<table><tr>{titles[0]}{titles[1]}</tr><tr>{items[0]}{items[1]}</tr>"
+        f"<tr>{titles[2]}{titles[3]}</tr><tr>{items[2]}{items[3]}</tr></table>"
     )
 )
 
@@ -1002,7 +989,6 @@ pressure_frame.plot.scatter(x="inlet velocity (m/s)", y="inlet-1 pressure (Pa)")
 pressure_frame.plot.scatter(x="inlet velocity (m/s)", y="inlet-2 pressure (Pa)")
 pressure_frame.plot.scatter(x="inlet velocity (m/s)", y="inlet-3 pressure (Pa)")
 pressure_frame.plot.scatter(x="inlet velocity (m/s)", y="flow-pipe pressure (Pa)")
-
 
 # 3d plots with matplotlib
 
