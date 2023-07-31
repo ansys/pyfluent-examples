@@ -149,7 +149,7 @@ sphinx_gallery_conf = {
     "backreferences_dir": None,
     # Modules for which function level galleries are created.  In
     "doc_module": "ansys-fluent-core",
-    # "ignore_pattern": r"demo22R2\.py",  # noqa: E501
+    "ignore_pattern": r"00-ahmed_body_workflow\.py|01-brake\.py|01-CreatePPTX\.py|02-DashApp\.py|03-powerPointReport\.py|04-TylerSofrinModes\.py",  # noqa: E501
     "thumbnail_size": (350, 350),
     "reset_modules_order": "both",
     "reset_modules": (_reset_module_cb),
