@@ -109,6 +109,10 @@ session = pyfluent.launch_fluent()
 session.tui.file.read_case(import_case_filename)
 session.tui.file.read_data(import_data_filename)
 
+session.solution.initialization.initialize()
+session.solution.run_calculation.iter_count = 50
+session.solution.run_calculation.calculate()
+
 # Open PPTX Template
 prs = Presentation(import_template_filename)
 
@@ -213,6 +217,9 @@ for key, value in Images.items():
         session.tui.display.objects.display(image)
         img_path = str((Path(pyfluent.EXAMPLES_PATH) / str(image)).with_suffix(".png"))
         session.tui.display.set.picture.driver.png()
+        session.tui.display.set.picture.use_window_resolution("no")
+        session.tui.display.set.picture.x_resolution(1920)
+        session.tui.display.set.picture.y_resolution(1080)
         session.tui.display.save_picture(img_path)
         placeholder = slide.placeholders[14]
         pic = placeholder.insert_picture(img_path)
