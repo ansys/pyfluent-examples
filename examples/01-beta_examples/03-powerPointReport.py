@@ -103,7 +103,7 @@ analyze_ppt(
 session = pyfluent.launch_fluent()
 
 # Check server status
-session.check_health()
+#session.check_health()
 
 # Read case file and data
 session.tui.file.read_case(import_case_filename)
@@ -210,7 +210,9 @@ for key, value in Images.items():
         slide = prs.slides.add_slide(graph_slide_layout)
         title = slide.shapes.title
         title.text = image
+        session.tui.display.objects.display(image)
         img_path = str((Path(pyfluent.EXAMPLES_PATH) / str(image)).with_suffix(".png"))
+        session.tui.display.set.picture.driver.png()
         session.tui.display.save_picture(img_path)
         placeholder = slide.placeholders[14]
         pic = placeholder.insert_picture(img_path)

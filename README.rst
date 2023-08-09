@@ -43,7 +43,7 @@ How to run the examples
 
     .. code:: bash
     
-        python examples/Ablation-tutorial/ablation.py
+        python examples/01-beta_examples/00-ablation.py
 
 
 .. LINKS AND REFERENCES
