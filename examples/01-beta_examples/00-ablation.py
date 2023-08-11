@@ -6,7 +6,12 @@ Modeling Ablation
 Objective:
 ==========
 
-In this tutorial, a flow field of air passing around a 3D wedge is simulated using the Ansys Fluent ablation model. Ablation is an effective treatment used to protect a vehicle from the damaging effects of external high temperatures. During high speed vehicle operations (for example, vehicle reentry), the ablative coating is chipped away to remove excessive amount of heat from the surface of the vehicle.
+Ablation is an effective treatment used to protect an atmospheric reentry vehicle from
+the damaging effects of external high temperatures caused by shock wave and viscous
+heating. The ablative material is chipped away due to surface reactions that remove a
+significant amount of heat and keep the vehicle surface temperature below the melting
+point. In this tutorial, Fluent ablation model is demonstrated for a reendtry vehicle
+geometry simplified as a 3D wedge.
 
 This tutorial demonstrates how to do the following:
 
@@ -17,10 +22,16 @@ This tutorial demonstrates how to do the following:
 Problem Description:
 ====================
 
+The geometry of the 3D wedge considered in this tutorial is shown in following figure.
+The air flow passes around a nose of a re-entry vehicle operating under high speed
+conditions. The inlet air has a temperature of 4500 K, a gauge pressure of 13500 Pa,
+and a Mach number of 3. The domain is bounded above and below by symmetry planes
+(displayed in yellow). As the ablative coating chips away, the surface of the wall
+moves. The moving of the surface is modeled using dynamic meshes. The surface moving
+rate is estimated by Vieille's empirical law:
 
-The geometry of the 3D wedge considered in this tutorial is shown in following Figure. The air flow passes around a nose of a re-entry vehicle operating under high speed conditions. The inlet air has a temperature of 4500 K, a gauge pressure of 13500 Pa, and a Mach number of 3. The domain is bounded above and below by symmetry planes (displayed in yellow). As the ablative coating chips away, the surface of the wall moves. The moving of the surface is modeled using dynamic meshes. The surface moving rate is estimated by Vielle's empirical law:
-
-where r is the surface moving rate, p is the absolute pressure, and A and n are model parameters. In the considered case, A = 5 and n = 0.1.
+where r is the surface moving rate, p is the absolute pressure, and A and n are model
+parameters. In the considered case, A = 5 and n = 0.1.
 
 """
 
@@ -45,12 +56,12 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+from ansys.fluent.visualization.pyvista import Graphics
 
 ###############################################################################
 # PyVista
 # --------------------
 
-from ansys.fluent.visualization.pyvista import Graphics
 
 ###############################################################################
 # Specifying save path
@@ -88,7 +99,7 @@ session = pyfluent.launch_fluent(version="3d", precision="double", processor_cou
 session.tui.file.read_case(import_filename)
 
 ####################################################################################
-# Define models 
+# Define models
 # ----------------
 
 session.tui.define.models.solver.density_based_implicit("yes")
@@ -107,7 +118,7 @@ session.tui.define.materials.change_create(
 
 ############################################################################
 # Following is alternative Settings API method to define material properties
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 session.setup.materials.fluid["air"]()
 session.setup.materials.fluid["air"] = {"density": {"option": "ideal-gas"}}
 
@@ -122,17 +133,20 @@ session.setup.boundary_conditions.pressure_far_field["inlet"] = {
     "gauge_pressure": 13500,
     "t": 4500,
     "m": 3,
-    "turb_intensity": 0.001
+    "turb_intensity": 0.001,
 }
 session.setup.boundary_conditions.pressure_outlet["outlet"] = {
     "gauge_pressure": 13500,
-    "prevent_reverse_flow": True
- }
+    "prevent_reverse_flow": True,
+}
 
 #############################################
 # Ablation boundary condition (Vielles Model)
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#Once you have specified the ablation boundary conditions for the wall, Ansys Fluent automatically enables the Dynamic Mesh model with the Smoothing and Remeshing options, #creates the wall-ablation dynamic mesh zone, and configure appropriate dynamic mesh settings.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Once you have specified the ablation boundary conditions for the wall,
+# Ansys Fluent automatically enables the Dynamic Mesh model with the Smoothing and
+# Remeshing options, #creates the wall-ablation dynamic mesh zone, and configure
+# appropriate dynamic mesh settings.
 
 session.setup.boundary_conditions.wall["wall_ablation"] = {
     "ablation_select_model": "Vielle's Model",
@@ -431,4 +445,3 @@ contour1.display()
 # ==================================================================================
 
 session.exit()
-
