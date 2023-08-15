@@ -1,30 +1,43 @@
 """
-PPTX-report-generation
-======================
-These examples show you how you can use Fluent capabilities from Python to perform
-Fluent simulations. This includes geometry import, Fluent's meshing workflows,
-setting up and running the solver, and reviewing the results using Fluent's
-postprocessing capabilities.
-"""
 
-# Create PowerPoint Report with Fluent Results
-# This script automatically generates a PPTX report based on Fluent results.
-# The PPTX contains a title slide, a table of computed report definitions,
-# images of user created graphics objects
-# (mesh, contours, vectors, pathlines, and particle tracks), and
-# images of charts (residuals and report plots).
-# It can be easily modified to work with any PowerPoint template.
+##########################################################
+PPTX Report Generation
+##########################################################
+.. _Write example object:
+
+Objective
+===============
+
+This example takes an existing Fluent .cas file and goes through the steps necessary 
+to post process the results and extract the information to a PPTX report. In this 
+example we are using Fluent's inbuild postprocessing capabilities. 
+
+The steps include:
+* This script automatically generates a PPTX report based on Fluent results.
+* The PPTX contains a title slide, a table of computed report definitions,
+* images of user created graphics objects
+* (mesh, contours, vectors, pathlines, and particle tracks), and
+* images of charts (residuals and report plots).
+* It can be easily modified to work with any PowerPoint template.
+
+"""
+####################################################################################
+# Import required libraries/modules
+# ==================================================================================
 
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
-# Import modules
 from pptx import Presentation
 from pptx.util import Inches
 
+####################################################################################
 # User Inputs
+# ==================================================================================
+# In this example the report is generated using the elbow case taken from the Fluent Tutorial.
+# The steps needed to generate a pptx report could be applied to any Fluent simulation.
 case_filename = "elbow.cas.h5"
 data_filename = "elbow.dat.h5"
 template_filename = "PPTX-report-generation/templatePyAnsys.pptx"
@@ -43,6 +56,7 @@ import_template_filename = examples.download_file(
     "templatePyAnsys.pptx",
     "pyfluent/examples/PPTX-report-generation",
 )  # noqa: E501
+
 
 # Determine Placeholder Index for Given PPTX Template
 # Analyze_ppt is taken from
