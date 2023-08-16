@@ -45,27 +45,29 @@ template_filename = "PPTX-report-generation/templatePyAnsys.pptx"
 import_case_filename = examples.download_file(
     "elbow.cas.h5",
     "pyfluent/examples/PPTX-report-generation",
-)  # noqa: E501
+)
 
 import_data_filename = examples.download_file(
     "elbow.dat.h5",
     "pyfluent/examples/PPTX-report-generation",
-)  # noqa: E501
+)
 
 import_template_filename = examples.download_file(
     "templatePyAnsys.pptx",
     "pyfluent/examples/PPTX-report-generation",
-)  # noqa: E501
+)
 
-
+####################################################################################
+# Organize PPTX Template
+# ==================================================================================
 # Determine Placeholder Index for Given PPTX Template
 # Analyze_ppt is taken from
 # https://github.com/chris1610/pbpython/blob/master/code/analyze_ppt.pyhttps:
 # //github.com/chris1610/pbpython/blob/master/code/analyze_ppt.py
 # * Analyze_ppt is used to determine the placeholder indices in the PPTX template.
-# It generates an annotated PPTX named labelled_template.pptx.
-# This function is only required if the placeholder indices are not known.
-# * Review the generated labelled_template.pptx and
+# *It generates an annotated PPTX named labelled_template.pptx.
+# *This function is only required if the placeholder indices are not known.
+# *Review the generated labelled_template.pptx and
 # determine slide desired layout (indices start at 0) and
 # for each layout the required placeholders
 # * Images can be inserted using placeholders of type:Picture.
@@ -113,75 +115,102 @@ analyze_ppt(
     str(Path(pyfluent.EXAMPLES_PATH) / "labelled_template.pptx"),
 )
 
-# Load Fluent Model
+
+####################################################################################
+# Open Fluent
+# ==================================================================================
 session = pyfluent.launch_fluent()
 
-# Check server status
-#session.check_health()
-
+####################################################################################
 # Read case file and data
+# ==================================================================================
 session.tui.file.read_case(import_case_filename)
-session.tui.file.read_data(import_data_filename)
+#session.tui.file.read_data(import_data_filename)
 
-session.solution.initialization.initialize()
-session.solution.run_calculation.iter_count = 50
-session.solution.run_calculation.calculate()
+####################################################################################
+# Initialize and run case
+# ==================================================================================
+# report data not stored in saved .dat files so need to run before creating plots.
+session.solution.initialization.hybrid_initialize()
+session.tui.solve.set.number_of_iterations(50)
+session.tui.solve.iterate()
 
+####################################################################################
 # Open PPTX Template
+# ==================================================================================
 prs = Presentation(import_template_filename)
 
+####################################################################################
 # Add Title Slide
-
+# ==================================================================================
 # slide layout 0 is selected based on particulate template
-slide = prs.slides.add_slide(prs.slide_layouts[0])
-
 # placeholder 10 holds the title text for particular template
+# placeholder 12 holds the subtitle text for particulare template
+slide = prs.slides.add_slide(prs.slide_layouts[0])
 title = slide.placeholders[10]
 title.text = case_filename
-
-# placeholder 12 holds the subtitle text for particulare template
 subtitle = slide.placeholders[12]
 subtitle.text = "CFD Simulation Results"
 
-# Add Report Definition Slide
-# Collect Report Definition Data
+####################################################################################
+# Add Report Definition
+# ==================================================================================
+# Look at list of reports in the Fluent simulation
+# Collect Report Definition Data and assign to arrays
 repdef = []
 repcalc = []
 reportList = session.solution.report_definitions.surface.get_object_names()
 
 for report in reportList:
-    for key, value in session.solution.report_definitions.compute(
-        report_defs=[report]
-    )[  # noqa: E501
-        0
-    ].items():
+    dataList = session.solution.report_definitions.compute(report_defs=[report])
+    keyList = list(dataList.keys())
+    valueList = list(dataList.values())
+    for key in keyList:
         repdef.append(key)
+    for value in valueList:           
         repcalc.append(value[0])
 
-if reportList:  # if there are reports
+####################################################################################
+# Create report slide(s)
+# ==================================================================================
+# If there are reports. For each report:
+# * Add a slide (layout option 3)
+# * Add a table with correct numner of columns and rows
+# * Add table headers
+# * Copy the report names and values
+
+if reportList: 
     slide = prs.slides.add_slide(prs.slide_layouts[3])
     title = slide.shapes.title
     title.text = "Report Definitions"
 
-    # Create a table of appropriate size
     x, y, cx, cy = Inches(2), Inches(2), Inches(8), Inches(1.5)
     shape = slide.shapes.add_table(len(repdef) + 1, 2, x, y, cx, cy)
     table = shape.table
 
-    # Create table headers
     cell = table.cell(0, 0)
     cell.text = "Report Definition"
     cell = table.cell(0, 1)
     cell.text = "Value"
 
-    # Populate table with Report Definition Data
     for index, value in enumerate(repdef):
         cell = table.cell(index + 1, 0)
         cell.text = value
         cell = table.cell(index + 1, 1)
         cell.text = format(repcalc[index], ".4E")
 
+####################################################################################
+# Define adjust_picture_to_fit function
+# ==================================================================================
 # Function that will be used later to resize pictures to fit their placeholder
+# It will apply the following modifications:
+# *Do not crop the image.
+# *If the image is "taller" in aspect than the available height,
+# shrink the picture to use the allowable height
+# *Otherwise scale the picture to use the full 
+# *Always maintain the image aspect ratio
+
+
 def adjust_picture_to_fit(picture):
     available_width = picture.width
     available_height = picture.height
@@ -195,21 +224,26 @@ def adjust_picture_to_fit(picture):
     picture.crop_bottom = 0
     picture.crop_right = 0
 
-    # ---if the placeholder is "wider" in aspect, shrink the picture width while
-    # ---maintaining the image aspect ratio
     if placeholder_aspect_ratio > image_aspect_ratio:
         picture.height = available_height
         picture.width = int(image_aspect_ratio * available_height)
-    # ---otherwise shrink the height
     else:
         picture.width = available_width
         picture.height = int(available_width / image_aspect_ratio)
     picture.left, picture.top = pos_left, pos_top
 
-
+####################################################################################
 # Add Graphics Slides
-# Dictionary corresponding to graphics objects.
+# ==================================================================================
+# Create dictionary corresponding to graphics objects defined in the Fluent simulation
 # Once scenes are enabled with the Settings API they can be added here.
+# Loop through the objects of each key in the Images dictionary and:
+# *Add a slide into the PPTX (layout[6])
+# *Add slide title
+# *dispay the image in Fluent session.tui.display.set.picture.use_window_resolution("no")
+# *save picture
+# *insert picture into PPTX
+# *use adjust_picture_to_fit function to adjust size
 Images = {
     "mesh": session.results.graphics.mesh.get_object_names(),
     "contour": session.results.graphics.contour.get_object_names(),
@@ -217,11 +251,6 @@ Images = {
     "pathlines": session.results.graphics.pathline.get_object_names(),
     "particletracks": session.results.graphics.particle_track.get_object_names(),
 }
-
-# session.tui.display.set.picture.use_window_resolution("no")
-
-# Loop through the objects of each key in the Images dictionary,
-# save picture, and insert picture into PPTX
 for key, value in Images.items():
     for image in value:
         graph_slide_layout = prs.slide_layouts[6]
@@ -239,7 +268,12 @@ for key, value in Images.items():
         pic = placeholder.insert_picture(img_path)
         adjust_picture_to_fit(pic)
 
-# Add residual plot.
+####################################################################################
+# Add residual plot
+# ==================================================================================
+# *Export residual plot from fluent
+# *Add slide (layout[6]) to pptx
+# *Adjust picture size and add to pptx
 session.tui.plot.residuals()
 session.tui.display.save_picture(str(Path(pyfluent.EXAMPLES_PATH) / "residuals.png"))
 
@@ -252,21 +286,27 @@ placeholder = slide.placeholders[14]
 pic = placeholder.insert_picture(str(Path(pyfluent.EXAMPLES_PATH) / "residuals.png"))
 adjust_picture_to_fit(pic)
 
+####################################################################################
 # Add Report Charts
+# ==================================================================================
+#Add charts for each individual report plot:
+#*Generate a list of all report plots. Take string provided by Fluent and divide into 
+# individual plots.
+#*Using Scheme Eval until Settings API can be used.
+#
+# If there are report plots present, loop over reports. For each:
+#*Plot report 
+#*Export .png image
+#*Add slide to pptx
+#*Add title with report plot name
+#*Add the .png
+#*Adjust to fit
 session.tui.solve.report_plots.list()
-# Add charts for each individual report plot.
-
-# Generate a list of all report plots.
-# Using Scheme Eval until Settings API can be used.
 reportdefs_string = session.scheme_eval.exec(
     ('(ti-menu-load-string "solve/report-plots/list ")',)
 )
 reportdefs = reportdefs_string.split()
 reportdefs.pop(0)
-
-# Loop through all report plots,
-# generate a slide titled with report plot name,
-# including image of plot
 if reportdefs[0] == "invalid":
     print("There are no report definitions.")
 else:
@@ -287,5 +327,7 @@ else:
         )
         adjust_picture_to_fit(pic)
 
+####################################################################################
 # Save and close PPTX
+# ==================================================================================
 prs.save(str((Path(pyfluent.EXAMPLES_PATH) / case_filename).with_suffix(".pptx")))
