@@ -69,14 +69,10 @@ import_template_filename = examples.download_file(
 # * Analyze_ppt is used to determine the placeholder indices in the PPTX template.
 # * It generates an annotated PPTX named labelled_template.pptx.
 # * This function is only required if the placeholder indices are not known.
-# * Review the generated labelled_template.pptx and
-# determine slide desired layout (indices start at 0) and
-# for each layout the required placeholders
+# * Review the generated labelled_template.pptx and determine slide desired layout and placeholders
 # * Images can be inserted using placeholders of type:Picture.
-# Alternatively images can be inserted anywhere in the slide
-# based on location (not covered in this script)
-# * If template does not include the desired layout,
-# edit template first and add layout with desired placeholder arrangement
+# * Alternatively images can be inserted anywhere in the slide based on location (not covered in this script)
+# * If template does not include the desired layout, edit template first and add layout with desired placeholder arrangement
 
 
 def analyze_ppt(input, output):
@@ -121,19 +117,20 @@ analyze_ppt(
 ####################################################################################
 # Open Fluent
 # ==================================================================================
-session = pyfluent.launch_fluent()
+session = pyfluent.launch_fluent(product_version = "23.1.0")
 
 ####################################################################################
 # Read case file and data
 # ==================================================================================
 session.tui.file.read_case(import_case_filename)
-#session.tui.file.read_data(import_data_filename)
+session.tui.file.read_data(import_data_filename)
 
 ####################################################################################
 # Initialize and run case
 # ==================================================================================
 # report data not stored in saved .dat files so need to run before creating plots.
 session.solution.initialization.hybrid_initialize()
+session.tui.display.set.windows.aspect_ratio(1920,1080)
 session.tui.solve.set.number_of_iterations(50)
 session.tui.solve.iterate()
 
@@ -166,8 +163,8 @@ reportList = session.solution.report_definitions.surface.get_object_names()
 
 for report in reportList:
     dataList = session.solution.report_definitions.compute(report_defs=[report])
-    keyList = list(dataList.keys())
-    valueList = list(dataList.values())
+    keyList = list(dataList[0].keys())
+    valueList = list(dataList[0].values())
     for key in keyList:
         repdef.append(key)
     for value in valueList:           
@@ -209,7 +206,6 @@ if reportList:
 # Function that will be used later to resize pictures to fit their placeholder
 # It will apply the following modifications:
 #
-
 # * Do not crop the image.
 # * If the image is "taller" in aspect than the available height,
 # * shrink the picture to use the allowable height
