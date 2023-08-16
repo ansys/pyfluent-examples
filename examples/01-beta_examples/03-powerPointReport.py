@@ -21,6 +21,10 @@ The steps include:
 * images of charts (residuals and report plots).
 * It can be easily modified to work with any PowerPoint template.
 
+.. image:: ../../_static/PPTXReport_mesh.png
+   :align: center
+   :alt: Mesh
+
 """
 ####################################################################################
 # Import required libraries/modules
@@ -247,6 +251,15 @@ def adjust_picture_to_fit(picture):
 # * save picture
 # * insert picture into PPTX
 # * use adjust_picture_to_fit function to adjust size
+#%%
+# .. image:: ../../_static/PPTXReport_velocity.png
+#    :align: center
+#    :alt: Velocity Magnitude
+#
+#%%
+# .. image:: ../../_static/PPTXReport_temperature.png
+#    :align: center
+#    :alt: Temperature
 Images = {
     "mesh": session.results.graphics.mesh.get_object_names(),
     "contour": session.results.graphics.contour.get_object_names(),
@@ -307,6 +320,11 @@ adjust_picture_to_fit(pic)
 # * Add title with report plot name
 # * Add the .png
 # * Adjust to fit
+#
+#%%
+# .. image:: ../../_static/PPTXReport_OutletT.png
+#    :align: center
+#    :alt: OutletTemperature
 session.tui.solve.report_plots.list()
 reportdefs_string = session.scheme_eval.exec(
     ('(ti-menu-load-string "solve/report-plots/list ")',)
