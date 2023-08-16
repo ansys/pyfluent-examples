@@ -64,6 +64,7 @@ import_template_filename = examples.download_file(
 # Analyze_ppt is taken from
 # https://github.com/chris1610/pbpython/blob/master/code/analyze_ppt.pyhttps:
 # //github.com/chris1610/pbpython/blob/master/code/analyze_ppt.py
+#
 # * Analyze_ppt is used to determine the placeholder indices in the PPTX template.
 # * It generates an annotated PPTX named labelled_template.pptx.
 # * This function is only required if the placeholder indices are not known.
@@ -143,6 +144,7 @@ prs = Presentation(import_template_filename)
 ####################################################################################
 # Add Title Slide
 # ==================================================================================
+#
 # * slide layout 0 is selected based on particulate template
 # * placeholder 10 holds the title text for particular template
 # * placeholder 12 holds the subtitle text for particulare template
@@ -174,6 +176,7 @@ for report in reportList:
 # Create report slide(s)
 # ==================================================================================
 # If there are reports. For each report:
+#
 # * Add a slide (layout option 3)
 # * Add a table with correct numner of columns and rows
 # * Add table headers
@@ -204,6 +207,8 @@ if reportList:
 # ==================================================================================
 # Function that will be used later to resize pictures to fit their placeholder
 # It will apply the following modifications:
+#
+
 # * Do not crop the image.
 # * If the image is "taller" in aspect than the available height,
 # * shrink the picture to use the allowable height
@@ -238,6 +243,7 @@ def adjust_picture_to_fit(picture):
 # Create dictionary corresponding to graphics objects defined in the Fluent simulation
 # Once scenes are enabled with the Settings API they can be added here.
 # Loop through the objects of each key in the Images dictionary and:
+#
 # * Add a slide into the PPTX (layout[6])
 # * Add slide title
 # * dispay the image in Fluent session.tui.display.set.picture.use_window_resolution("no")
@@ -271,6 +277,7 @@ for key, value in Images.items():
 ####################################################################################
 # Add residual plot
 # ==================================================================================
+#
 # * Export residual plot from fluent
 # * Add slide (layout[6]) to pptx
 # * Adjust picture size and add to pptx
@@ -291,10 +298,12 @@ adjust_picture_to_fit(pic)
 # ==================================================================================
 #
 # Add charts for each individual report plot:
+#
 # * Generate a list of all report plots. Take string provided by Fluent and divide into individual plots.
 # * Using Scheme Eval until Settings API can be used.
 #
 # If there are report plots present, loop over reports. For each:
+#
 # * Plot report 
 # * Export .png image
 # * Add slide to pptx
