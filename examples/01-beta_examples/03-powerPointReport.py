@@ -143,9 +143,9 @@ prs = Presentation(import_template_filename)
 ####################################################################################
 # Add Title Slide
 # ==================================================================================
-# slide layout 0 is selected based on particulate template
-# placeholder 10 holds the title text for particular template
-# placeholder 12 holds the subtitle text for particulare template
+# * slide layout 0 is selected based on particulate template
+# * placeholder 10 holds the title text for particular template
+# * placeholder 12 holds the subtitle text for particulare template
 slide = prs.slides.add_slide(prs.slide_layouts[0])
 title = slide.placeholders[10]
 title.text = case_filename
@@ -206,7 +206,7 @@ if reportList:
 # It will apply the following modifications:
 # * Do not crop the image.
 # * If the image is "taller" in aspect than the available height,
-# shrink the picture to use the allowable height
+# * shrink the picture to use the allowable height
 # * Otherwise scale the picture to use the full 
 # * Always maintain the image aspect ratio
 
@@ -291,8 +291,7 @@ adjust_picture_to_fit(pic)
 # ==================================================================================
 #
 # Add charts for each individual report plot:
-# * Generate a list of all report plots. Take string provided by Fluent and divide into 
-# individual plots.
+# * Generate a list of all report plots. Take string provided by Fluent and divide into individual plots.
 # * Using Scheme Eval until Settings API can be used.
 #
 # If there are report plots present, loop over reports. For each:
