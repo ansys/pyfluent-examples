@@ -271,9 +271,9 @@ for key, value in Images.items():
 ####################################################################################
 # Add residual plot
 # ==================================================================================
-# Export residual plot from fluent
-# Add slide (layout[6]) to pptx
-# Adjust picture size and add to pptx
+# * Export residual plot from fluent
+# * Add slide (layout[6]) to pptx
+# * Adjust picture size and add to pptx
 session.tui.plot.residuals()
 session.tui.display.save_picture(str(Path(pyfluent.EXAMPLES_PATH) / "residuals.png"))
 
@@ -289,7 +289,8 @@ adjust_picture_to_fit(pic)
 ####################################################################################
 # Add Report Charts
 # ==================================================================================
-#Add charts for each individual report plot:
+#
+# Add charts for each individual report plot:
 # * Generate a list of all report plots. Take string provided by Fluent and divide into 
 # individual plots.
 # * Using Scheme Eval until Settings API can be used.
