@@ -183,6 +183,11 @@ for report in reportList:
 # * Add a table with correct numner of columns and rows
 # * Add table headers
 # * Copy the report names and values
+#
+# .. image:: ../../_static/PPTXReport_Table.png
+#    :align: center
+#    :alt: Table
+
 
 if reportList: 
     slide = prs.slides.add_slide(prs.slide_layouts[3])
@@ -251,12 +256,11 @@ def adjust_picture_to_fit(picture):
 # * save picture
 # * insert picture into PPTX
 # * use adjust_picture_to_fit function to adjust size
-#%%
+#
 # .. image:: ../../_static/PPTXReport_velocity.png
 #    :align: center
 #    :alt: Velocity Magnitude
 #
-#%%
 # .. image:: ../../_static/PPTXReport_temperature.png
 #    :align: center
 #    :alt: Temperature
@@ -321,7 +325,6 @@ adjust_picture_to_fit(pic)
 # * Add the .png
 # * Adjust to fit
 #
-#%%
 # .. image:: ../../_static/PPTXReport_OutletT.png
 #    :align: center
 #    :alt: OutletTemperature
