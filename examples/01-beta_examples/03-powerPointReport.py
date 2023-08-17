@@ -72,15 +72,14 @@ import_template_filename = examples.download_file(
 # * Analyze_ppt is used to determine the placeholder indices in the PPTX template.
 # * It generates an annotated PPTX named labelled_template.pptx.
 # * This function is only required if the placeholder indices are not known.
-# * Review the generated labelled_template.pptx and determine slide desired
-# layout and placeholders
-#
+# * Review the generated labelled_template.pptx and
+# * determine slide desired layout and placeholders
 # * Images can be inserted using placeholders of type:Picture.
-# * Alternatively images can be inserted anywhere in the slide based on
-# location (not covered in this script)
-#
-# * If template does not include the desired layout, edit template first and
-# add layout with desired placeholder arrangement
+# * Alternatively images can be inserted anywhere in the slide based on location
+#     - (not coverd in this script)
+# * If template does not include the desired layout
+#     - edit template first
+#     - add layout with desired placeholder arrangement
 
 
 def analyze_ppt(input, output):
