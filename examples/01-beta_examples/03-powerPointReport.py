@@ -8,9 +8,9 @@ PPTX Report Generation
 Objective
 ===============
 
-This example takes an existing Fluent .cas file and goes through the steps necessary 
-to post process the results and extract the information to a PPTX report. In this 
-example we are using Fluent's inbuild postprocessing capabilities. 
+This example takes an existing Fluent .cas file and goes through the steps necessary
+to post process the results and extract the information to a PPTX report. In this
+example we are using Fluent's inbuild postprocessing capabilities.
 
 The steps include:
 
@@ -34,14 +34,13 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
-
 from pptx import Presentation
 from pptx.util import Inches
 
 ####################################################################################
 # User Inputs
 # ==================================================================================
-# In this example the report is generated using the elbow case taken from the Fluent Tutorial.
+# This example using the elbow case taken from the Fluent Tutorial.
 # The steps needed to generate a pptx report could be applied to any Fluent simulation.
 case_filename = "elbow.cas.h5"
 data_filename = "elbow.dat.h5"
@@ -73,10 +72,15 @@ import_template_filename = examples.download_file(
 # * Analyze_ppt is used to determine the placeholder indices in the PPTX template.
 # * It generates an annotated PPTX named labelled_template.pptx.
 # * This function is only required if the placeholder indices are not known.
-# * Review the generated labelled_template.pptx and determine slide desired layout and placeholders
+# * Review the generated labelled_template.pptx and determine slide desired
+# layout and placeholders
+#
 # * Images can be inserted using placeholders of type:Picture.
-# * Alternatively images can be inserted anywhere in the slide based on location (not covered in this script)
-# * If template does not include the desired layout, edit template first and add layout with desired placeholder arrangement
+# * Alternatively images can be inserted anywhere in the slide based on
+# location (not covered in this script)
+#
+# * If template does not include the desired layout, edit template first and
+# add layout with desired placeholder arrangement
 
 
 def analyze_ppt(input, output):
@@ -121,7 +125,7 @@ analyze_ppt(
 ####################################################################################
 # Open Fluent
 # ==================================================================================
-session = pyfluent.launch_fluent(product_version = "23.1.0")
+session = pyfluent.launch_fluent(product_version="23.1.0")
 
 ####################################################################################
 # Read case file and data
@@ -134,7 +138,7 @@ session.tui.file.read_data(import_data_filename)
 # ==================================================================================
 # report data not stored in saved .dat files so need to run before creating plots.
 session.solution.initialization.hybrid_initialize()
-session.tui.display.set.windows.aspect_ratio(1920,1080)
+session.tui.display.set.windows.aspect_ratio(1920, 1080)
 session.tui.solve.set.number_of_iterations(50)
 session.tui.solve.iterate()
 
@@ -171,7 +175,7 @@ for report in reportList:
     valueList = list(dataList[0].values())
     for key in keyList:
         repdef.append(key)
-    for value in valueList:           
+    for value in valueList:
         repcalc.append(value[0])
 
 ####################################################################################
@@ -180,7 +184,7 @@ for report in reportList:
 # If there are reports. For each report:
 #
 # * Add a slide (layout option 3)
-# * Add a table with correct numner of columns and rows
+# * Add a table with correct number of columns and rows
 # * Add table headers
 # * Copy the report names and values
 #
@@ -189,7 +193,7 @@ for report in reportList:
 #    :alt: Table
 
 
-if reportList: 
+if reportList:
     slide = prs.slides.add_slide(prs.slide_layouts[3])
     title = slide.shapes.title
     title.text = "Report Definitions"
@@ -218,7 +222,7 @@ if reportList:
 # * Do not crop the image.
 # * If the image is "taller" in aspect than the available height,
 # * shrink the picture to use the allowable height
-# * Otherwise scale the picture to use the full 
+# * Otherwise scale the picture to use the full width
 # * Always maintain the image aspect ratio
 
 
@@ -243,6 +247,7 @@ def adjust_picture_to_fit(picture):
         picture.height = int(available_width / image_aspect_ratio)
     picture.left, picture.top = pos_left, pos_top
 
+
 ####################################################################################
 # Add Graphics Slides
 # ==================================================================================
@@ -252,7 +257,7 @@ def adjust_picture_to_fit(picture):
 #
 # * Add a slide into the PPTX (layout[6])
 # * Add slide title
-# * dispay the image in Fluent session.tui.display.set.picture.use_window_resolution("no")
+# * display the image in Fluent
 # * save picture
 # * insert picture into PPTX
 # * use adjust_picture_to_fit function to adjust size
@@ -313,12 +318,13 @@ adjust_picture_to_fit(pic)
 #
 # Add charts for each individual report plot:
 #
-# * Generate a list of all report plots. Take string provided by Fluent and divide into individual plots.
+# * Generate a list of all report plots
+# * Take the string provided by Fluent and divide into individual plots.
 # * Using Scheme Eval until Settings API can be used.
 #
 # If there are report plots present, loop over reports. For each:
 #
-# * Plot report 
+# * Plot report
 # * Export .png image
 # * Add slide to pptx
 # * Add title with report plot name
