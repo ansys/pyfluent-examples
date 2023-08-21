@@ -1,14 +1,13 @@
 """
 .. _ahmed_body_simulation:
 
-
-##########################################################
-Ahmed Body External Aerodynamics Simulation
-##########################################################
 .. _Write example object:
 
+Ahmed Body External Aerodynamics Simulation
+============================================
+
 Objective
-===============
+---------
 
 Ahmed body is a simplified car model used for studying the flow around it and to predict
 the drag and lift forces. The model consists of a slanted back and a blunt front.
@@ -27,10 +26,6 @@ simulation. which includes typical workflow of CFD Simulation as follows:
 .. image:: ../../_static/ahmed_body_model.png
    :align: center
    :alt: Ahmed Body Model
-
-
-
-
 
 """
 ####################################################################################
@@ -356,3 +351,5 @@ session.exit()
 #
 # [1] S.R. Ahmed, G. Ramm, Some Salient Features of the Time-Averaged Ground Vehicle
 # Wake,SAE-Paper 840300,1984
+
+# sphinx_gallery_thumbnail_path = '_static/ahmed_body_model_pressure_coeff.png'
