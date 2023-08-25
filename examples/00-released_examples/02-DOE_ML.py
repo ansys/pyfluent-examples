@@ -3,8 +3,8 @@
 Design of Experiments and Machine Learning model building
 #########################################################
 
-Problem Description:
-====================
+Objective:
+==========
 
 Water enters a Mixing Elbow from two Inlets; Hot (313 K) and Cold (293 K) and exits
 from Outlet. Using PyFluent in the background, this example runs Design of Experiments
@@ -41,9 +41,9 @@ from tensorflow import keras
 ###########################################################################
 # Specifying save path
 # ====================
-# save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
-# Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
-# Path("~/pyfluent-examples-tests") in Linux.
+# * save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
+# * Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
+# * Path("~/pyfluent-examples-tests") in Linux.
 save_path = Path(pyfluent.EXAMPLES_PATH)
 
 import_filename = examples.download_file(
@@ -58,7 +58,7 @@ import_filename = examples.download_file(
 
 ########################################
 # Launch Fluent session with solver mode
-# --------------------------------------
+# ======================================
 
 solver = pyfluent.launch_fluent(
     product_version="23.1.0",
@@ -71,17 +71,19 @@ solver = pyfluent.launch_fluent(
 solver.health_check_service.check_health()
 
 
-###########
+#############################################################################
 # Read case
-# ---------
+# =========
 
 solver.tui.file.read_case(import_filename)
 
-#############################################################################
-# Define Manual DOE as numpy arrays
-# Run cases in sequence
-# Populate results (Mass Weighted Average of Temperature at Outlet) in resArr
-# ---------------------------------------------------------------------------
+###############################################################################
+# Design of Experiments
+# =====================
+# * Define Manual DOE as numpy arrays
+# * Run cases in sequence
+# * Populate results (Mass Weighted Average of Temperature at Outlet) in resArr
+
 coldVelArr = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
 hotVelArr = np.array([0.8, 1, 1.2, 1.4, 1.6, 1.8, 2.0])
 resArr = np.zeros((coldVelArr.shape[0], hotVelArr.shape[0]))
@@ -111,7 +113,7 @@ for idx1, coldVel in np.ndenumerate(coldVelArr):
         resArr[idx1][idx2] = eval(res_tui.split(" ")[-1])
 
 
-###################
+####################################################################
 # Close the session
 # =================
 
@@ -152,7 +154,7 @@ fig.show()
 
 ############################################
 # Create Pandas Dataframe for ML Model Input
-# ------------------------------------------
+# ==========================================
 coldVelList = []
 hotVelList = []
 ResultList = []
@@ -168,16 +170,17 @@ tempDict = {"coldVel": coldVelList, "hotVel": hotVelList, "Result": ResultList}
 df = pd.DataFrame.from_dict(tempDict)
 
 from sklearn.compose import ColumnTransformer
-
-####################################################################
-# Using scikit-learn
-# Prepare Features (X) and Label (y) using a Pre-Processing Pipeline
-# Train-Test (80-20) Split
-# Add Polynomial Features to improve ML Model
-# ------------------------------------------------------------------
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+
+####################################################################
+# Using scikit-learn
+# ==================
+# * Prepare Features (X) and Label (y) using a Pre-Processing Pipeline
+# * Train-Test (80-20) Split
+# * Add Polynomial Features to improve ML Model
+
 
 poly_features = PolynomialFeatures(degree=2, include_bias=False)
 
@@ -208,11 +211,11 @@ y_test = np.ravel(y_test.T)
 
 
 ####################################################
-# Define functions for:
-# Cross-Validation and Display Scores (scikit-learn)
-# Training the Model (scikit-learn)
-# Prediction on Unseen/Test Data (scikit-learn)
-# Parity Plot (Matplotlib and Seaborn)
+# * Define functions for:
+# * Cross-Validation and Display Scores (scikit-learn)
+# * Training the Model (scikit-learn)
+# * Prediction on Unseen/Test Data (scikit-learn)
+# * Parity Plot (Matplotlib and Seaborn)
 # --------------------------------------------------
 
 from pprint import pprint  # noqa: F401
@@ -291,10 +294,10 @@ def fit_and_predict(model):
     plt.show()
 
 
-########################################################
+#############################################################################
 # Select the Model from Linear, Random Forest or XGBoost
-# Call fit_and_predict
-# ------------------------------------------------------
+# ======================================================
+# * Call fit_and_predict
 
 # model = LinearRegression()
 model = XGBRegressor(
@@ -304,10 +307,9 @@ model = XGBRegressor(
 
 fit_and_predict(model)
 
-
-############
+#############################################################################
 # Show graph
-# ----------
+# ==========
 
 plt.show()
 
@@ -321,7 +323,7 @@ plt.show()
 
 ###########################################################
 # 3D Visualization of Model Predictions on Train & Test Set
-# ---------------------------------------------------------
+# =========================================================
 
 df = pd.read_csv("PyFluent_Output.csv")
 
@@ -436,9 +438,9 @@ plt.ylabel("Predictions", fontsize=12)
 plt.tight_layout()
 
 
-############
+#############################################################################
 # Show graph
-# ----------
+# ==========
 
 plt.show()
 
