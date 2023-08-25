@@ -34,15 +34,15 @@ import numpy as np
 os.environ[
     "PYFLUENT_FLUENT_ROOT"
 ] = r"D:\Installations\Ansys\v231_04012023\ANSYS Inc\v231\fluent"
-# import matplotlib.pyplot as plt
-# import seaborn as sns
-# import plotly.graph_objects as go
-# import plotly.express as px
-# import tensorflow as tf
-# from tensorflow import keras
 from pathlib import Path
 
 from ansys.fluent.core import examples
+import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
+import seaborn as sns
+import tensorflow as tf
+from tensorflow import keras
 
 ###########################################################################
 # Specifying save path
