@@ -298,6 +298,7 @@ def fit_and_predict(model):
 # Select the Model from Linear, Random Forest or XGBoost
 # ======================================================
 # * Call fit_and_predict
+# --------------------------------------------------
 
 # model = LinearRegression()
 model = XGBRegressor(
