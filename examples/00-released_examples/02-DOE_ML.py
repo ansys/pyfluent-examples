@@ -17,7 +17,7 @@ Learning Regression Task is performed to build the ML Model
 This example demonstrates:
 
 * Design of Experiment, Fluent setup and simulation using PyFluent
-* Building of Supervised Machine Learning Regression Model
+* Building of Supervised Machine Learning Model using Regression and Neural Network
 
 """
 
@@ -311,7 +311,6 @@ plt.show()
 #%%
 #    Regression Model Predictions
 
-
 ###########################################################
 # 3D Visualization of Model Predictions on Train & Test Set
 # ---------------------------------------------------------
@@ -395,7 +394,6 @@ history = model.fit(
     callbacks=[checkpoint_cb, early_stopping_cb],
 )
 model = keras.models.load_model("my_keras_model.h5")
-
 
 print(history.params)
 
