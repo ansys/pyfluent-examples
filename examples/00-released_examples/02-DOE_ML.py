@@ -25,7 +25,6 @@ This example demonstrates:
 # Import required libraries/modules
 # =================================
 
-import os  # noqa: F401
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
@@ -71,6 +70,7 @@ solver = pyfluent.launch_fluent(
 )
 solver.health_check_service.check_health()
 
+
 ###########
 # Read case
 # ---------
@@ -110,9 +110,11 @@ for idx1, coldVel in np.ndenumerate(coldVelArr):
         )
         resArr[idx1][idx2] = eval(res_tui.split(" ")[-1])
 
+
 ###################
 # Close the session
 # =================
+
 solver.exit()
 
 ####################################
@@ -143,8 +145,12 @@ fig.update_layout(
 )
 fig.show()
 
-############################################
+
+#####################################
 # Supervised ML for a Regression Task
+# ===================================
+
+############################################
 # Create Pandas Dataframe for ML Model Input
 # ------------------------------------------
 coldVelList = []
@@ -199,6 +205,7 @@ y_train = train_set["Result"]
 y_test = test_set["Result"]
 y_train = np.ravel(y_train.T)
 y_test = np.ravel(y_test.T)
+
 
 ####################################################
 # Define functions for:
@@ -296,6 +303,7 @@ model = XGBRegressor(
 # model = RandomForestRegressor(random_state=42)
 
 fit_and_predict(model)
+
 
 ############
 # Show graph
@@ -426,6 +434,7 @@ plt.xlabel("Ground Truth", fontsize=12)
 plt.ylabel("Predictions", fontsize=12)
 
 plt.tight_layout()
+
 
 ############
 # Show graph
