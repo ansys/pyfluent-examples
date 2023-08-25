@@ -44,6 +44,7 @@ from tensorflow import keras
 # * save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # * Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # * Path("~/pyfluent-examples-tests") in Linux.
+
 save_path = Path(pyfluent.EXAMPLES_PATH)
 
 import_filename = examples.download_file(
@@ -181,7 +182,6 @@ from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 # * Train-Test (80-20) Split
 # * Add Polynomial Features to improve ML Model
 
-
 poly_features = PolynomialFeatures(degree=2, include_bias=False)
 
 transformer1 = Pipeline(
@@ -216,7 +216,6 @@ y_test = np.ravel(y_test.T)
 # * Training the Model (scikit-learn)
 # * Prediction on Unseen/Test Data (scikit-learn)
 # * Parity Plot (Matplotlib and Seaborn)
-# --------------------------------------------------
 
 from pprint import pprint  # noqa: F401
 
@@ -298,7 +297,6 @@ def fit_and_predict(model):
 # Select the Model from Linear, Random Forest or XGBoost
 # ======================================================
 # * Call fit_and_predict
-# --------------------------------------------------
 
 # model = LinearRegression()
 model = XGBRegressor(
