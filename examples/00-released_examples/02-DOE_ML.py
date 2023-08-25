@@ -25,19 +25,14 @@ This example demonstrates:
 # Import required libraries/modules
 # =================================
 
-# import pandas as pd
-import os
-
-import ansys.fluent.core as pyfluent
-import numpy as np
-
-os.environ[
-    "PYFLUENT_FLUENT_ROOT"
-] = r"D:\Installations\Ansys\v231_04012023\ANSYS Inc\v231\fluent"
+import os  # noqa: F401
 from pathlib import Path
 
+import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import seaborn as sns
