@@ -17,7 +17,7 @@ Learning Regression Task is performed to build the ML Model
 This example demonstrates:
 
 * Design of Experiment, Fluent setup and simulation using PyFluent
-* Building of Supervised Machine Learning Model using Regression and Neural Network
+* Building of Supervised Machine Learning Model
 
 """
 
