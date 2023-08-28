@@ -64,23 +64,17 @@ Tyler-Sofrin Compressor Modes Post-Processing
 #
 #   + Disable the Hanning windowing (specifically for periodic flows like
 #     this one) to avoid getting half the expected magnitudes for periodic flows.
-#     Use the command `(rpsetvar 'rtdft/window "none")`.
-#
-#   + Make sure the sampling period is a multiple of the period of the lowest
-#     frequency. Although a single period can be used, it's preferable to run for
-#     multiple periods (e.g., one revolution).
 #
 #   + The DFT data will only be accurate if the sampling is done across the
 #     entire specified sampling period.
 #
-#   + Follow the Nyquist criteria: Ensure the DFT sampling frequency is
-#     more than twice the highest frequency.
-#
-#
+#   + Make sure to set the windowing parameter to 'None' when specifying
+#     the Discrete Fourier Transform (DFT) in the graphical user interface (GUI).
 #
 # .. note::
 #   The .cas/.dat file provided with this example is for demonstration purposes only.
-#   A finer mesh is necessary for accurate acoustic analysis.
+#   A finer mesh is necessary for accurate acoustic analysis. This example uses data
+#   sets generated with Ansys Fluent V2023R2.
 
 #######################################################################################
 # Post-Processing Implementation
@@ -114,12 +108,12 @@ save_path = Path(pyfluent.EXAMPLES_PATH)
 # Downloading cas/dat file
 # =====================================================================================
 import_filename = examples.download_file(
-    "axial_comp_fullWheel_DFT.cas.h5",
+    "axial_comp_fullWheel_DFT_23R2.cas.h5",
     "pyfluent/examples/Tyler-Sofrin-Modes-Compressor",
 )  # noqa: E501
 
 examples.download_file(
-    "axial_comp_fullWheel_DFT.dat.h5",
+    "axial_comp_fullWheel_DFT_23R2.dat.h5",
     "pyfluent/examples/Tyler-Sofrin-Modes-Compressor",
     save_path=save_path,
 )
@@ -152,10 +146,10 @@ session.tui.file.read_case_data(import_filename)
 #    :alt: variable names
 
 varname = [
-    "static-pressure-1_0.00mHz-ta1",
-    "static-pressure-1_9.80kHz-ta2",
-    "static-pressure-1_20.20kHz-ta3",
-    "static-pressure-1_30.00kHz-ta4",
+    "mean-static-pressure-dataset",
+    "dft-static-pressure_10.00kHz-ta",
+    "dft-static-pressure-1_21.43kHz-ta",
+    "dft-static-pressure-2_30.00kHz-ta",
 ]
 n_mode = [0, 1, 2, 3]  # Impeller frequency harmonics
 r = 0.082  # meters
@@ -182,24 +176,39 @@ Bn = np.zeros((len(varname), int(360 / d_theta)))
 
 for angle_ind, angle in enumerate(range(0, 360, d_theta)):
     for n_ind, variable in enumerate(varname):
-        session.solution.report_definitions.surface["mag-report"] = {
-            "report_type": "surface-vertexmax",
-            "surface_names": ["point-" + str(angle)],
-            "field": str(variable) + "-mag",
-        }
-        mag = session.solution.report_definitions.compute(report_defs=["mag-report"])
-        mag = mag[0]["mag-report"][0]
-        session.solution.report_definitions.surface["phase-report"] = {
-            "report_type": "surface-vertexmax",
-            "surface_names": ["point-" + str(angle)],
-            "field": str(variable) + "-phase",
-        }
-        phase = session.solution.report_definitions.compute(
-            report_defs=["phase-report"]
-        )
-        phase = phase[0]["phase-report"][0]
-        An[n_ind][angle_ind] = mag * math.cos(phase)
-        Bn[n_ind][angle_ind] = -mag * math.sin(phase)
+        if len(variable) >= 4 and variable[:4] == "mean":
+            session.solution.report_definitions.surface["mag-report"] = {
+                "report_type": "surface-vertexavg",
+                "surface_names": ["point-" + str(angle)],
+                "field": str(variable),
+            }
+            mag = session.solution.report_definitions.compute(
+                report_defs=["mag-report"]
+            )
+            mag = mag[0]["mag-report"][0]
+            An[n_ind][angle_ind] = mag
+            Bn[n_ind][angle_ind] = 0
+        else:
+            session.solution.report_definitions.surface["mag-report"] = {
+                "report_type": "surface-vertexavg",
+                "surface_names": ["point-" + str(angle)],
+                "field": str(variable) + "-mag",
+            }
+            mag = session.solution.report_definitions.compute(
+                report_defs=["mag-report"]
+            )
+            mag = mag[0]["mag-report"][0]
+            session.solution.report_definitions.surface["phase-report"] = {
+                "report_type": "surface-vertexavg",
+                "surface_names": ["point-" + str(angle)],
+                "field": str(variable) + "-phase",
+            }
+            phase = session.solution.report_definitions.compute(
+                report_defs=["phase-report"]
+            )
+            phase = phase[0]["phase-report"][0]
+            An[n_ind][angle_ind] = mag * math.cos(phase)
+            Bn[n_ind][angle_ind] = -mag * math.sin(phase)
 
 
 #######################################################################################
