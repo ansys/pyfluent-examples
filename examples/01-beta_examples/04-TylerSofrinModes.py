@@ -1,147 +1,226 @@
 """
-Tyler-Sofrin-Modes-Compressor
-=============================
-These examples show you how you can use Fluent capabilities from Python to perform
-Fluent simulations. This includes geometry import, Fluent's meshing workflows,
-setting up and running the solver, and reviewing the results using Fluent's
-postprocessing capabilities.
+.. _ref_ts_mode_calculator:
+
+Tyler-Sofrin Compressor Modes Post-Processing
+---------------------------------------------
 """
 
-# Tyler/Sofrin Mode Calculator
-
+#######################################################################################
+# Objective
+# ~~~~~~~~~
+#
+# This example demonstrates PyFluent API's for
+#
+# * Read a case and data file
+# * Create monitor points to calculate Fourier coefficients
+# * Write Fourier coefficients to a file
+# * Tyler-Sofrin mode Plot using the matplotlib library
+#
 # Background
-# Tyler and Sofrin (1961) showed that rotor/stator interactions
-# produce an infinite collection of spinning modes
-# Each TS mode has an m-lobed pattern and rotates at a speed of BnΩ/m where:
-#         m = nB+kV (m is the Tyler/Sofrin mode number)
-#         n = impeller frequency harmonic
-#         k = vane harmonic
-#         B = # rotating blades
-#         V = # stationary vanes
+# ~~~~~~~~~~
+#
+# Tyler and Sofrin (1961) demonstrated that interactions between a rotor and a
+# stator result in an infinite set of spinning modes. Each Tyler-Sofrin (TS)
+# mode exhibits an m-lobed pattern and rotates at a speed given by the
+# following equation:
+#
+# :math:`\text{speed} = \frac{BnΩ}{m}`
+# Where:
+#
+# * m is the Tyler-Sofrin mode number, defined as 'm = nB + kV'
+# * n is the impeller frequency harmonic
+# * k is the vane harmonic
+# * B is the number of rotating blades
+# * V is the number of stationary vanes
+# * Ω is the Rotor shaft speed, rad/s
 #
 # Example:
-#         8-blade rotor interacting with a 6-vane stator
-#         2-lobed pattern turning at (8)(1)/(2) = 4 times shaft speed
 #
-# ![Exampletable](Tyler-Sofrin-Modes-Compressor/ExampleTable.jpg)
+#         * 8-blade rotor interacting with a 6-vane stator
+#         * 2-lobed pattern turning at (8)(1)/(2) = 4 times shaft speed
 #
-# ![TSmode](Tyler-Sofrin-Modes-Compressor/TSmode.jpg)
+#
+# Example Table
+# ~~~~~~~~~~~~~
+#
+# .. image:: ../../_static/ExampleTable.jpg
+#    :alt: Example Table
+#
+#
+# Tyler-Sofrin Modes
+# ~~~~~~~~~~~~~~~~~~
+#
+# .. image:: ../../_static/TSmode.jpg
+#    :alt: Tyler-Sofrin Modes
 
-# Discrete Fourier Transform (DFT)
-# To determine the pressure associated
-# with each TS-mode,
-# extend the simulation and compute the DFT of pressure
-# @ desired blade passing frequency harmonics
-# Disable (Hanning) windowing (for periodic flows such as this).
-# Failure to do this will result in ½ expected magnitudes (for periodic flows)
-#     `(rpsetvar 'rtdft/window "none")`
-# Ensure that sampling period corresponds to
-# a multiple of the period of the lowest frequency.
-# It can be a single period but
-# it’s better to run for multiple periods (e.g. 1 revolution)
-# The DFT data is only valid if
-# sampling is performed across entire specified sampling period
-# Nyquist criteria: Ensure that DFT sampling frequency is
-# greater than 2*highest frequency
 
-# Please note that the cas/dat file
-# included with this notebook is for demonstration purposes.
-# A finer mesh is required for proper acoustic analysis.
+#######################################################################################
+# Example Note: Discrete Fourier Transform (DFT)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#   + In order to calculate the pressure related to each TS-mode, extend the
+#     simulation and perform the DFT of pressure at the desired blade passing
+#     frequency harmonics.
+#
+#   + Disable the Hanning windowing (specifically for periodic flows like
+#     this one) to avoid getting half the expected magnitudes for periodic flows.
+#     Make sure to set the windowing parameter to 'None' when specifying
+#     the Discrete Fourier Transform (DFT) in the graphical user interface (GUI).
+#
+#   + The DFT data will only be accurate if the sampling is done across the
+#     entire specified sampling period.
+#
+#
+# .. note::
+#   The .cas/.dat file provided with this example is for demonstration purposes only.
+#   A finer mesh is necessary for accurate acoustic analysis. This example uses data
+#   sets generated with Ansys Fluent V2023R2.
 
-# This line is needed at the beginning of the notebook to allow for an interactive plot
-# get_ipython().run_line_magic("matplotlib", "widget")
+#######################################################################################
+# Post-Processing Implementation
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Import Pyfluent module
+
+#######################################################################################
+# Import required libraries/modules
+# =====================================================================================
+import math
+from pathlib import Path
+import random
+
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+import matplotlib.pyplot as plt
+import numpy as np
 
+#######################################################################################
+# Specifying save path
+# =====================================================================================
+# save_path can be specified as:
+#
+#   +   Path("E:/", "pyfluent-examples-tests") or
+#   +   Path("E:/pyfluent-examples-tests") in a Windows machine for example, or
+#   +   Path("~/pyfluent-examples-tests") in Linux.
+
+save_path = Path(pyfluent.EXAMPLES_PATH)
+
+#######################################################################################
+# Downloading cas/dat file
+# =====================================================================================
 import_filename = examples.download_file(
-    "axial_comp_fullWheel_DFT.cas.h5",
+    "axial_comp_fullWheel_DFT_23R2.cas.h5",
     "pyfluent/examples/Tyler-Sofrin-Modes-Compressor",
 )  # noqa: E501
 
 examples.download_file(
-    "axial_comp_fullWheel_DFT.dat.h5",
+    "axial_comp_fullWheel_DFT_23R2.dat.h5",
     "pyfluent/examples/Tyler-Sofrin-Modes-Compressor",
+    save_path=save_path,
 )
 
-# Create a session object
-session = pyfluent.launch_fluent()
+#######################################################################################
+# Launch Fluent session
+# =====================================================================================
+session = pyfluent.launch_fluent(
+    show_gui=True, processor_count=4, product_version="23.2.0"
+)
 
-# Check server status
-session.check_health()
-
-# User Inputs
+#######################################################################################
+# Reading case and data file
+# =====================================================================================
 #
-# The varnames should correspond to the variables writted from the DFT and
-# can be determined by manually inspecting the solution variables as depicted below:
-# ![Varnames](Tyler-Sofrin-Modes-Compressor/varnames.jpg)
+# .. note::
+#   The dat file should correspond to the already completed DFT simulation.
 
-n_mode = [0, 1, 2, 3]  # Impeller frequency harmonics
+session.tui.file.read_case_data(import_filename)
+
+#######################################################################################
+# Define User constant/variables
+# =====================================================================================
+#
+# .. note::
+#   The variable names should match the ones written from the DFT and can be
+#   identified by manually examining the solution variables as shown below:
+#
+# .. image:: ../../_static/var_names.jpg
+#    :alt: variable names
+
 varname = [
-    "static-pressure-1_0.00mHz-ta1",
-    "static-pressure-1_9.80kHz-ta2",
-    "static-pressure-1_20.20kHz-ta3",
-    "static-pressure-1_30.00kHz-ta4",
-]  # Variable names from DFT analysis. Ensure len(n_mode)=len(varname)
+    "mean-static-pressure-dataset",
+    "dft-static-pressure_10.00kHz-ta",
+    "dft-static-pressure-1_21.43kHz-ta",
+    "dft-static-pressure-2_30.00kHz-ta",
+]
+n_mode = [0, 1, 2, 3]  # Impeller frequency harmonics
 r = 0.082  # meters
 z = -0.037  # meters
-dtheta = 5  # degrees
+d_theta = 5  # degrees
 m_max = 50  # maximum TS mode number
 
-# TS mode number increment.
 # Plot will be from -m_max to +m_max, incremented by m_inc
-m_inc = 2
+m_inc = 2  # TS mode increment
 
-# CAS/DAT Files
-# The dat file should correspond to the already completed DFT simulation.
-
-# Read a case file
-session.tui.file.read_case_data(
-    import_filename
-)  # The dat file containing the DFT results
-
-
-# Create Monitor Points
-import math
-
-for angle in range(0, 360, dtheta):
+#######################################################################################
+# Create monitor points
+# =====================================================================================
+for angle in range(0, 360, d_theta):
     x = math.cos(math.radians(angle)) * r
     y = math.sin(math.radians(angle)) * r
     session.tui.surface.point_surface("point-" + str(angle), x, y, z)
 
-# Compute An and Bn at each monitor point
-import numpy as np
+#######################################################################################
+# Compute Fourier coefficients at each monitor point (An, Bn)
+# =====================================================================================
+An = np.zeros((len(varname), int(360 / d_theta)))
+Bn = np.zeros((len(varname), int(360 / d_theta)))
 
-An = np.zeros((len(varname), int(360 / dtheta)))
-Bn = np.zeros((len(varname), int(360 / dtheta)))
-
-for angle_ind, angle in enumerate(range(0, 360, dtheta)):
+for angle_ind, angle in enumerate(range(0, 360, d_theta)):
     for n_ind, variable in enumerate(varname):
-        session.solution.report_definitions.surface["mag-report"] = {
-            "report_type": "surface-vertexmax",
-            "surface_names": ["point-" + str(angle)],
-            "field": "pressure",
-        }
-        mag = session.solution.report_definitions.compute(report_defs=["mag-report"])
-        mag = mag[0]["mag-report"][0]
-        session.solution.report_definitions.surface["phase-report"] = {
-            "report_type": "surface-vertexmax",
-            "surface_names": ["point-" + str(angle)],
-            "field": "pressure",
-        }
-        phase = session.solution.report_definitions.compute(
-            report_defs=["phase-report"]
-        )
-        phase = phase[0]["phase-report"][0]
-        An[n_ind][angle_ind] = mag * math.cos(phase)
-        Bn[n_ind][angle_ind] = -mag * math.sin(phase)
+        if len(variable) >= 4 and variable[:4] == "mean":
+            session.solution.report_definitions.surface["mag-report"] = {
+                "report_type": "surface-vertexavg",
+                "surface_names": ["point-" + str(angle)],
+                "field": str(variable),
+            }
+            mag = session.solution.report_definitions.compute(
+                report_defs=["mag-report"]
+            )
+            mag = mag[0]["mag-report"][0]
+            An[n_ind][angle_ind] = mag
+            Bn[n_ind][angle_ind] = 0
+        else:
+            session.solution.report_definitions.surface["mag-report"] = {
+                "report_type": "surface-vertexavg",
+                "surface_names": ["point-" + str(angle)],
+                "field": str(variable) + "-mag",
+            }
+            mag = session.solution.report_definitions.compute(
+                report_defs=["mag-report"]
+            )
+            mag = mag[0]["mag-report"][0]
+            session.solution.report_definitions.surface["phase-report"] = {
+                "report_type": "surface-vertexavg",
+                "surface_names": ["point-" + str(angle)],
+                "field": str(variable) + "-phase",
+            }
+            phase = session.solution.report_definitions.compute(
+                report_defs=["phase-report"]
+            )
+            phase = phase[0]["phase-report"][0]
+            An[n_ind][angle_ind] = mag * math.cos(phase)
+            Bn[n_ind][angle_ind] = -mag * math.sin(phase)
 
 
-# Write Fourier Coefficients to File
+#######################################################################################
+# Write Fourier coefficients to file
+# =====================================================================================
 #
-# This step is only required if data is to be processed outside of this script.
-with open("Tyler-Sofrin-Modes-Compressor/FourierCoefficients.txt", "w") as f:
+# .. note::
+#   This step is only required if data is to be processed with other standalone
+#   tools. Update the path to the file accordingly.
+
+fourier_coefficients_file = Path(save_path, "FourierCoefficients.txt")
+with open(fourier_coefficients_file, "w") as f:
     f.write("n theta An Bn \n")
 
     for n_ind, variable in enumerate(varname):
@@ -149,7 +228,7 @@ with open("Tyler-Sofrin-Modes-Compressor/FourierCoefficients.txt", "w") as f:
             f.write(
                 str(n_mode[n_ind])
                 + ","
-                + str(ind * dtheta)
+                + str(ind * d_theta)
                 + ","
                 + str(An[n_ind, ind])
                 + ","
@@ -158,10 +237,15 @@ with open("Tyler-Sofrin-Modes-Compressor/FourierCoefficients.txt", "w") as f:
             )
 
 
-# Calculating Pnm
+#######################################################################################
+# Calculate Resultant Pressure Field
+# =====================================================================================
 #
-# ![TS_formulas](Tyler-Sofrin-Modes-Compressor/TS_formulas.jpg)
 # Create list of m values based on m_max and m_inc
+#
+# .. image:: ../../_static/TS_formulas.jpg
+#    :alt: variable names
+
 m_mode = range(-m_max, m_max + m_inc, m_inc)
 
 # Initialize solution matrices with zeros
@@ -172,7 +256,7 @@ Pnm = np.zeros((len(varname), len(m_mode)))
 for n_ind, variable in enumerate(varname):  # loop over n modes
     for m_ind, m in enumerate(m_mode):  # loop over m modes
         for angle_ind, angle in enumerate(
-            np.arange(0, math.radians(360), math.radians(dtheta))
+            np.arange(0, math.radians(360), math.radians(d_theta))
         ):  # loop over all angles, in radians
             Anm[n_ind][m_ind] += An[n_ind][angle_ind] * math.cos(m * angle) - Bn[n_ind][
                 angle_ind
@@ -180,24 +264,21 @@ for n_ind, variable in enumerate(varname):  # loop over n modes
             Bnm[n_ind][m_ind] += An[n_ind][angle_ind] * math.sin(m * angle) + Bn[n_ind][
                 angle_ind
             ] * math.cos(m * angle)
-        Anm[n_ind][m_ind] = Anm[n_ind][m_ind] / (2 * math.pi) * math.radians(dtheta)
-        Bnm[n_ind][m_ind] = Bnm[n_ind][m_ind] / (2 * math.pi) * math.radians(dtheta)
+        Anm[n_ind][m_ind] = Anm[n_ind][m_ind] / (2 * math.pi) * math.radians(d_theta)
+        Bnm[n_ind][m_ind] = Bnm[n_ind][m_ind] / (2 * math.pi) * math.radians(d_theta)
         Pnm[n_ind][m_ind] = math.sqrt(Anm[n_ind][m_ind] ** 2 + Bnm[n_ind][m_ind] ** 2)
 
 # P_00 is generally orders of magnitude larger than that of other modes.
 # Giving focus to other modes by setting P_00 equal to zero
 Pnm[0][int(len(m_mode) / 2)] = 0
 
-# get_ipython().run_line_magic("matplotlib", "inline")
-# from mpl_toolkits import mplot3d
-import random
-
-# Tyler/Sofrin Mode Plot
-import matplotlib.pyplot as plt
-
+#######################################################################################
+# Plot Tyler-Sofrin modes
+# =====================================================================================
+#
 fig = plt.figure()
 ax = plt.axes(projection="3d")
-ax.set_xlabel("TS mode, m")
+ax.set_xlabel("Tyler-Sofrin Mode, m")
 ax.set_ylabel("Imp Freq Harmonic, n")
 ax.set_zlabel("Pnm [Pa]")
 plt.yticks(n_mode)
@@ -207,3 +288,26 @@ for n_ind, n in enumerate(n_mode):
     z = Pnm[n_ind]
     rgb = (random.random(), random.random(), random.random())
     ax.plot3D(x, y, z, c=rgb)
+plt.show()
+
+#######################################################################################
+# Tyler-Sofrin modes
+# =====================================================================================
+# .. image:: ../../_static/ts_modes.png
+#    :alt: Tyler-Sofrin modes
+
+
+#######################################################################################
+# Close the session
+# =====================================================================================
+session.exit()
+
+
+#######################################################################################
+# References
+# =====================================================================================
+#
+# [1] J.M. Tyler and  T. G. Sofrin, Axial Flow Compressor Noise Studies,1961 Manly
+# Memorial Award.
+
+# sphinx_gallery_thumbnail_path = '_static/ts_modes.png'
