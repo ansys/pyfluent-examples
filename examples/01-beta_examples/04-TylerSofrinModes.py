@@ -64,12 +64,12 @@ Tyler-Sofrin Compressor Modes Post-Processing
 #
 #   + Disable the Hanning windowing (specifically for periodic flows like
 #     this one) to avoid getting half the expected magnitudes for periodic flows.
+#     Make sure to set the windowing parameter to 'None' when specifying
+#     the Discrete Fourier Transform (DFT) in the graphical user interface (GUI).
 #
 #   + The DFT data will only be accurate if the sampling is done across the
 #     entire specified sampling period.
 #
-#   + Make sure to set the windowing parameter to 'None' when specifying
-#     the Discrete Fourier Transform (DFT) in the graphical user interface (GUI).
 #
 # .. note::
 #   The .cas/.dat file provided with this example is for demonstration purposes only.
