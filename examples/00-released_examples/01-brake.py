@@ -397,3 +397,5 @@ plt.show()
 # Close the session
 # ==================================================================================
 session.exit()
+
+# sphinx_gallery_thumbnail_path = '_static/brake_surface_temperature-thumbnail.png'
