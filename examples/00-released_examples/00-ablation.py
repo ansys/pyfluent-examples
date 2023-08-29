@@ -1,39 +1,41 @@
 """
-#################################
+.. _modeling_ablation:
+
 Modeling Ablation
-#################################
-
-Objective:
-==========
-
-Ablation is an effective treatment used to protect an atmospheric reentry vehicle from
-the damaging effects of external high temperatures caused by shock wave and viscous
-heating. The ablative material is chipped away due to surface reactions that remove a
-significant amount of heat and keep the vehicle surface temperature below the melting
-point. In this tutorial, Fluent ablation model is demonstrated for a reendtry vehicle
-geometry simplified as a 3D wedge.
-
-This tutorial demonstrates how to do the following:
-
-* Define boundary conditions for a high-speed flow.
-* Set up the ablation model to model effects of a moving boundary due to ablation.
-* Initiate and solve the transient simulation using the density-based solver.
-
-Problem Description:
-====================
-
-The geometry of the 3D wedge considered in this tutorial is shown in following figure.
-The air flow passes around a nose of a re-entry vehicle operating under high speed
-conditions. The inlet air has a temperature of 4500 K, a gauge pressure of 13500 Pa,
-and a Mach number of 3. The domain is bounded above and below by symmetry planes
-(displayed in yellow). As the ablative coating chips away, the surface of the wall
-moves. The moving of the surface is modeled using dynamic meshes. The surface moving
-rate is estimated by Vieille's empirical law:
-
-where r is the surface moving rate, p is the absolute pressure, and A and n are model
-parameters. In the considered case, A = 5 and n = 0.1.
-
+-------------------------------------------
 """
+
+#######################################################################################
+# Objective
+# =====================================================================================
+#
+# Ablation is an effective treatment used to protect an atmospheric reentry vehicle from
+# the damaging effects of external high temperatures caused by shock wave and viscous
+# heating. The ablative material is chipped away due to surface reactions that remove a
+# significant amount of heat and keep the vehicle surface temperature below the melting
+# point. In this tutorial, Fluent ablation model is demonstrated for a reendtry vehicle
+# geometry simplified as a 3D wedge.
+#
+# This tutorial demonstrates how to do the following:
+#
+# * Define boundary conditions for a high-speed flow.
+# * Set up the ablation model to model effects of a moving boundary due to ablation.
+# * Initiate and solve the transient simulation using the density-based solver.
+#
+# Problem Description:
+# ====================
+#
+# The geometry of the 3D wedge considered in this tutorial is shown in following figure.
+# The air flow passes around a nose of a re-entry vehicle operating under high speed
+# conditions. The inlet air has a temperature of 4500 K, a gauge pressure of 13500 Pa,
+# and a Mach number of 3. The domain is bounded above and below by symmetry planes
+# (displayed in yellow). As the ablative coating chips away, the surface of the wall
+# moves. The moving of the surface is modeled using dynamic meshes. The surface moving
+# rate is estimated by Vieille's empirical law:
+#
+# where r is the surface moving rate, p is the absolute pressure, and A and n are model
+# parameters. In the considered case, A = 5 and n = 0.1.
+
 
 ####################################################################################
 # .. math::
@@ -59,13 +61,8 @@ from ansys.fluent.core import examples
 from ansys.fluent.visualization.pyvista import Graphics
 
 ###############################################################################
-# PyVista
-# --------------------
-
-
-###############################################################################
 # Specifying save path
-# ~~~~~~~~~~~~~~~~~~~~
+# ++++++++++++++++++++++
 # save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
@@ -73,7 +70,7 @@ save_path = Path(pyfluent.EXAMPLES_PATH)
 
 ####################################################################################
 # Download example file
-# --------------------------------------
+# ==================================================================================
 import_filename = examples.download_file(
     "ablation.msh.h5", "pyfluent/examples/Ablation-tutorial", save_path=save_path
 )
@@ -88,19 +85,19 @@ set_config(blocking=True, set_view_on_display="isometric")
 
 ####################################################################################
 # Launch Fluent session with solver mode
-# --------------------------------------
+# ==================================================================================
 
 session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=4)
 
 ####################################################################################
 # Import mesh
-# ------------
+# ==================================================================================
 
 session.tui.file.read_case(import_filename)
 
 ####################################################################################
 # Define models
-# ----------------
+# ==================================================================================
 
 session.tui.define.models.solver.density_based_implicit("yes")
 session.tui.define.models.unsteady_1st_order("yes")
@@ -110,7 +107,7 @@ session.tui.define.models.ablation("yes")
 
 ###################################################################
 # Define material
-# --------------------------
+# =================================================================
 
 session.tui.define.materials.change_create(
     "air", "air", "yes", "ideal-gas", "no", "no", "no", "no", "no", "no"
@@ -118,13 +115,13 @@ session.tui.define.materials.change_create(
 
 ############################################################################
 # Following is alternative Settings API method to define material properties
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 session.setup.materials.fluid["air"]()
 session.setup.materials.fluid["air"] = {"density": {"option": "ideal-gas"}}
 
 ############################
 # Define boundary conditions
-# --------------------------
+# ==========================
 
 session.setup.boundary_conditions.change_type(
     zone_list=["inlet"], new_type="pressure-far-field"
@@ -142,7 +139,7 @@ session.setup.boundary_conditions.pressure_outlet["outlet"] = {
 
 #############################################
 # Ablation boundary condition (Vielles Model)
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ++++++++++++++++++++++++++++++++++++++++++++
 # Once you have specified the ablation boundary conditions for the wall,
 # Ansys Fluent automatically enables the Dynamic Mesh model with the Smoothing and
 # Remeshing options, #creates the wall-ablation dynamic mesh zone, and configure
@@ -156,7 +153,7 @@ session.setup.boundary_conditions.wall["wall_ablation"] = {
 
 ##############################
 # Define dynamic mesh controls
-# ----------------------------
+# ============================
 
 session.tui.define.dynamic_mesh.dynamic_mesh("yes")
 session.tui.define.dynamic_mesh.zones.create(
@@ -241,7 +238,7 @@ session.tui.define.dynamic_mesh.zones.create(
 
 ############################################
 # Define solver settings
-# ----------------------
+# =======================
 
 session.tui.define.models.unsteady_2nd_order("yes")
 session.tui.solve.set.limits(
@@ -253,7 +250,7 @@ session.tui.solve.monitors.residual.convergence_criteria(
 
 ############################################
 # Create report definitions
-# -------------------------
+# ==========================
 
 session.tui.solve.report_definitions.add(
     "drag_force_x", "drag", "thread-names", "wall_ablation", "()", "scaled?", "no", "q"
@@ -326,7 +323,7 @@ session.tui.solve.report_files.add(
 
 ############################################
 # Initialize and Save case
-# -------------------------
+# ========================
 
 session.tui.solve.initialize.compute_defaults.pressure_far_field("inlet")
 session.tui.solve.initialize.initialize_flow()
@@ -337,14 +334,14 @@ session.tui.file.write_case(save_case_data_as)
 
 ############################################
 # Run the calculation
-# -------------------------
+# ===================
 # Note: It may take about half an hour to finish the calculation.
 
 session.tui.solve.dual_time_iterate(100, 20)
 
 ###############################################
 # Save simulation data
-# --------------------
+# ====================
 # Write case and data files
 save_case_data_as = Path(save_path) / "ablation_Solved.cas.h5"
 session.tui.file.write_case_data(save_case_data_as)
@@ -355,7 +352,7 @@ session.tui.file.write_case_data(save_case_data_as)
 
 ###############################################
 # Display plots
-# -------------
+# =============
 
 #%%
 # .. image:: ../../_static/ablation-residual.png
@@ -391,7 +388,7 @@ session.tui.file.write_case_data(save_case_data_as)
 
 ###############################################
 # Display contour
-# ---------------
+# ================
 # Following contours are displayed in the Fluent GUI:
 
 session.tui.display.surface.plane_surface("mid_plane", "zx-plane", "0")
@@ -445,3 +442,5 @@ contour1.display()
 # ==================================================================================
 
 session.exit()
+
+# sphinx_gallery_thumbnail_path = '_static/ablation-mach-number-thumbnail.png'
