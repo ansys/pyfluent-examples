@@ -17,7 +17,7 @@ This tutorial demonstrates how to perform the following tasks:
 * Use a convective thermal boundary condition to represent heat transfer inside the tubes
 * Examining the temperature and flow fields to understand the relationship between flow and temperature in the system
 
-"""
+"""  # noqa: E501
 
 ###################################
 # Import required libraries/modules
