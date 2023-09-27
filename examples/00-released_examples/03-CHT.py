@@ -14,8 +14,8 @@ This tutorial demonstrates how to perform the following tasks:
 
 * Calculate the fin heat transfer rate
 * Use periodic boundaries to reduce the size of the computational domain
-* Use a convective thermal boundary condition to represent heat transfer inside the tubes  # noqa: E501
-* Examining the temperature and flow fields to understand the relationship between flow and temperature in the system # noqa: E501
+* Use a convective thermal boundary condition to represent heat transfer inside the tubes
+* Examining the temperature and flow fields to understand the relationship between flow and temperature in the system
 
 """
 
