@@ -697,7 +697,7 @@ solver.tui.solve.initialize.hyb_initialization()
 solver.tui.solve.set.pseudo_time_method.global_time_step_settings(
     "yes", "0", "1", "yes", "1"
 )
-solver.tui.solve.iterate("20")
+solver.tui.solve.iterate("250")
 save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.dat.h5")
 solver.tui.file.write_case_data(save_case_data_as)
 
