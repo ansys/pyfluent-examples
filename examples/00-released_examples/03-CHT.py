@@ -1,13 +1,14 @@
 """
-###
-CHT
-###
+#######################
+Conjugate Heat Transfer
+#######################
 
 Objective:
 ==========
 
 This tutorial demonstrates how to model forced convection in a louvered fin heat
-exchanger.
+exchanger. This case solves equations for both Fluid and Solid domain.
+As a result, temperature field evolved together.
 
 This tutorial demonstrates how to perform the following tasks:
 
@@ -700,9 +701,9 @@ solver.tui.solve.iterate("20")
 save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.dat.h5")
 solver.tui.file.write_case_data(save_case_data_as)
 
-# Post-Processing
-# ===============
-# * Mass Balance Report
+#############################################################################
+# Post-Processing Mass Balance Report
+# ===================================
 
 inlet_mfr = solver.scheme_eval.exec(
     ('(ti-menu-load-string "/report/fluxes/mass-flow no inlet () no")',)
@@ -718,7 +719,9 @@ print("Inlet (kg/s): ", inlet_mfr)
 print("Outlet (kg/s): ", outlet_mfr)
 print("Net (kg/s): ", net_mfr)
 
-# * Heat Balance Report
+#############################################################################
+# Heat Balance Report
+# ===================
 
 htr = solver.scheme_eval.exec(
     ('(ti-menu-load-string "/report/fluxes/heat-transfer yes no")',)
