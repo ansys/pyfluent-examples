@@ -5,10 +5,11 @@ Conjugate Heat Transfer
 -----------------------
 """
 
-"""
-Objective
-=========
+###########
+# Objective
+# =========
 
+"""
 This tutorial demonstrates how to model forced convection in a louvered fin heat
 exchanger. This case solves equations for both Fluid and Solid domain.
 As a result, temperature field evolved together.
@@ -21,7 +22,9 @@ This tutorial demonstrates how to perform the following tasks:
 * Examining the temperature and flow fields to understand the relationship between flow and temperature in the system
 """  # noqa: E501
 
+
 # sphinx_gallery_thumbnail_path = '_static/cht_xy_pressure.png'
+
 
 ###################################
 # Import required libraries/modules
