@@ -1,25 +1,28 @@
 """
-#########################################################
+.. _doe_ml:
+
 Design of Experiments and Machine Learning model building
-#########################################################
-
-Objective:
-==========
-
-Water enters a Mixing Elbow from two Inlets; Hot (313 K) and Cold (293 K) and exits
-from Outlet. Using PyFluent in the background, this example runs Design of Experiments
-with Cold Inlet Velocity and Hot Inlet Velocity as Input Parameters and Outlet
-Temperature as an Output Parameter.
-
-Results can be visualized using a Response Surface. Finally, Supervised Machine
-Learning Regression Task is performed to build the ML Model
-
-This example demonstrates:
-
-* Design of Experiment, Fluent setup and simulation using PyFluent
-* Building of Supervised Machine Learning Model
-
+---------------------------------------------------------
 """
+
+#######################################################################################
+# Objective
+# =====================================================================================
+#
+# Water enters a Mixing Elbow from two Inlets; Hot (313 K) and Cold (293 K) and exits
+# from Outlet. Using PyFluent in the background, this example runs Design of Experiments
+# with Cold Inlet Velocity and Hot Inlet Velocity as Input Parameters and Outlet
+# Temperature as an Output Parameter.
+#
+# Results can be visualized using a Response Surface. Finally, Supervised Machine
+# Learning Regression Task is performed to build the ML Model.
+#
+# This example demonstrates:
+#
+# * Design of Experiment, Fluent setup and simulation using PyFluent.
+# * Building of Supervised Machine Learning Model.
+
+# sphinx_gallery_thumbnail_path = '_static/doe_ml_predictions_regression.png'
 
 ###################################
 # Import required libraries/modules
