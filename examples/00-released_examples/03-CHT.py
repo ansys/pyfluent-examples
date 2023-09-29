@@ -1,10 +1,13 @@
 """
-#######################
-Conjugate Heat Transfer
-#######################
+.. _conjugate_heat_transfer:
 
-Objective:
-==========
+Conjugate Heat Transfer
+-----------------------
+"""
+
+"""
+Objective
+=========
 
 This tutorial demonstrates how to model forced convection in a louvered fin heat
 exchanger. This case solves equations for both Fluid and Solid domain.
@@ -16,8 +19,9 @@ This tutorial demonstrates how to perform the following tasks:
 * Use periodic boundaries to reduce the size of the computational domain
 * Use a convective thermal boundary condition to represent heat transfer inside the tubes
 * Examining the temperature and flow fields to understand the relationship between flow and temperature in the system
-
 """  # noqa: E501
+
+# sphinx_gallery_thumbnail_path = '_static/cht_xy_pressure.png'
 
 ###################################
 # Import required libraries/modules
