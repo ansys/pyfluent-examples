@@ -134,7 +134,7 @@ def _reset_module_cb(gallery_conf, fname, when):
 # -- Sphinx Gallery Options ---------------------------------------------------
 sphinx_gallery_conf = {
     # convert rst to md for ipynb
-    # "pypandoc": True,
+    "pypandoc": True,
     # path to your examples scripts
     "examples_dirs": ["../../examples/"],
     # path where to save gallery generated examples
@@ -153,6 +153,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (350, 350),
     "reset_modules_order": "both",
     "reset_modules": (_reset_module_cb),
+    "thumbnail_size": (350, 350),
 }
 
 if not os.getenv("RUN_EXAMPLES"):
@@ -165,7 +166,7 @@ html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
 html_theme_options = {
     "switcher": {
-        "json_url": f"https://{cname}/release/versions.json",
+        "json_url": f"https://{cname}/versions.json",
         "version_match": get_version_match(__version__),
     },
     "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
