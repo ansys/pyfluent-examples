@@ -23,7 +23,6 @@ import csv
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import examples
 
 ###############################################################################
 # PyVista
@@ -34,6 +33,7 @@ import ansys.fluent.visualization.pyvista as pv
 # Matplotlib
 # --------------------
 import matplotlib.pyplot as plt
+from ansys.fluent.core import examples
 
 ###############################################################################
 # Specifying save path

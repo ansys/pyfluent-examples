@@ -1,11 +1,10 @@
 """Sphinx documentation configuration file."""
-from datetime import datetime
 import os
 import platform
 import subprocess
+from datetime import datetime
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import __version__
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
 from sphinx_gallery.sorting import FileNameSortKey
 
@@ -21,7 +20,7 @@ author = "ANSYS Inc."
 cname = os.getenv("DOCUMENTATION_CNAME", "examples.fluent.docs.pyansys.com")
 
 # The short X.Y version
-release = version = __version__
+release = version = "0.1.dev0"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
@@ -167,7 +166,7 @@ html_logo = pyansys_logo_black
 html_theme_options = {
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
+        "version_match": get_version_match(version),
     },
     "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
     "github_url": "https://github.com/pyansys/pyfluent-examples",
@@ -194,7 +193,7 @@ latex_elements = {}
 latex_documents = [
     (
         master_doc,
-        f"pyfluent-examples-Documentation-{__version__}.tex",
+        f"pyfluent-examples-Documentation-{version}.tex",
         "ansys.fluent.core Documentation",
         author,
         "manual",

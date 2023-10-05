@@ -31,16 +31,14 @@ import os
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import examples
 import ansys.fluent.visualization as viz  # noqa: F401
-from ansys.fluent.visualization.matplotlib import (  # noqa: F401
-    Plots,
-    matplot_windows_manager,
-)
-from ansys.fluent.visualization.pyvista import Graphics, pyvista_windows_manager
-from ansys.fluent.visualization.pyvista.pyvista_windows_manager import PyVistaWindow
 import matplotlib.pyplot as plt
 import pyvista as pv
+from ansys.fluent.core import examples
+from ansys.fluent.visualization.matplotlib import Plots  # noqa: F401
+from ansys.fluent.visualization.matplotlib import matplot_windows_manager  # noqa: F401
+from ansys.fluent.visualization.pyvista import Graphics, pyvista_windows_manager
+from ansys.fluent.visualization.pyvista.pyvista_windows_manager import PyVistaWindow
 
 ###########################################################################
 # Specifying save path

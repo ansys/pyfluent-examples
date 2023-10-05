@@ -1,23 +1,24 @@
-ansys-fluent-core
-ansys-fluent-parametric
-ansys-fluent-visualization
-numpy
-pandas==1.5.3
+
+ansys-fluent-core == 0.12.0
+ansys-fluent-parametric == 0.6.0
+ansys-fluent-visualization ==0.6.0
+numpy==1.26.0
+pandas==2.1.1
 seaborn
 python-pptx
 plotly
 openpyxl
-Sphinx==5.3.0
+sphinx==7.2.5
 jupyter_sphinx==0.4.0
 numpydoc==1.5.0
 matplotlib==3.6.3
-ansys-sphinx-theme==0.8.1
+ansys-sphinx-theme==0.12.1
 pypandoc==1.10
 pytest-sphinx==0.5.0
 sphinx-autobuild==2021.3.14
 sphinx-autodoc-typehints==1.21.8
 sphinx-copybutton==0.5.1
-sphinx-gallery==0.11.1
-sphinx-notfound-page==0.8.3
+sphinx-gallery==0.14.0
+sphinx-notfound-page==1.0.0
 sphinxcontrib-websupport==1.2.4
 sphinxemoji==0.2.0

@@ -7,7 +7,7 @@ docker-pull:
 
 build-doc:
 	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
-	@pip install .[doc]
+	@pip install -r requirements/requirements_doc.txt
 	@xvfb-run make -C doc html
 	@touch doc/_build/html/.nojekyll
 	@echo "$(DOCS_CNAME)" >> doc/_build/html/CNAME
