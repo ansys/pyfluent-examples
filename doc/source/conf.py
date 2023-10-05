@@ -5,7 +5,6 @@ import platform
 import subprocess
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import __version__
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
 from sphinx_gallery.sorting import FileNameSortKey
 
@@ -21,7 +20,7 @@ author = "ANSYS Inc."
 cname = os.getenv("DOCUMENTATION_CNAME", "examples.fluent.docs.pyansys.com")
 
 # The short X.Y version
-release = version = __version__
+release = version = "0.1.dev0"
 
 # -- General configuration ---------------------------------------------------
 extensions = [
@@ -134,7 +133,7 @@ def _reset_module_cb(gallery_conf, fname, when):
 # -- Sphinx Gallery Options ---------------------------------------------------
 sphinx_gallery_conf = {
     # convert rst to md for ipynb
-    # "pypandoc": True,
+    "pypandoc": True,
     # path to your examples scripts
     "examples_dirs": ["../../examples/"],
     # path where to save gallery generated examples
@@ -153,6 +152,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (350, 350),
     "reset_modules_order": "both",
     "reset_modules": (_reset_module_cb),
+    "thumbnail_size": (350, 350),
 }
 
 if not os.getenv("RUN_EXAMPLES"):
@@ -165,8 +165,8 @@ html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
 html_theme_options = {
     "switcher": {
-        "json_url": f"https://{cname}/release/versions.json",
-        "version_match": get_version_match(__version__),
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": get_version_match(version),
     },
     "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
     "github_url": "https://github.com/pyansys/pyfluent-examples",
@@ -193,7 +193,7 @@ latex_elements = {}
 latex_documents = [
     (
         master_doc,
-        f"pyfluent-examples-Documentation-{__version__}.tex",
+        f"pyfluent-examples-Documentation-{version}.tex",
         "ansys.fluent.core Documentation",
         author,
         "manual",
