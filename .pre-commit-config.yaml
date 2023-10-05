@@ -15,6 +15,30 @@ repos:
   hooks:
   - id: codespell
 
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.3.0
+  hooks:
+  - id: check-merge-conflict
+  - id: debug-statements
+
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.21.0
+  hooks:
+    - id: check-github-workflows
+      name: "Check GitHub workflows"
+      files: ^\.github/workflows/
+      types: [yaml]
+
+- repo: https://github.com/pycqa/isort
+  rev: 5.12.0
+  hooks:
+  - id: isort
+    args: [
+      "--profile", "black",
+      "--force-sort-within-sections",
+      "--line-length", "100",
+    ]
+
 #- repo: https://github.com/pycqa/pydocstyle
 #  rev: 6.1.1
 #  hooks:

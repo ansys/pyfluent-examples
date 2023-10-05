@@ -85,13 +85,13 @@ Tyler-Sofrin Compressor Modes Post-Processing
 # Import required libraries/modules
 # =====================================================================================
 import math
-import random
 from pathlib import Path
+import random
 
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 import matplotlib.pyplot as plt
 import numpy as np
-from ansys.fluent.core import examples
 
 #######################################################################################
 # Specifying save path

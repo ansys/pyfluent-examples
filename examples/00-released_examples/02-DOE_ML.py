@@ -31,6 +31,7 @@ Design of Experiments and Machine Learning model building
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -38,7 +39,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 import seaborn as sns
 import tensorflow as tf
-from ansys.fluent.core import examples
 from tensorflow import keras
 
 ###########################################################################
