@@ -37,6 +37,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_gallery.gen_gallery",
     "sphinxemoji.sphinxemoji",
+    "sphinx_design",
 ]
 
 # Intersphinx mapping
@@ -173,7 +174,7 @@ html_theme_options = {
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
-        ("PyAnsys", "https://docs.pyansys.com/"),
+        ("PyFluent", "https://fluent.docs.pyansys.com/version/stable/"),
     ],
     "navigation_depth": -1,
 }
