@@ -37,6 +37,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_gallery.gen_gallery",
     "sphinxemoji.sphinxemoji",
+    "sphinx_design",
 ]
 
 # Intersphinx mapping
