@@ -31,7 +31,7 @@ material degradation.
 # sphinx_gallery_thumbnail_path = '_static/radiation_headlamp_thumbnail.png'
 
 ###############################################################################
-# .. image:: /_static/radiation_headlamp_geom.png
+# .. image:: ../../_static/radiation_headlamp_geom.png
 #   :width: 500pt
 #   :align: center
 
