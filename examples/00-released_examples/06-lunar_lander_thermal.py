@@ -3,7 +3,7 @@
 Thermal Model of a Lunar Lander Using the Monte Carlo Radiation Model
 ---------------------------------------------------------------------
 This example demonstrates creating and solving a thermal model of a lander on
-the lunar surface using Fluent's Monte Carlo radiation solver. 
+the lunar surface using Fluent's Monte Carlo radiation solver.
 
 PyFluent uses the following loop at each timestep to retrofit the required
 functionality to Fluent:
@@ -23,7 +23,7 @@ example guides you through these tasks:
 - Setting boundary conditions for heat transfer and radiation calculations.
 - Setting up shell conduction boundary conditions.
 - Calculating a solution using the pressure-based solver.
-- Dynamically updating the Sun direction and lander state at each step. 
+- Dynamically updating the Sun direction and lander state at each step.
 
 **Problem description**
 The lander is modelled as a hollow 1 m × 1 m × 1 m cube with aluminum walls 3
@@ -88,12 +88,12 @@ import numpy as np
 
 lander_spaceclaim_file, lander_mesh_file, apollo17_temp_data = [
     examples.download_file(
-        f, 'pyfluent/lunar_lander_thermal', save_path=pyfluent.EXAMPLES_PATH
+        f, "pyfluent/lunar_lander_thermal", save_path=pyfluent.EXAMPLES_PATH
     )
     for f in [
-        'lander_geom.scdoc',
-        'lander_mesh.msh',
-        'apollo17_temp_data.csv',
+        "lander_geom.scdoc",
+        "lander_mesh.msh",
+        "apollo17_temp_data.csv",
     ]
 ]
 
@@ -139,34 +139,36 @@ n_steps = 60
 # `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
 # `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_system#Definition>`_
 
+
 def calc_sun_vecs_for_moon(
-        earth_ecliptic_lon_start: float, 
-        subsol_lon_start: float,
-        obsv_lat: float,
-        obsv_lon: float,
-        t: float,
-        ) -> tuple[float, float]:
+    earth_ecliptic_lon_start: float,
+    subsol_lon_start: float,
+    obsv_lat: float,
+    obsv_lon: float,
+    t: float,
+) -> tuple[float, float]:
     # Earth ecliptic longitude
-    earth_ecliptic_lon = earth_ecliptic_lon_start + 2*np.pi/(365*86400)*t
+    earth_ecliptic_lon = earth_ecliptic_lon_start + 2 * np.pi / (365 * 86400) * t
 
     # Subsolar point
-    subsol_lat = np.arcsin(np.sin(-moon_obliquity)*np.sin(earth_ecliptic_lon))
-    subsol_lon = subsol_lon_start + t/(29.5*86400)*2*np.pi
+    subsol_lat = np.arcsin(np.sin(-moon_obliquity) * np.sin(earth_ecliptic_lon))
+    subsol_lon = subsol_lon_start + t / (29.5 * 86400) * 2 * np.pi
 
     # Solar altitude and azimuth
     sun_obsv_phaseang = np.arccos(
-        np.sin(subsol_lat)*np.sin(obsv_lat) + 
-        np.cos(subsol_lat)*np.cos(obsv_lat)*np.cos(obsv_lon - subsol_lon)
+        np.sin(subsol_lat) * np.sin(obsv_lat)
+        + np.cos(subsol_lat) * np.cos(obsv_lat) * np.cos(obsv_lon - subsol_lon)
     )
 
-    sun_alt = np.pi/2 - sun_obsv_phaseang
+    sun_alt = np.pi / 2 - sun_obsv_phaseang
     sun_azm = np.arctan2(
-        np.cos(obsv_lat)*np.sin(subsol_lat) -
-        np.sin(obsv_lat)*np.cos(subsol_lat)*np.cos(subsol_lon - obsv_lon),
-        np.cos(subsol_lat)*np.sin(subsol_lon - obsv_lon)
+        np.cos(obsv_lat) * np.sin(subsol_lat)
+        - np.sin(obsv_lat) * np.cos(subsol_lat) * np.cos(subsol_lon - obsv_lon),
+        np.cos(subsol_lat) * np.sin(subsol_lon - obsv_lon),
     )
 
     return sun_alt, sun_azm
+
 
 ###############################################################################
 # Define beam direction function
@@ -178,21 +180,23 @@ def calc_sun_vecs_for_moon(
 # - Y: Zenith
 # - Z: East
 
+
 def sun_vec_to_beam_dir(
-        sun_alt: float, 
-        sun_azm: float,
-        ) -> tuple[float, float, float]:
+    sun_alt: float,
+    sun_azm: float,
+) -> tuple[float, float, float]:
     # Coordinate system:
     #   X: North
     #   Y: Zenith
     #   Z: East
-    x = np.cos(sun_alt)*np.cos(sun_azm)
+    x = np.cos(sun_alt) * np.cos(sun_azm)
     y = np.sin(sun_alt)
-    z = np.cos(sun_alt)*np.sin(sun_azm)
+    z = np.cos(sun_alt) * np.sin(sun_azm)
 
     # Since the sun vector points toward the sun, we need to take the
     # negative to get the beam direction
     return -x, -y, -z
+
 
 ###############################################################################
 # Define mean surface temperature function
@@ -202,15 +206,14 @@ def sun_vec_to_beam_dir(
 # list of surface names as input, finds their surface IDs, obtains the scalar
 # field data from the solver, then returns the average temperature.
 
+
 def get_surf_mean_temp(
-        surf_names: list[str], 
-        solver: pyfluent.session_solver.Solver,
-        ) -> float:
+    surf_names: list[str],
+    solver: pyfluent.session_solver.Solver,
+) -> float:
     # Get surface IDs
     surfs = solver.field_info.get_surfaces_info()
-    surf_ids_ = [
-        surfs[surf_name]['surface_id'] for surf_name in surf_names
-    ]
+    surf_ids_ = [surfs[surf_name]["surface_id"] for surf_name in surf_names]
 
     # Flatten surf_ids nested list
     surf_ids = []
@@ -218,7 +221,7 @@ def get_surf_mean_temp(
 
     # Get temperature data
     temp_data = solver.field_data.get_scalar_field_data(
-        'temperature', 
+        "temperature",
         surface_ids=surf_ids,
     )
 
@@ -228,13 +231,12 @@ def get_surf_mean_temp(
         temps = np.concatenate(
             (
                 temps,
-                np.array(
-                    [y.scalar_data for y in x.data]
-                ),
+                np.array([y.scalar_data for y in x.data]),
             ),
         )
-    
+
     return np.mean(temps)
+
 
 ###############################################################################
 # Start Fluent
@@ -245,9 +247,9 @@ def get_surf_mean_temp(
 # ~~~~~~~~~~~~~
 
 solver = pyfluent.launch_fluent(
-    precision='double',
+    precision="double",
     processor_count=12,
-    mode='solver',
+    mode="solver",
     cwd=pyfluent.EXAMPLES_PATH,
 )
 
@@ -270,11 +272,11 @@ solver.file.read_mesh(file_name=lander_mesh_file)
 # 1.
 
 # Set solution to transient
-solver.setup.general.solver.time = 'unsteady-2nd-order'
+solver.setup.general.solver.time = "unsteady-2nd-order"
 
 # Set transient settings
 trans_controls = solver.solution.run_calculation.transient_controls
-trans_controls.type = 'Fixed'
+trans_controls.type = "Fixed"
 trans_controls.max_iter_per_time_step = 20
 trans_controls.time_step_count = 1
 trans_controls.time_step_size = step_size
@@ -287,7 +289,7 @@ trans_controls.time_step_size = step_size
 
 models = solver.setup.models
 models.energy.enabled = True
-models.viscous.model = 'laminar'
+models.viscous.model = "laminar"
 
 ###############################################################################
 # Set up radiation model
@@ -295,7 +297,7 @@ models.viscous.model = 'laminar'
 # Enable the Monte Carlo radiation model with two radiation bands: one for
 # solar radiation and one for thermal infrared radiation. Ensure that bands are
 # created in order of increasing wavelength.
-# 
+#
 # The number of histories is set to 10 million to reduce computation time, but
 # more may be required for accurate results.
 #
@@ -310,27 +312,27 @@ models.viscous.model = 'laminar'
 
 # Set up radiation model
 radiation = models.radiation
-radiation.model = 'monte-carlo'
+radiation.model = "monte-carlo"
 radiation.monte_carlo.number_of_histories = 1e7
 
 radiation.multiband = {
     # Define range of solar wavelengths
-    'solar': {
-        'name': 'solar',
-        'start': 0,
-        'end': 2.8,
+    "solar": {
+        "name": "solar",
+        "start": 0,
+        "end": 2.8,
     },
     # Define range of thermal IR wavelengths
-    'thermal-ir': {
-        'name': 'thermal-ir',
-        'start': 2.8,
-        'end': 100.,
+    "thermal-ir": {
+        "name": "thermal-ir",
+        "start": 2.8,
+        "end": 100.0,
     },
 }
 
 # Solve radiation once per timestep
 radiation_freq = radiation.solve_frequency
-radiation_freq.method = 'time-step'
+radiation_freq.method = "time-step"
 radiation_freq.time_step_interval = 1
 
 ###############################################################################
@@ -344,8 +346,8 @@ radiation_freq.time_step_interval = 1
 # --- Properties of vacuum ---
 # Thermal conductivity: 0
 
-vacuum = solver.setup.materials.solid.create('vacuum')
-vacuum.chemical_formula = ''
+vacuum = solver.setup.materials.solid.create("vacuum")
+vacuum.chemical_formula = ""
 vacuum.thermal_conductivity.value = 0
 vacuum.absorption_coefficient.value = 0
 vacuum.refractive_index.value = 1
@@ -355,24 +357,28 @@ vacuum.refractive_index.value = 1
 # Specific heat capacity: 1050 [J kg^-1 K^-1]
 # Thermal conductivity: 9.22e-4*(1 + 1.48*(temperature/350 K)^3) [W m^-1 K^-1]
 
-fluff = solver.setup.materials.solid.create('fluff')
-fluff.chemical_formula = ''
+fluff = solver.setup.materials.solid.create("fluff")
+fluff.chemical_formula = ""
 fluff.density.value = 1000
 fluff.specific_heat.value = 1050
-fluff.thermal_conductivity.option = 'expression'
-fluff.thermal_conductivity.expression = '9.22e-4[W m^-1 K^-1]*(1 + 1.48*(StaticTemperature/350[K])^3)'
+fluff.thermal_conductivity.option = "expression"
+fluff.thermal_conductivity.expression = (
+    "9.22e-4[W m^-1 K^-1]*(1 + 1.48*(StaticTemperature/350[K])^3)"
+)
 
 # --- Properties of regolith (Christie et al., 2008) ---
 # Density: 2000 [kg m^-3]
 # Specific heat capacity: 1050 [J kg^-1 K^-1]
 # Thermal conductivity: 9.30e-4*(1 + 0.73*(temperature/350 K)^3) [W m^-1 K^-1]
 
-regolith = solver.setup.materials.solid.create('regolith')
-regolith.chemical_formula = ''
+regolith = solver.setup.materials.solid.create("regolith")
+regolith.chemical_formula = ""
 regolith.density.value = 2000
 regolith.specific_heat.value = 1050
-regolith.thermal_conductivity.option = 'expression'
-regolith.thermal_conductivity.expression = '9.30e-4[W m^-1 K^-1]*(1 + 0.73*(StaticTemperature/350[K])^3)'
+regolith.thermal_conductivity.option = "expression"
+regolith.thermal_conductivity.expression = (
+    "9.30e-4[W m^-1 K^-1]*(1 + 0.73*(StaticTemperature/350[K])^3)"
+)
 
 ###############################################################################
 # Cell zone conditions
@@ -384,10 +390,10 @@ regolith.thermal_conductivity.expression = '9.30e-4[W m^-1 K^-1]*(1 + 0.73*(Stat
 
 cellzones = solver.setup.cell_zone_conditions
 cellzones.set_zone_type(
-    zone_list=['geom-2_domain'],
-    new_type='solid',
+    zone_list=["geom-2_domain"],
+    new_type="solid",
 )
-cellzones.solid['geom-2_domain'].material = 'vacuum'
+cellzones.solid["geom-2_domain"].material = "vacuum"
 
 ###############################################################################
 # Regolith boundary condition
@@ -403,39 +409,39 @@ cellzones.solid['geom-2_domain'].material = 'vacuum'
 # Surface absorptivity: 0.87
 # Surface emissivity: 0.97
 
-regolith_bc = solver.setup.boundary_conditions.wall['regolith']
+regolith_bc = solver.setup.boundary_conditions.wall["regolith"]
 
 regolith_bc.thermal.q.value = 0.031
 regolith_bc.thermal.planar_conduction = True
 regolith_bc.thermal.shell_conduction = [
     {
-        'thickness': 0.02,
-        'material': 'fluff',
+        "thickness": 0.02,
+        "material": "fluff",
     },
     {
-        'thickness': 0.04,
-        'material': 'regolith',
+        "thickness": 0.04,
+        "material": "regolith",
     },
     {
-        'thickness': 0.08,
-        'material': 'regolith',
+        "thickness": 0.08,
+        "material": "regolith",
     },
     {
-        'thickness': 0.16,
-        'material': 'regolith',
+        "thickness": 0.16,
+        "material": "regolith",
     },
     {
-        'thickness': 0.32,
-        'material': 'regolith',
+        "thickness": 0.32,
+        "material": "regolith",
     },
 ]
 regolith_bc.radiation.band_in_emiss = {
-    'solar': {
-        'value': 0.87,
+    "solar": {
+        "value": 0.87,
     },
-    'thermal-ir': {
-        'value': 0.97,
-    }
+    "thermal-ir": {
+        "value": 0.97,
+    },
 }
 
 ###############################################################################
@@ -450,20 +456,20 @@ regolith_bc.radiation.band_in_emiss = {
 # Absorptivity: 1
 # Solar flux: 1414 [W m^-2]
 
-space_bc = solver.setup.boundary_conditions.wall['space']
+space_bc = solver.setup.boundary_conditions.wall["space"]
 
-space_bc.thermal.thermal_bc = 'Temperature'
+space_bc.thermal.thermal_bc = "Temperature"
 space_bc.thermal.t.value = 3
-space_bc.thermal.material = 'vacuum'
+space_bc.thermal.material = "vacuum"
 space_bc.radiation.mc_bsource_p = True
-space_bc.radiation.band_q_irrad['solar'].value = 1414
+space_bc.radiation.band_q_irrad["solar"].value = 1414
 space_bc.radiation.band_diffuse_frac = {
-    'solar': 0,
-    'thermal-ir': 0,
+    "solar": 0,
+    "thermal-ir": 0,
 }
 space_bc.radiation.band_in_emiss = {
-    'solar': 1,
-    'thermal-ir': 1,
+    "solar": 1,
+    "thermal-ir": 1,
 }
 
 ###############################################################################
@@ -478,21 +484,21 @@ space_bc.radiation.band_in_emiss = {
 # Absorptivity: 0.05
 # Emissivity: 0.05
 
-sc_mli_bc = solver.setup.boundary_conditions.wall['sc-mli']
+sc_mli_bc = solver.setup.boundary_conditions.wall["sc-mli"]
 
 sc_mli_bc.thermal.planar_conduction = True
 sc_mli_bc.thermal.shell_conduction = [
     {
-        'thickness': 0.03,
-        'material': 'aluminum',
+        "thickness": 0.03,
+        "material": "aluminum",
     },
 ]
 sc_mli_bc.radiation.band_in_emiss = {
-    'solar': {
-        'value': 0.05,
+    "solar": {
+        "value": 0.05,
     },
-    'thermal-ir': {
-        'value': 0.05,
+    "thermal-ir": {
+        "value": 0.05,
     },
 }
 
@@ -509,18 +515,18 @@ sc_mli_bc.radiation.band_in_emiss = {
 # Absorptivity: 0.17
 # Emissivity: 0.09 below 273 K, 0.70 otherwise
 
-sc_rad_bc = solver.setup.boundary_conditions.wall['sc-radiator']
+sc_rad_bc = solver.setup.boundary_conditions.wall["sc-radiator"]
 
 sc_rad_bc.thermal.planar_conduction = True
 sc_rad_bc.thermal.shell_conduction = [
     {
-        'thickness': 0.03,
-        'material': 'aluminum',
+        "thickness": 0.03,
+        "material": "aluminum",
     },
 ]
 sc_rad_bc.radiation.band_in_emiss = {
-    'solar': {
-        'value': 0.17,
+    "solar": {
+        "value": 0.17,
     },
 }
 
@@ -533,7 +539,7 @@ sc_rad_bc.radiation.band_in_emiss = {
 # to a temperature of 230 K, or -43 °C.
 
 sim_init = solver.solution.initialization
-sim_init.defaults['temperature'] = 230
+sim_init.defaults["temperature"] = 230
 sim_init.initialize()
 
 ###############################################################################
@@ -543,22 +549,22 @@ sim_init.initialize()
 
 surf_report_defs = solver.solution.report_definitions.surface
 
-sc_surfs = ['sc-radiator', 'sc-mli']
+sc_surfs = ["sc-radiator", "sc-mli"]
 
-surf_report_defs['sc-min-temp'] = {
-    'surface_names': sc_surfs,
-    'report_type': 'surface-facetmin',
-    'field': 'temperature',
+surf_report_defs["sc-min-temp"] = {
+    "surface_names": sc_surfs,
+    "report_type": "surface-facetmin",
+    "field": "temperature",
 }
-surf_report_defs['sc-avg-temp'] = {
-    'surface_names': sc_surfs,
-    'report_type': 'surface-facetavg',
-    'field': 'temperature',
+surf_report_defs["sc-avg-temp"] = {
+    "surface_names": sc_surfs,
+    "report_type": "surface-facetavg",
+    "field": "temperature",
 }
-surf_report_defs['sc-max-temp'] = {
-    'surface_names': sc_surfs,
-    'report_type': 'surface-facetmax',
-    'field': 'temperature',
+surf_report_defs["sc-max-temp"] = {
+    "surface_names": sc_surfs,
+    "report_type": "surface-facetmax",
+    "field": "temperature",
 }
 
 ###############################################################################
@@ -571,19 +577,19 @@ surf_report_defs = solver.solution.report_definitions.surface
 
 # Loop over all regolith reports to set common properties
 regolith_report_names = []
-for i in range(1, 5+1):
-    report_name = f'regolith-layer-{i}-temp'
+for i in range(1, 5 + 1):
+    report_name = f"regolith-layer-{i}-temp"
     surf_report_defs[report_name] = {
-        'report_type': 'surface-facetavg',
-        'field': 'temperature',
+        "report_type": "surface-facetavg",
+        "field": "temperature",
     }
     regolith_report_names.extend([report_name])
 
-surf_report_defs['regolith-layer-1-temp'].surface_names = ['regolith']
-surf_report_defs['regolith-layer-2-temp'].surface_names = ['regolith-1:2']
-surf_report_defs['regolith-layer-3-temp'].surface_names = ['regolith-2:3']
-surf_report_defs['regolith-layer-4-temp'].surface_names = ['regolith-3:4']
-surf_report_defs['regolith-layer-5-temp'].surface_names = ['regolith-4:5']
+surf_report_defs["regolith-layer-1-temp"].surface_names = ["regolith"]
+surf_report_defs["regolith-layer-2-temp"].surface_names = ["regolith-1:2"]
+surf_report_defs["regolith-layer-3-temp"].surface_names = ["regolith-2:3"]
+surf_report_defs["regolith-layer-4-temp"].surface_names = ["regolith-3:4"]
+surf_report_defs["regolith-layer-5-temp"].surface_names = ["regolith-4:5"]
 
 ###############################################################################
 # Temperature report files
@@ -593,13 +599,13 @@ surf_report_defs['regolith-layer-5-temp'].surface_names = ['regolith-4:5']
 surf_report_files = solver.solution.monitor.report_files
 
 # Spacecraft temperatures
-surf_report_files['sc-temps-rfile'] = {
-    'report_defs': ['flow-time', 'sc-min-temp', 'sc-avg-temp', 'sc-max-temp'],
+surf_report_files["sc-temps-rfile"] = {
+    "report_defs": ["flow-time", "sc-min-temp", "sc-avg-temp", "sc-max-temp"],
 }
 
 # Regolith temperatures
-surf_report_files['regolith-temps-rfile'] = {
-    'report_defs': [*regolith_report_names, 'flow-time'],
+surf_report_files["regolith-temps-rfile"] = {
+    "report_defs": [*regolith_report_names, "flow-time"],
 }
 
 ###############################################################################
@@ -609,10 +615,10 @@ surf_report_files['regolith-temps-rfile'] = {
 
 autosave = solver.file.auto_save
 
-autosave.case_frequency = 'if-mesh-is-modified'
+autosave.case_frequency = "if-mesh-is-modified"
 autosave.data_frequency = 1
-autosave.save_data_file_every.frequency_type = 'time-step'
-autosave.append_file_name_with.file_suffix_type = 'time-step'
+autosave.save_data_file_every.frequency_type = "time-step"
+autosave.append_file_name_with.file_suffix_type = "time-step"
 
 ###############################################################################
 # Convergence criteria
@@ -622,7 +628,7 @@ autosave.append_file_name_with.file_suffix_type = 'time-step'
 
 residuals = solver.solution.monitor.residual.equations
 
-for criterion in ['continuity', 'x-velocity', 'y-velocity', 'z-velocity']:
+for criterion in ["continuity", "x-velocity", "y-velocity", "z-velocity"]:
     residuals[criterion].check_convergence = False
     residuals[criterion].monitor = False
 
@@ -633,8 +639,8 @@ for criterion in ['continuity', 'x-velocity', 'y-velocity', 'z-velocity']:
 
 solver.file.batch_options.confirm_overwrite = True
 solver.file.write(
-    file_name='lunar_lander_thermal.cas.h5',
-    file_type='case',
+    file_name="lunar_lander_thermal.cas.h5",
+    file_type="case",
 )
 
 ###############################################################################
@@ -650,7 +656,7 @@ solver.file.write(
 
 for i in range(n_steps):
     # Get current simulation time
-    t = solver.rp_vars('flow-time')
+    t = solver.rp_vars("flow-time")
 
     # Calculate sun vector
     sun_alt, sun_azm = calc_sun_vecs_for_moon(
@@ -666,29 +672,32 @@ for i in range(n_steps):
     )
 
     # Set beam direction
-    solver.setup.boundary_conditions.wall['space'].\
-        radiation.radiation_direction = [beam_x, beam_y, beam_z]
+    solver.setup.boundary_conditions.wall["space"].radiation.radiation_direction = [
+        beam_x,
+        beam_y,
+        beam_z,
+    ]
 
     # Calculate radiator mean temperature
     rad_mean_temp = get_surf_mean_temp(
-        ['sc-radiator-1:external'],
+        ["sc-radiator-1:external"],
         solver,
     )
 
     # Simulate closing louvers below 273 K by changing emissivity
     if rad_mean_temp < 273:
         sc_rad_bc.radiation.band_in_emiss = {
-            'thermal-ir': {
-                'value': 0.09,
+            "thermal-ir": {
+                "value": 0.09,
             },
         }
     else:
         sc_rad_bc.radiation.band_in_emiss = {
-            'thermal-ir': {
-                'value': 0.70,
+            "thermal-ir": {
+                "value": 0.70,
             },
         }
-    
+
     # Run simulation for 1 timestep
     solver.solution.run_calculation.calculate()
 
@@ -708,20 +717,23 @@ solver.exit()
 # ~~~~~~~~~~~~~~~
 # Import the packages required for post-processing.
 
-import re
-import pandas as pd
-from matplotlib import pyplot as plt
 from pathlib import Path
+import re
+
+from matplotlib import pyplot as plt
+import pandas as pd
 
 ###############################################################################
 # Clean column names function
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Pandas will not correctly format the column names when reading in the Fluent
-# output files. We will clean the names by removing all parantheses and double
+# output files. We will clean the names by removing all parentheses and double
 # quotation marks.
 
+
 def clean_col_names(df):
-    df.columns = [re.sub(r'["()]', '', col) for col in df.columns]
+    df.columns = [re.sub(r'["()]', "", col) for col in df.columns]
+
 
 ###############################################################################
 # Read in simulation data
@@ -733,25 +745,25 @@ def clean_col_names(df):
 # expression.
 
 root = Path(cwd)
-sep = r'(?<![a-zA-Z])\s+(?![a-zA-Z])'
+sep = r"(?<![a-zA-Z])\s+(?![a-zA-Z])"
 
 # Read in regolith data
 regolith_df = pd.read_csv(
-    root / 'regolith-temps-rfile.out',
+    root / "regolith-temps-rfile.out",
     sep=sep,
     header=2,
     dtype=np.float64,
-    engine='python',
+    engine="python",
 )
 clean_col_names(regolith_df)
 
 # Read in spacecraft data
 sc_df = pd.read_csv(
-    root / 'sc-temps-rfile.out',
+    root / "sc-temps-rfile.out",
     sep=sep,
     header=2,
     dtype=np.float64,
-    engine='python',
+    engine="python",
 )
 clean_col_names(sc_df)
 
@@ -765,9 +777,10 @@ clean_col_names(sc_df)
 
 apollo17_df = pd.read_csv(apollo17_temp_data)
 
-apollo17_offset = regolith_df['flow-time'].iloc[25]
-apollo17_df['Offset time since sunrise'] = \
-    apollo17_df['Time since sunrise'] + apollo17_offset
+apollo17_offset = regolith_df["flow-time"].iloc[25]
+apollo17_df["Offset time since sunrise"] = (
+    apollo17_df["Time since sunrise"] + apollo17_offset
+)
 
 ###############################################################################
 # Set data types
@@ -776,12 +789,12 @@ apollo17_df['Offset time since sunrise'] = \
 
 regolith_df = regolith_df.astype(
     {
-        'Time Step': np.int64,
+        "Time Step": np.int64,
     },
 )
 sc_df = sc_df.astype(
     {
-        'Time Step': np.int64,
+        "Time Step": np.int64,
     },
 )
 
@@ -794,21 +807,21 @@ sc_df = sc_df.astype(
 fig1, ax1 = plt.subplots()
 
 regolith_df.plot(
-    x='flow-time',
-    y=[f'regolith-layer-{i+1}-temp' for i in range(5)],
-    title='Regolith temperatures',
+    x="flow-time",
+    y=[f"regolith-layer-{i+1}-temp" for i in range(5)],
+    title="Regolith temperatures",
     ax=ax1,
 )
 apollo17_df.plot(
-    x='Offset time since sunrise',
-    y='Temperature',
-    style='x',
-    xlabel='Time [s]',
-    ylabel='Temperature [K]',
+    x="Offset time since sunrise",
+    y="Temperature",
+    style="x",
+    xlabel="Time [s]",
+    ylabel="Temperature [K]",
     ax=ax1,
 )
 
-ax1.legend(['Layer 1', '2', '3', '4', '5', 'Apollo 17'])
+ax1.legend(["Layer 1", "2", "3", "4", "5", "Apollo 17"])
 
 ###############################################################################
 # Plot spacecraft temperatures
@@ -818,16 +831,16 @@ ax1.legend(['Layer 1', '2', '3', '4', '5', 'Apollo 17'])
 fig2, ax2 = plt.subplots()
 
 sc_df.plot(
-    x='flow-time',
-    y=['sc-min-temp', 'sc-avg-temp', 'sc-max-temp'],
-    title='Spacecraft Temperatures',
-    xlabel='Time [s]',
-    ylabel='Temperature [K]',
+    x="flow-time",
+    y=["sc-min-temp", "sc-avg-temp", "sc-max-temp"],
+    title="Spacecraft Temperatures",
+    xlabel="Time [s]",
+    ylabel="Temperature [K]",
     ax=ax2,
 )
-ax2.axhline(273, color='k', linestyle=':')
+ax2.axhline(273, color="k", linestyle=":")
 
-ax2.legend(['Minimum', 'Mean', 'Maximum', 'Setpoint'])
+ax2.legend(["Minimum", "Mean", "Maximum", "Setpoint"])
 
 ###############################################################################
 # Show plots
