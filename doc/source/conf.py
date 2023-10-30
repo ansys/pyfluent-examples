@@ -177,7 +177,6 @@ html_theme_options = {
         ("PyFluent", "https://fluent.docs.pyansys.com/version/stable/"),
     ],
     "navigation_depth": -1,
-    "surface_warnings": False,
 }
 
 # -- Options for HTMLHelp output ---------------------------------------------
