@@ -1,6 +1,6 @@
 ansys-fluent-core==0.18.1
-ansys-fluent-parametric==0.8.1
-ansys-fluent-visualization==0.7.1
+ansys-fluent-parametric
+ansys-fluent-visualization
 numpy==1.26.0
 pandas==2.1.1
 seaborn==0.13.0
