@@ -141,11 +141,9 @@ n_steps = 60
 #
 # For more information, see the following links:
 #
-# * `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_syst
-#   em#Spherical_coordinates>`_
+# * `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_system#Spherical_coordinates>`_      # noqa: E501
 # * `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
-# * `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_
-#   system#Definition>`_
+# * `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_system#Definition>`_             # noqa: E501
 
 
 def calc_sun_vecs_for_moon(
@@ -314,8 +312,8 @@ models.viscous.model = "laminar"
 # space industry best practices documented in:
 #
 #   L. Kauder, “Spacecraft Thermal Control Coatings References,” Goddard Space
-#   Flight Center, Greenbelt, MD 20771, NASA Technical Report NASA/TP-2005-
-#   212792, Dec. 2005. [Online]. Available:
+#   Flight Center, Greenbelt, MD 20771, NASA Technical Report
+#   NASA/TP-2005-212792, Dec. 2005. [Online]. Available:
 #   https://ntrs.nasa.gov/citations/20070014757
 
 
