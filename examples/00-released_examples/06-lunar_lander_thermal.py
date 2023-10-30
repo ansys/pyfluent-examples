@@ -135,11 +135,11 @@ n_steps = 60
 # It returns the Sun's altitude and azimuth as outputs.
 #
 # For more information, see the following links:
-# `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_syste\
-# m#Spherical_coordinates>`_
+# `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_system
+# #Spherical_coordinates>`_
 # `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
-# `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_s\
-# ystem#Definition>`_
+# `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_sy
+# stem#Definition>`_
 
 
 def calc_sun_vecs_for_moon(
