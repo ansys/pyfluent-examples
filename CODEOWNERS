@@ -1,19 +1,8 @@
-examples/Ablation-tutorial/                 @rploconnor
-examples/Ahmed-Body-Simulation/             @abhishekchitwar
-examples/AnsysLab-exhaust-manifold/         @seanpearsonuk
-examples/Brake-Thermal-PyVista-Matplotlib/  @mkvani
-examples/CHT/                               @PySRG
-examples/Dash-App-for-Post-processing/      @rploconnor
-examples/DOE-ML-Mixing-Elbow/               @PySRG
-examples/Excel-Monitor-Points/              @zorandragojlovic
-examples/Fluent-Parametric/                 @mkundu1
-examples/Graphics-Demo/                     @ajain-work
-examples/Gravity-Separator-PID/             @sravanansys
-examples/MixingTank-DOE/                    @sravanansys
-examples/MixingTank-WorkFlow/               @sravanansys
-examples/PPTX-report-generation/            @rploconnor
-examples/PyFluent-ACE-Training-at-22R2/     @seanpearsonuk
-examples/Remote-Execution-in-Cluster/       @PyPablo
-examples/Separator-Collection-Efficiency/   @sravanansys
-examples/Steady-Vortex-VOF/                 @sravanansys
-examples/Tyler-Sofrin-Modes-Compressor/     @rploconnor
+examples/00-released_examples/Tyler-Sofrin-Modes-Compressor @abhishekchitwar
+examples/00-released_examples/00-ablation.py                @mkvani
+examples/00-released_examples/00-ahmed_body_workflow.py     @abhishekchitwar
+examples/00-released_examples/01-brake.py                   @mkvani
+examples/00-released_examples/02-DOE_ML.py                  @hpohekar
+examples/00-released_examples/03-CHT.py                     @PySRG @hpohekar
+examples/00-released_examples/04-TylerSofrinModes.py        @abhishekchitwar
+examples/00-released_examples/05-radiation_headlamp.py      @ansjsia
