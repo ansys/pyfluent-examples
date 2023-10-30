@@ -135,9 +135,11 @@ n_steps = 60
 # It returns the Sun's altitude and azimuth as outputs.
 #
 # For more information, see the following links:
-# `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_system#Spherical_coordinates>`_
+# `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_syste\
+# m#Spherical_coordinates>`_
 # `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
-# `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_system#Definition>`_
+# `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_s\
+# ystem#Definition>`_
 
 
 def calc_sun_vecs_for_moon(
@@ -315,19 +317,15 @@ radiation = models.radiation
 radiation.model = "monte-carlo"
 radiation.monte_carlo.number_of_histories = 1e7
 
-radiation.multiband = {
-    # Define range of solar wavelengths
-    "solar": {
-        "name": "solar",
-        "start": 0,
-        "end": 2.8,
-    },
-    # Define range of thermal IR wavelengths
-    "thermal-ir": {
-        "name": "thermal-ir",
-        "start": 2.8,
-        "end": 100.0,
-    },
+# Define range of solar wavelengths
+radiation.multiband["solar"] = {
+    "start": 0,
+    "end": 2.8,
+}
+# Define range of thermal IR wavelengths
+radiation.multiband["thermal-ir"] = {
+    "start": 2.8,
+    "end": 100,
 }
 
 # Solve radiation once per timestep
@@ -744,7 +742,7 @@ def clean_col_names(df):
 # alphabetical character, implemented as negative lookarounds in a regular
 # expression.
 
-root = Path(cwd)
+root = Path(pyfluent.EXAMPLES_PATH)
 sep = r"(?<![a-zA-Z])\s+(?![a-zA-Z])"
 
 # Read in regolith data
