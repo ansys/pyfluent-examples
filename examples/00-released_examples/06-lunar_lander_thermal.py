@@ -18,14 +18,15 @@ functionality to Fluent:
 The Thermal Model of a Lunar Lander Using the Monte Carlo Radiation Model
 example guides you through these tasks:
 
-- Setting up a Monte Carlo radiation model.
-- Creation of materials with thermal and radiation properties.
-- Setting boundary conditions for heat transfer and radiation calculations.
-- Setting up shell conduction boundary conditions.
-- Calculating a solution using the pressure-based solver.
-- Dynamically updating the Sun direction and lander state at each step.
+* Setting up a Monte Carlo radiation model.
+* Creation of materials with thermal and radiation properties.
+* Setting boundary conditions for heat transfer and radiation calculations.
+* Setting up shell conduction boundary conditions.
+* Calculating a solution using the pressure-based solver.
+* Dynamically updating the Sun direction and lander state at each step.
 
 **Problem description**
+
 The lander is modelled as a hollow 1 m × 1 m × 1 m cube with aluminum walls 3
 mm thick, covered in highly reflective multilayer insulation (MLI). To allow
 for comparison to empirical data, the landing site is selected to be the same
@@ -40,24 +41,24 @@ direction of the Sun at each timestep.
 The case setup is taken from the following paper, originally implemented in
 Ansys Thermal Desktop:
 
-T.-Y. Park, J.-J. Lee, J.-H. Kim, and H.-U. Oh, “Preliminary Thermal Design and
-    Analysis of Lunar Lander for Night Survival,” *International Journal of
+    T.-Y. Park, J.-J. Lee, J.-H. Kim, and H.-U. Oh, “Preliminary Thermal Design
+    and Analysis of Lunar Lander for Night Survival,” *International Journal of
     Aerospace Engineering*, vol. 2018, p. e4236396, Oct. 2018, doi:
     doi.org/10.1155/2018/4236396.
 
 The paper uses a thermal model of the lunar regolith developed in the following
 paper:
 
-R. J. Christie, D. W. Plachta, and M. M. Yasan, “Transient Thermal Model and
-    Analysis of the Lunar Surface and Regolith for Cryogenic Fluid Storage,”
-    NASA Glenn Research Center, Cleveland, Ohio, NASA Technical Report TM-2008-
-    215300, Aug. 2008. [Online]. Available:
+    R. J. Christie, D. W. Plachta, and M. M. Yasan, “Transient Thermal Model
+    and Analysis of the Lunar Surface and Regolith for Cryogenic Fluid
+    Storage,” NASA Glenn Research Center, Cleveland, Ohio, NASA Technical
+    Report TM-2008-215300, Aug. 2008. [Online]. Available:
     https://ntrs.nasa.gov/citations/20080039640
 
 Validation data for the regolith temperatures are taken from measurements
 conducted by the Apollo 17 mission to the Moon:
 
-M. G. Langseth, S. J. Keihm, and J. L. Chute, “Heat Flow Experiment,” in
+    M. G. Langseth, S. J. Keihm, and J. L. Chute, “Heat Flow Experiment,” in
     *Apollo 17: Preliminary Science Report*, vol. SP-330, Washington, D.C.:
     NASA Lyndon B. Johnson Space Center, 1973. [Online]. Available:
     https://ui.adsabs.harvard.edu/abs/1973NASSP.330....../abstract
@@ -100,10 +101,14 @@ lander_spaceclaim_file, lander_mesh_file, apollo17_temp_data = [
 ###############################################################################
 # Define variables
 # ~~~~~~~~~~~~~~~~
-# Define the key variables: the obliquity (axial tilt) of the Moon relative to
-# the plane of the Earth's orbit around the Sun, the setpoint temperature above
-# which the radiator louvers open, the coordinates of the lander, the timestep
-# size, and the number of timesteps.
+# Define the key variables:
+#
+# * The obliquity (axial tilt) of the Moon relative to the plane of the Earth's
+#   orbit around the Sun
+# * The setpoint temperature above which the radiator louvers open
+# * The coordinates of the lander
+# * The timestep size
+# * The number of timesteps
 #
 # We will use a timestep size of 24 hours and run the simulation for 60 Earth
 # days, or approximately 2 lunar days.
@@ -135,11 +140,12 @@ n_steps = 60
 # It returns the Sun's altitude and azimuth as outputs.
 #
 # For more information, see the following links:
-# `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_system
-# #Spherical_coordinates>`_
-# `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
-# `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_sy
-# stem#Definition>`_
+#
+# * `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_syst
+#   em#Spherical_coordinates>`_
+# * `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
+# * `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_
+#   system#Definition>`_
 
 
 def calc_sun_vecs_for_moon(
@@ -178,9 +184,10 @@ def calc_sun_vecs_for_moon(
 # Define the function that converts the Sun's altitude and azimuth, as
 # calculated by ``calc_sun_vecs_for_moon``, into a beam direction in Cartesian
 # coordinates that can be used in Fluent. The coordinate system used is:
-# - X: North
-# - Y: Zenith
-# - Z: East
+#
+# * X: North
+# * Y: Zenith
+# * Z: East
 
 
 def sun_vec_to_beam_dir(
@@ -306,7 +313,7 @@ models.viscous.model = "laminar"
 # The limits of each band are based on Fluent manual recommendations and on
 # space industry best practices documented in:
 #
-# L. Kauder, “Spacecraft Thermal Control Coatings References,” Goddard Space
+#   L. Kauder, “Spacecraft Thermal Control Coatings References,” Goddard Space
 #   Flight Center, Greenbelt, MD 20771, NASA Technical Report NASA/TP-2005-
 #   212792, Dec. 2005. [Online]. Available:
 #   https://ntrs.nasa.gov/citations/20070014757
@@ -684,17 +691,9 @@ for i in range(n_steps):
 
     # Simulate closing louvers below 273 K by changing emissivity
     if rad_mean_temp < 273:
-        sc_rad_bc.radiation.band_in_emiss = {
-            "thermal-ir": {
-                "value": 0.09,
-            },
-        }
+        sc_rad_bc.radiation.band_in_emiss["thermal-ir"].value = 0.09
     else:
-        sc_rad_bc.radiation.band_in_emiss = {
-            "thermal-ir": {
-                "value": 0.70,
-            },
-        }
+        sc_rad_bc.radiation.band_in_emiss["thermal-ir"].value = 0.70
 
     # Run simulation for 1 timestep
     solver.solution.run_calculation.calculate()
