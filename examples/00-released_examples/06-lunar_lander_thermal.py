@@ -439,12 +439,8 @@ regolith_bc.thermal.shell_conduction = [
     },
 ]
 regolith_bc.radiation.band_in_emiss = {
-    "solar": {
-        "value": 0.87,
-    },
-    "thermal-ir": {
-        "value": 0.97,
-    },
+    "solar": 0.87,
+    "thermal-ir": 0.97,
 }
 
 ###############################################################################
@@ -497,12 +493,8 @@ sc_mli_bc.thermal.shell_conduction = [
     },
 ]
 sc_mli_bc.radiation.band_in_emiss = {
-    "solar": {
-        "value": 0.05,
-    },
-    "thermal-ir": {
-        "value": 0.05,
-    },
+    "solar": 0.05,
+    "thermal-ir": 0.05,
 }
 
 ###############################################################################
@@ -528,9 +520,7 @@ sc_rad_bc.thermal.shell_conduction = [
     },
 ]
 sc_rad_bc.radiation.band_in_emiss = {
-    "solar": {
-        "value": 0.17,
-    },
+    "solar": 0.17,
 }
 
 ###############################################################################
@@ -683,15 +673,18 @@ for i in range(n_steps):
 
     # Calculate radiator mean temperature
     rad_mean_temp = get_surf_mean_temp(
-        ["sc-radiator-1:external"],
+        ["sc-radiator"],
         solver,
     )
 
     # Simulate closing louvers below 273 K by changing emissivity
+    rad_emiss = solver.setup.boundary_conditions.wall[
+        "sc-radiator"
+    ].radiation.band_in_emiss["thermal-ir"]
     if rad_mean_temp < 273:
-        sc_rad_bc.radiation.band_in_emiss["thermal-ir"].value = 0.09
+        rad_emiss.value = 0.09
     else:
-        sc_rad_bc.radiation.band_in_emiss["thermal-ir"].value = 0.70
+        rad_emiss.value = 0.70
 
     # Run simulation for 1 timestep
     solver.solution.run_calculation.calculate()
