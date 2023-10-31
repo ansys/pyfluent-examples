@@ -48,7 +48,6 @@ measurements conducted by the Apollo 17 mission to the Moon [3_].
 
 ###############################################################################
 # .. image:: ../../_static/lunar_lander_thermal_setup.png
-#   :width: 500pt
 #   :align: center
 
 ###############################################################################
@@ -807,8 +806,24 @@ ax2.legend(["Minimum", "Mean", "Maximum", "Setpoint"])
 ###############################################################################
 # Show plots
 # ~~~~~~~~~~
+# Display the plots.
 
 plt.show()
+
+###############################################################################
+# The expected plot for the mean temperature of the regolith layers (Figure 1)
+# is as follows. This represents the regolith temperatures that would be
+# observed without a spacecraft in the environment.
+#
+# .. image:: ../../_static/lunar_lander_regolith_temps.png
+#   :align: center
+#
+# The expected plot for the spacecraft's minimum, mean, and maximum
+# temperatures (Figure 2) is as follows.
+#
+# .. image:: ../../_static/lunar_lander_sc_temps.png
+#   :align: center
+
 
 ###############################################################################
 # References
