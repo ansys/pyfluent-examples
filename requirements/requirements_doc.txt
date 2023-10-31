@@ -9,7 +9,7 @@ plotly==5.17.0
 openpyxl==3.1.2
 sphinx==7.2.5
 jupyter_sphinx==0.4.0
-numpydoc==1.5.0
+numpydoc==1.6.0
 matplotlib==3.6.3
 ansys-sphinx-theme==0.12.1
 pypandoc==1.10
