@@ -38,31 +38,10 @@ which open above 273 K to reject heat and close below 273 K to retain heat.
 The PyFluent API is used to automatically update the radiator state and the
 direction of the Sun at each timestep.
 
-The case setup is taken from the following paper, originally implemented in
-Ansys Thermal Desktop:
-
-    T.-Y. Park, J.-J. Lee, J.-H. Kim, and H.-U. Oh, “Preliminary Thermal Design
-    and Analysis of Lunar Lander for Night Survival,” *International Journal of
-    Aerospace Engineering*, vol. 2018, p. e4236396, Oct. 2018, doi:
-    doi.org/10.1155/2018/4236396.
-
-The paper uses a thermal model of the lunar regolith developed in the following
-paper:
-
-    R. J. Christie, D. W. Plachta, and M. M. Yasan, “Transient Thermal Model
-    and Analysis of the Lunar Surface and Regolith for Cryogenic Fluid
-    Storage,” NASA Glenn Research Center, Cleveland, Ohio, NASA Technical
-    Report TM-2008-215300, Aug. 2008. [Online]. Available:
-    https://ntrs.nasa.gov/citations/20080039640
-
-Validation data for the regolith temperatures are taken from measurements
-conducted by the Apollo 17 mission to the Moon:
-
-    M. G. Langseth, S. J. Keihm, and J. L. Chute, “Heat Flow Experiment,” in
-    *Apollo 17: Preliminary Science Report*, vol. SP-330, Washington, D.C.:
-    NASA Lyndon B. Johnson Space Center, 1973. [Online]. Available:
-    https://ui.adsabs.harvard.edu/abs/1973NASSP.330....../abstract
-
+The case setup is taken from reference [1_], originally created in ANSYS
+Thermal Desktop. It uses a thermal model of the lunar regolith developed in
+reference [2_]. Validation data for the regolith temperatures are taken from
+measurements conducted by the Apollo 17 mission to the Moon [3_].
 """
 
 # sphinx_gallery_thumbnail_path = '_static/lunar_lander_thermal_thumbnail.png'
@@ -309,12 +288,7 @@ models.viscous.model = "laminar"
 # more may be required for accurate results.
 #
 # The limits of each band are based on Fluent manual recommendations and on
-# space industry best practices documented in:
-#
-#   L. Kauder, “Spacecraft Thermal Control Coatings References,” Goddard Space
-#   Flight Center, Greenbelt, MD 20771, NASA Technical Report
-#   NASA/TP-2005-212792, Dec. 2005. [Online]. Available:
-#   https://ntrs.nasa.gov/citations/20070014757
+# space industry best practices [4_].
 
 
 # Set up radiation model
@@ -835,3 +809,36 @@ ax2.legend(["Minimum", "Mean", "Maximum", "Setpoint"])
 # ~~~~~~~~~~
 
 plt.show()
+
+###############################################################################
+# References
+# ------------
+#
+# .. _1:
+#
+# [1] T.-Y. Park, J.-J. Lee, J.-H. Kim, and H.-U. Oh, “Preliminary Thermal
+# Design and Analysis of Lunar Lander for Night Survival,” *International
+# Journal of Aerospace Engineering*, vol. 2018, p. e4236396, Oct. 2018, doi:
+# `doi.org/10.1155/2018/4236396 <https://doi.org/10.1155/2018/4236396>`_.
+#
+# .. _2:
+#
+# [2] R. J. Christie, D. W. Plachta, and M. M. Yasan, “Transient Thermal Model
+# and Analysis of the Lunar Surface and Regolith for Cryogenic Fluid Storage,”
+# NASA Glenn Research Center, Cleveland, Ohio, NASA Technical Report
+# TM-2008-215300, Aug. 2008. [Online]. Available:
+# https://ntrs.nasa.gov/citations/20080039640
+#
+# .. _3:
+#
+# [3] M. G. Langseth, S. J. Keihm, and J. L. Chute, “Heat Flow Experiment,” in
+# *Apollo 17: Preliminary Science Report*, vol. SP-330, Washington, D.C.: NASA
+# Lyndon B. Johnson Space Center, 1973. [Online]. Available:
+# https://ui.adsabs.harvard.edu/abs/1973NASSP.330....../abstract
+#
+# .. _4:
+#
+# [4] L. Kauder, “Spacecraft Thermal Control Coatings References,” Goddard
+# Space Flight Center, Greenbelt, MD 20771, NASA Technical Report
+# NASA/TP-2005-212792, Dec. 2005. [Online]. Available:
+# https://ntrs.nasa.gov/citations/20070014757
