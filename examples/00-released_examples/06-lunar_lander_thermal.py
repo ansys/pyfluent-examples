@@ -120,9 +120,9 @@ n_steps = 60
 #
 # For more information, see the following links:
 #
-# * `Ecliptic longitude <https://en.wikipedia.org/wiki/Ecliptic_coordinate_system#Spherical_coordinates>`_      # noqa: E501
-# * `Subsolar longitude <https://en.wikipedia.org/wiki/Subsolar_point>`_
-# * `Altitude and azimuth <https://en.wikipedia.org/wiki/Horizontal_coordinate_system#Definition>`_             # noqa: E501
+# * `Ecliptic longitude <https://w.wiki/7zFR>`_
+# * `Subsolar longitude <https://w.wiki/7zFS>`_
+# * `Altitude and azimuth <https://w.wiki/7zFU>`_
 
 
 def calc_sun_vecs_for_moon(
