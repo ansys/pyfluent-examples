@@ -328,7 +328,7 @@ vacuum.thermal_conductivity.value = 0
 vacuum.absorption_coefficient.value = 0
 vacuum.refractive_index.value = 1
 
-# --- Properties of fluff (Christie et al., 2008) ---
+# --- Properties of fluff (see ref. [2]) ---
 # Density: 1000 [kg m^-3]
 # Specific heat capacity: 1050 [J kg^-1 K^-1]
 # Thermal conductivity: 9.22e-4*(1 + 1.48*(temperature/350 K)^3) [W m^-1 K^-1]
@@ -342,7 +342,7 @@ fluff.thermal_conductivity.expression = (
     "9.22e-4[W m^-1 K^-1]*(1 + 1.48*(StaticTemperature/350[K])^3)"
 )
 
-# --- Properties of regolith (Christie et al., 2008) ---
+# --- Properties of regolith (see ref. [2]) ---
 # Density: 2000 [kg m^-3]
 # Specific heat capacity: 1050 [J kg^-1 K^-1]
 # Thermal conductivity: 9.30e-4*(1 + 0.73*(temperature/350 K)^3) [W m^-1 K^-1]
@@ -374,7 +374,7 @@ cellzones.solid["geom-2_domain"].material = "vacuum"
 ###############################################################################
 # Regolith boundary condition
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# We will implement the regolith model in Christie *et al.* (2008) by modelling
+# We will implement the regolith model in reference [2_] by modelling
 # it as a wall exhibiting multilayer shell conduction. A basal heat flux is
 # used to represent the geothermal heat from the Moon's interior that heats
 # the regolith from the bottom.
@@ -731,10 +731,9 @@ clean_col_names(sc_df)
 ###############################################################################
 # Read in experimental data
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
-# Read in the experimental data from Apollo 17 (see Langseth *et al.*, 1973)
-# to compare against the simulation. We will offset the data to start at time
-# step 25 of the simulation, to ensure that the data are compared at the same
-# sun angles.
+# Read in the experimental data from Apollo 17 [3_] to compare against the
+# simulation. We will offset the data to start at time step 25 of the
+# simulation, to ensure that the data are compared at the same sun angles.
 
 apollo17_df = pd.read_csv(apollo17_temp_data)
 
