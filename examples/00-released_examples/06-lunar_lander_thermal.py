@@ -201,8 +201,7 @@ def get_surf_mean_temp(
     surf_ids_ = [surfs[surf_name]["surface_id"] for surf_name in surf_names]
 
     # Flatten surf_ids nested list
-    surf_ids = []
-    _ = [surf_ids.extend(sublist) for sublist in surf_ids_]
+    surf_ids = list(chain(*surf_ids_))
 
     # Get temperature data
     temp_data = solver.field_data.get_scalar_field_data(
