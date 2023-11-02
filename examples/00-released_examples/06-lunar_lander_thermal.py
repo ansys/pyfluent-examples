@@ -61,6 +61,8 @@ measurements conducted by the Apollo 17 mission to the Moon [3_].
 # Perform required imports, including downloading the required geometry files.
 # The mesh has been pre-made for this problem.
 
+from itertools import chain
+
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import numpy as np
