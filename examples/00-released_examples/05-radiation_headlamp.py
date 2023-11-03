@@ -353,7 +353,7 @@ solver.setup.cell_zone_conditions.copy(
 
 lens_cellzone_conds = solver.setup.cell_zone_conditions.solid["lens"]
 lens_cellzone_conds.material = "glass"
-lens_cellzone_conds.radiating = True
+lens_cellzone_conds.participates_in_radiation = True
 
 ###############################################################################
 # Boundary Conditions
@@ -367,13 +367,18 @@ lens_cellzone_conds.radiating = True
 # Diffuse fraction: 1
 
 bezel_enc_bc = solver.setup.boundary_conditions.wall["bezel-enclosure"]
-bezel_enc_bc.material = "plastic"
-bezel_enc_bc.radiation_bc = "Opaque"
-bezel_enc_bc.in_emiss = 1
-bezel_enc_bc.band_diffuse_frac = {"s-": 1}
+bezel_enc_bc.thermal.material = "plastic"
+bezel_enc_bc.radiation.radiation_bc = "Opaque"
+bezel_enc_bc.thermal.internal_emissivity = 1
+bezel_enc_bc.radiation.band_diffuse_frac = {" ": 1}
 
 # Get list of wall zones
 bc_state = solver.setup.boundary_conditions.get_state()
+
+# Remove disallowed entries
+del bc_state["wall"]["enclosure:1"]
+del bc_state["wall"]["rad-input"]
+del bc_state["wall"]["bezel-enclosure"]
 
 # Copy bezel-enclosure BC to all other BCs
 solver.setup.boundary_conditions.copy(
@@ -387,9 +392,9 @@ solver.setup.boundary_conditions.copy(
 # Diffuse fraction: 0
 
 enc_lens_bc = solver.setup.boundary_conditions.wall["enclosure-lens"]
-enc_lens_bc.material = "glass"
-enc_lens_bc.radiation_bc = "Semi Transparent"
-enc_lens_bc.band_diffuse_frac = {"s-": 0}
+enc_lens_bc.thermal.material = "glass"
+enc_lens_bc.radiation.radiation_bc = "Semi Transparent"
+enc_lens_bc.radiation.band_diffuse_frac = {" ": 0}
 
 # Copy enclosure-lens BC to other lens boundary
 solver.setup.boundary_conditions.copy(
@@ -404,10 +409,10 @@ solver.setup.boundary_conditions.copy(
 # Diffuse fraction: 0.1
 
 enc_rim_bezel_bc = solver.setup.boundary_conditions.wall["enclosure-rim-bezel"]
-enc_rim_bezel_bc.material = "plastic"
-enc_rim_bezel_bc.radiation_bc = "Opaque"
-enc_rim_bezel_bc.in_emiss = 0.16
-enc_rim_bezel_bc.band_diffuse_frac = {"s-": 0.1}
+enc_rim_bezel_bc.thermal.material = "plastic"
+enc_rim_bezel_bc.radiation.radiation_bc = "Opaque"
+enc_rim_bezel_bc.thermal.internal_emissivity = 0.16
+enc_rim_bezel_bc.radiation.band_diffuse_frac = {" ": 0.1}
 
 # Copy enclosure-rim-bezel BC to other rim bezel boundaries
 solver.setup.boundary_conditions.copy(
@@ -426,8 +431,8 @@ solver.setup.boundary_conditions.copy(
 # Temperature: 298.15 [K]
 
 enc1_bc = solver.setup.boundary_conditions.wall["enclosure:1"]
-enc1_bc.thermal_bc = "Temperature"
-enc1_bc.t = 298.15
+enc1_bc.thermal.thermal_bc = "Temperature"
+enc1_bc.thermal.t = 298.15
 
 # --- Set up radiation input BC ---
 # BC type: temperature
@@ -437,24 +442,26 @@ enc1_bc.t = 298.15
 # Radiation direction: (-0.848, 0, -0.53)
 
 rad_inp_bc = solver.setup.boundary_conditions.wall["rad-input"]
-rad_inp_bc.thermal_bc = "Temperature"
-rad_inp_bc.t = 298.15
-rad_inp_bc.mc_bsource_p = True
-rad_inp_bc.band_q_irrad = {
-    "s-": {
+rad_inp_bc.thermal.thermal_bc = "Temperature"
+rad_inp_bc.thermal.t = 298.15
+rad_inp_bc.radiation.mc_bsource_p = True
+rad_inp_bc.radiation.band_q_irrad = {
+    " ": {
         "option": "value",
         "value": 1200,
     }
 }
-rad_inp_bc.radiation_direction = [-0.848, 0, -0.53]
+rad_inp_bc.radiation.radiation_direction = [-0.848, 0, -0.53]
 
 ###############################################################################
 # Set convergence criteria
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # Enable residual plots and set the convergence criteria to 'none'.
 
-solver.tui.solve.monitors.residual.plot("yes")
-solver.tui.solve.monitors.residual.criterion_type("3")
+residual_opts = solver.solution.monitor.residual.options
+
+residual_opts.plot = True
+residual_opts.criterion_type = "none"
 
 ###############################################################################
 # Define surface reports
@@ -495,12 +502,12 @@ solver.file.write(file_name="headlamp.cas.h5", file_type="case")
 solver.solution.initialization.initialize()
 
 ###############################################################################
-# Solve for 19 iterations
+# Solve for 39 iterations
 # ~~~~~~~~~~~~~~~~~~~~~~~
-# Solve for 19 iterations. 99 iterations is recommended by the tutorial, but is
-# reduced to 19 for this example for demonstration purposes.
+# Solve for 39 iterations. 99 iterations is recommended by the tutorial, but is
+# reduced to 39 for this example for demonstration purposes.
 
-solver.solution.run_calculation.iterate(iter_count=19)
+solver.solution.run_calculation.iterate(iter_count=39)
 
 ###############################################################################
 # Write final case file and data
@@ -508,7 +515,7 @@ solver.solution.run_calculation.iterate(iter_count=19)
 # Enable overwrite so that the original case file will be overwritten. Write
 # the final case file and the data.
 
-solver.file.confirm_overwrite = True
+solver.file.batch_options.confirm_overwrite = True
 solver.file.write(file_name="headlamp.cas.h5", file_type="case-data")
 
 ###############################################################################
