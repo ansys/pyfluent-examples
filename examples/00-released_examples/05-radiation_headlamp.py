@@ -160,8 +160,8 @@ meshing.workflow.TaskObject["Improve Surface Mesh"].Execute()
 describe_geo = meshing.workflow.TaskObject["Describe Geometry"]
 describe_geo.Arguments.set_state(
     {
-        "SetupType": "The geometry consists of both fluid and solid regions \
-            and/or voids",
+        "SetupType": "The geometry consists of both fluid and solid regions " +
+            "and/or voids",
         "CappingRequired": "No",
         "WallToInternal": "No",
         "InvokeShareTopology": "No",
