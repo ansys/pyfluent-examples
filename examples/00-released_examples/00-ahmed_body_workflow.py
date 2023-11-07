@@ -62,7 +62,7 @@ set_config(blocking=True, set_view_on_display="isometric")
 # Launch Fluent session with meshing mode
 # =====================================================================================
 session = pyfluent.launch_fluent(mode="meshing", cleanup_on_exit=True)
-session.check_health()
+session.health_check_service.status()
 
 #######################################################################################
 # Meshing Workflow
@@ -234,74 +234,83 @@ inlet_area = 0.11203202
 #######################################################################################
 # Define Materials
 # =====================================================================================
-session.tui.define.materials.change_create("air", "air", "yes", "constant", density)
-session.tui.define.models.viscous.ke_realizable("yes")
-session.tui.define.models.viscous.curvature_correction("yes")
+session.setup.materials.fluid['air'].density.value = density
+
+viscous = session.setup.models.viscous
+viscous.model = 'k-epsilon'
+viscous.k_epsilon_model = 'realizable'
+viscous.options.curvature_correction = True
 
 #######################################################################################
 # Define Boundary Conditions
 # =====================================================================================
 inlet = session.setup.boundary_conditions.velocity_inlet["inlet"]
-inlet.turb_intensity = 0.05
-inlet.vmag = inlet_velocity
-inlet.turb_viscosity_ratio = 5
+inlet.turbulence.turbulent_intensity = 0.05
+inlet.momentum.velocity.value = inlet_velocity
+inlet.turbulence.turbulent_viscosity_ratio_real = 5
 
 outlet = session.setup.boundary_conditions.pressure_outlet["outlet"]
-outlet.turb_intensity = 0.05
+outlet.turbulence.turbulent_intensity = 0.05
 
 #######################################################################################
 # Define Reference Values
 # =====================================================================================
-session.tui.report.reference_values.area(inlet_area)
-session.tui.report.reference_values.density(density)
-session.tui.report.reference_values.velocity(inlet_velocity)
+reference_values = session.setup.reference_values
+session.setup.reference_values.area = inlet_area
+session.setup.reference_values.density = density
+session.setup.reference_values.velocity = inlet_velocity
 
 #######################################################################################
 # Define Solver Settings
 # =====================================================================================
-session.tui.solve.set.p_v_coupling(24)
+session.solution.methods.p_v_coupling.flow_scheme = 'Coupled'
 
-session.tui.solve.set.discretization_scheme("pressure", 12)
-session.tui.solve.set.discretization_scheme("k", 1)
-session.tui.solve.set.discretization_scheme("epsilon", 1)
-session.tui.solve.initialize.set_defaults("k", 0.000001)
+discretization_scheme = session.solution.methods.discretization_scheme
+discretization_scheme['pressure'] = 'second-order'
+discretization_scheme['k'] = 'second-order-upwind'
+discretization_scheme['epsilon'] = 'second-order-upwind'
 
-session.tui.solve.monitors.residual.convergence_criteria(
-    0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001
-)
+session.solution.initialization.defaults['k'] = 1e-6
+
+for criterion in ['continuity', 'x-velocity', 'y-velocity', 'z-velocity', 'k', 'epsilon']:
+    session.solution.monitor.residual.equations[criterion].absolute_criteria = 0.0001
 
 #######################################################################################
 # Define Report Definitions
 # =====================================================================================
 
-session.tui.solve.report_definitions.add(
-    "cd-mon1",
-    "drag",
-    "thread-names",
-    "*ahmed*",
-    "()",
-    "scaled?",
-    "yes",
-    "force-vector",
-    "0 0 1",
-    "q",
-)
-session.tui.define.parameters.output_parameters.create("report-definition", "cd-mon1")
-session.tui.solve.report_plots.add("cd-mon1", "report-defs", "cd-mon1", "()", "q")
+session.solution.report_definitions.drag['cd-mon1'] = {
+    'zones': '*ahmed*',
+    'scaled': True,
+    'force_vector': [0, 0, 1],
+}
+session.parameters.output_parameters.report_definitions['cd-mon1-op'] = {
+    'report_definition': 'cd-mon1',
+}
+session.solution.monitor.report_plots['cd-mon1'] = {
+    'report_defs': ['cd-mon1'],
+}
 
 #######################################################################################
 # Initialize and Run Solver
 # =====================================================================================
 
-session.tui.solve.set.number_of_iterations(5)
-session.tui.solve.initialize.initialize_flow()
-session.tui.solve.iterate()
+initialization = session.solution.initialization
+initialization.initialization_type = 'standard'
+initialization.standard_initialize()
+
+session.solution.run_calculation.iterate(iter_count=5)
 
 #######################################################################################
 # Post-Processing Workflow
 # =====================================================================================
-session.tui.surface.iso_surface("x-coordinate", "xmid", "()", "()", 0, "()")
+session.results.surfaces.iso_surface['xmid'] = {
+    'field': 'x-coordinate',
+    'iso_values': [0.],
+}
+
 graphics_session1 = pv.Graphics(session)
+
 contour1 = graphics_session1.Contours["contour-1"]
 contour1.field = "velocity-magnitude"
 contour1.surfaces_list = ["xmid"]
@@ -338,7 +347,7 @@ contour2.display("window-2")
 # =====================================================================================
 
 save_case_data_as = Path(save_path) / "ahmed_body_final.cas.h5"
-session.tui.file.write_case_data(save_case_data_as)
+session.file.write_case_data(file_name=save_case_data_as)
 
 #######################################################################################
 # Close the session
