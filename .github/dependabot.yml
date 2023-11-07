@@ -6,8 +6,8 @@ updates:
     schedule:
       interval: "monthly"
     labels:
-      - "Maintenance"
-      - "Dependencies"
+      - "maintenance"
+      - "dependencies"
     groups:
       dependencies:
         patterns:
@@ -21,7 +21,7 @@ updates:
     schedule:
       interval: "monthly"
     labels:
-      - "Maintenance"
+      - "maintenance"
     groups:
       actions:
         patterns:
