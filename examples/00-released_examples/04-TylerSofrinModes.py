@@ -84,7 +84,6 @@ Tyler-Sofrin Compressor Modes Post-Processing
 #######################################################################################
 # Import required libraries/modules
 # =====================================================================================
-import math
 from pathlib import Path
 import random
 
@@ -110,7 +109,7 @@ save_path = Path(pyfluent.EXAMPLES_PATH)
 import_filename = examples.download_file(
     "axial_comp_fullWheel_DFT_23R2.cas.h5",
     "pyfluent/examples/Tyler-Sofrin-Modes-Compressor",
-)  # noqa: E501
+)
 
 examples.download_file(
     "axial_comp_fullWheel_DFT_23R2.dat.h5",
@@ -122,7 +121,8 @@ examples.download_file(
 # Launch Fluent session
 # =====================================================================================
 session = pyfluent.launch_fluent(
-    show_gui=True, processor_count=4, product_version="23.2.0"
+    show_gui=True,
+    processor_count=4,
 )
 
 #######################################################################################
@@ -132,7 +132,7 @@ session = pyfluent.launch_fluent(
 # .. note::
 #   The dat file should correspond to the already completed DFT simulation.
 
-session.tui.file.read_case_data(import_filename)
+session.file.read_case_data(file_name=import_filename)
 
 #######################################################################################
 # Define User constant/variables
@@ -164,9 +164,11 @@ m_inc = 2  # TS mode increment
 # Create monitor points
 # =====================================================================================
 for angle in range(0, 360, d_theta):
-    x = math.cos(math.radians(angle)) * r
-    y = math.sin(math.radians(angle)) * r
-    session.tui.surface.point_surface("point-" + str(angle), x, y, z)
+    x = np.cos(np.deg2rad(angle)) * r
+    y = np.sin(np.deg2rad(angle)) * r
+    session.results.surfaces.point_surface["point-" + str(angle)] = {
+        "point": [x, y, z],
+    }
 
 #######################################################################################
 # Compute Fourier coefficients at each monitor point (An, Bn)
@@ -177,38 +179,34 @@ Bn = np.zeros((len(varname), int(360 / d_theta)))
 for angle_ind, angle in enumerate(range(0, 360, d_theta)):
     for n_ind, variable in enumerate(varname):
         if len(variable) >= 4 and variable[:4] == "mean":
-            session.solution.report_definitions.surface["mag-report"] = {
+            report_defs = session.solution.report_definitions
+
+            report_defs.surface["mag-report"] = {
                 "report_type": "surface-vertexavg",
                 "surface_names": ["point-" + str(angle)],
                 "field": str(variable),
             }
-            mag = session.solution.report_definitions.compute(
-                report_defs=["mag-report"]
-            )
+            mag = report_defs.compute(report_defs=["mag-report"])
             mag = mag[0]["mag-report"][0]
             An[n_ind][angle_ind] = mag
             Bn[n_ind][angle_ind] = 0
         else:
-            session.solution.report_definitions.surface["mag-report"] = {
+            report_defs.surface["mag-report"] = {
                 "report_type": "surface-vertexavg",
                 "surface_names": ["point-" + str(angle)],
                 "field": str(variable) + "-mag",
             }
-            mag = session.solution.report_definitions.compute(
-                report_defs=["mag-report"]
-            )
+            mag = report_defs.compute(report_defs=["mag-report"])
             mag = mag[0]["mag-report"][0]
-            session.solution.report_definitions.surface["phase-report"] = {
+            report_defs.surface["phase-report"] = {
                 "report_type": "surface-vertexavg",
                 "surface_names": ["point-" + str(angle)],
                 "field": str(variable) + "-phase",
             }
-            phase = session.solution.report_definitions.compute(
-                report_defs=["phase-report"]
-            )
+            phase = report_defs.compute(report_defs=["phase-report"])
             phase = phase[0]["phase-report"][0]
-            An[n_ind][angle_ind] = mag * math.cos(phase)
-            Bn[n_ind][angle_ind] = -mag * math.sin(phase)
+            An[n_ind][angle_ind] = mag * np.cos(phase)
+            Bn[n_ind][angle_ind] = -mag * np.sin(phase)
 
 
 #######################################################################################
@@ -219,7 +217,7 @@ for angle_ind, angle in enumerate(range(0, 360, d_theta)):
 #   This step is only required if data is to be processed with other standalone
 #   tools. Update the path to the file accordingly.
 
-fourier_coefficients_file = Path(save_path, "FourierCoefficients.txt")
+fourier_coefficients_file = save_path / "FourierCoefficients.txt"
 with open(fourier_coefficients_file, "w") as f:
     f.write("n theta An Bn \n")
 
@@ -256,17 +254,17 @@ Pnm = np.zeros((len(varname), len(m_mode)))
 for n_ind, variable in enumerate(varname):  # loop over n modes
     for m_ind, m in enumerate(m_mode):  # loop over m modes
         for angle_ind, angle in enumerate(
-            np.arange(0, math.radians(360), math.radians(d_theta))
+            np.arange(0, np.deg2rad(360), np.deg2rad(d_theta))
         ):  # loop over all angles, in radians
-            Anm[n_ind][m_ind] += An[n_ind][angle_ind] * math.cos(m * angle) - Bn[n_ind][
+            Anm[n_ind][m_ind] += An[n_ind][angle_ind] * np.cos(m * angle) - Bn[n_ind][
                 angle_ind
-            ] * math.sin(m * angle)
-            Bnm[n_ind][m_ind] += An[n_ind][angle_ind] * math.sin(m * angle) + Bn[n_ind][
+            ] * np.sin(m * angle)
+            Bnm[n_ind][m_ind] += An[n_ind][angle_ind] * np.sin(m * angle) + Bn[n_ind][
                 angle_ind
-            ] * math.cos(m * angle)
-        Anm[n_ind][m_ind] = Anm[n_ind][m_ind] / (2 * math.pi) * math.radians(d_theta)
-        Bnm[n_ind][m_ind] = Bnm[n_ind][m_ind] / (2 * math.pi) * math.radians(d_theta)
-        Pnm[n_ind][m_ind] = math.sqrt(Anm[n_ind][m_ind] ** 2 + Bnm[n_ind][m_ind] ** 2)
+            ] * np.cos(m * angle)
+        Anm[n_ind][m_ind] = Anm[n_ind][m_ind] / (2 * np.pi) * np.deg2rad(d_theta)
+        Bnm[n_ind][m_ind] = Bnm[n_ind][m_ind] / (2 * np.pi) * np.deg2rad(d_theta)
+        Pnm[n_ind][m_ind] = np.sqrt(Anm[n_ind][m_ind] ** 2 + Bnm[n_ind][m_ind] ** 2)
 
 # P_00 is generally orders of magnitude larger than that of other modes.
 # Giving focus to other modes by setting P_00 equal to zero
