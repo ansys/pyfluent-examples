@@ -24,16 +24,18 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+import ansys.fluent.visualization.pyvista as pv
+import matplotlib.pyplot as plt
 
 ###############################################################################
 # PyVista
 # --------------------
-import ansys.fluent.visualization.pyvista as pv
+
 
 ##############################################################################
 # Matplotlib
 # --------------------
-import matplotlib.pyplot as plt
+
 
 ###############################################################################
 # Specifying save path
@@ -41,6 +43,7 @@ import matplotlib.pyplot as plt
 # save_path can be specified as Path("E:/", "pyfluent-examples-tests") or
 # Path("E:/pyfluent-examples-tests") in a Windows machine for example,  or
 # Path("~/pyfluent-examples-tests") in Linux.
+
 save_path = Path(pyfluent.EXAMPLES_PATH)
 
 import_filename = examples.download_file(
@@ -58,62 +61,52 @@ import_filename = examples.download_file(
 # --------------------------------------
 
 session = pyfluent.launch_fluent(
-    mode="solver", show_gui=False, version="3ddp", precision="double", processor_count=2
+    mode="solver", show_gui=False, precision="double", processor_count=2
 )
-session.check_health()
+session.health_check_service.status()
 
 ####################################################################################
 # Import mesh
 # ------------
 
-session.tui.file.read_case(import_filename)
+session.file.read_case(file_name=import_filename)
 
 ############################
 # Define models and material
 # --------------------------
-session.tui.define.models.energy("yes", "no", "no", "no", "yes")
-session.tui.define.models.unsteady_2nd_order_bounded("Yes")
-session.tui.define.materials.copy("solid", "steel")
+
+energy = session.setup.models.energy
+energy.enabled = True
+energy.viscous_dissipation = False
+energy.pressure_work = False
+energy.kinetic_energy = False
+energy.inlet_diffusion = True
+
+session.setup.general.solver.time = "unsteady-2nd-order-bounded"
+
+session.setup.materials.database.copy_by_name(type="solid", name="steel")
 
 #########################################
 # Solve only energy equation (conduction)
 # ---------------------------------------
-session.tui.solve.set.equations("flow", "no", "kw", "no")
+
+equations = session.solution.controls.equations
+equations["flow"] = False
+equations["kw"] = False
 
 ############################################
 # Define disc rotation
 # --------------------
 # (15.79 rps corresponds to 100 km/h car speed
 # with 0.28 m of axis height from ground)
-session.tui.define.boundary_conditions.set.solid(
-    "disc1",
-    "disc2",
-    "()",
-    "solid-motion?",
-    "yes",
-    "solid-omega",
-    "no",
-    -15.79,
-    "solid-x-origin",
-    "no",
-    -0.035,
-    "solid-y-origin",
-    "no",
-    -0.821,
-    "solid-z-origin",
-    "no",
-    0.045,
-    "solid-ai",
-    "no",
-    0,
-    "solid-aj",
-    "no",
-    1,
-    "solid-ak",
-    "no",
-    0,
-    "q",
-)
+
+session.setup.cell_zone_conditions.solid["disc1"].solid_motion = {
+    "solid_motion": True,
+    "solid_omega": -15.79,
+    "solid_motion_axis_origin": [-0.035, -0.821, 0.045],
+    "solid_motion_axis_direction": [0, 1, 0],
+}
+session.setup.cell_zone_conditions.copy(from_="disc1", to="disc2")
 
 ###################################################
 # Apply frictional heating on pad-disc surfaces
@@ -121,17 +114,16 @@ session.tui.define.boundary_conditions.set.solid(
 # Wall thickness 0f 2 mm has been assumed and 2e9 w/m3 is the heat generation which
 # has been calculated from kinetic energy change due to braking.
 
-session.tui.define.boundary_conditions.set.wall(
-    "wall_pad-disc1",
-    "wall-pad-disc2",
-    "()",
-    "wall-thickness",
-    0.002,
-    "q-dot",
-    "no",
-    2e9,
-    "q",
-)
+boundary_conditions = session.setup.boundary_conditions
+boundary_conditions.wall["wall_pad-disc1"].thermal = {
+    "wall_thickness": {
+        "value": 0.002,
+    },
+    "q_dot": {
+        "value": 2e9,
+    },
+}
+boundary_conditions.copy(from_="wall_pad-disc1", to="wall-pad-disc2")
 
 ############################################################
 # Apply convection cooling on outer surfaces due to air flow
@@ -139,25 +131,22 @@ session.tui.define.boundary_conditions.set.wall(
 # Outer surfaces are applied a constant htc of 100 W/(m2 K)
 # and 300 K free stream temperature
 
-session.tui.define.boundary_conditions.set.wall(
-    "wall-disc*",
-    "wall-geom*",
-    "()",
-    "thermal-bc",
-    "yes",
-    "convection",
-    "convective-heat-transfer-coefficient",
-    "no",
-    100,
-    "q",
-)
+wall_disc_thermal_bcs = boundary_conditions.wall["wall-disc*"].thermal
+wall_disc_thermal_bcs.thermal_bc = "Convection"
+wall_disc_thermal_bcs.h.value = 100
+wall_disc_thermal_bcs.tinf.value = 300
+
+wall_geom_thermal_bcs = boundary_conditions.wall["wall-geom*"].thermal
+wall_geom_thermal_bcs.thermal_bc = "Convection"
+wall_geom_thermal_bcs.h.value = 100
+wall_geom_thermal_bcs.tinf.value = 300
 
 ###############################################
 # Initialize
 # ----------
 # Initialize with 300 K temperature
 
-session.tui.solve.initialize.initialize_flow()
+session.solution.initialization.standard_initialize()
 
 ###############################################
 # Post processing setup
@@ -167,43 +156,27 @@ session.tui.solve.initialize.initialize_flow()
 # * Set views and camera
 # * Set animation object
 
-session.tui.solve.report_definitions.add(
-    "max-pad-temperature",
-    "volume-max",
-    "field",
-    "temperature",
-    "zone-names",
-    "geom-1-innerpad",
-    "geom-1-outerpad",
-)
-session.tui.solve.report_definitions.add(
-    "max-disc-temperature",
-    "volume-max",
-    "field",
-    "temperature",
-    "zone-names",
-    "disc1",
-    "disc2",
-)
+volume_reports = session.solution.report_definitions.volume
+volume_reports["max-pad-temperature"] = {
+    "report_type": "volume-max",
+    "cell_zones": ["geom-1-innerpad", "geom-1-outerpad"],
+    "field": "temperature",
+}
+volume_reports["max-disc-temperature"] = {
+    "report_type": "volume-max",
+    "cell_zones": ["disc1", "disc2"],
+    "field": "temperature",
+}
 
-session.tui.solve.report_plots.add(
-    "max-temperature",
-    "report-defs",
-    "max-pad-temperature",
-    "max-disc-temperature",
-    "()",
-)
+session.solution.monitor.report_plots["max-temperature"] = {
+    "report_defs": ["max-pad-temperature", "max-disc-temperature"],
+}
 
 report_file_path = Path(save_path) / "max-temperature.out"
-session.tui.solve.report_files.add(
-    "max-temperature",
-    "report-defs",
-    "max-pad-temperature",
-    "max-disc-temperature",
-    "()",
-    "file-name",
-    str(report_file_path),
-)
+session.solution.monitor.report_files["max-temperature"] = {
+    "report_defs": ["max-pad-temperature", "max-disc-temperature", "flow-time"],
+    "file_name": str(report_file_path),
+}
 
 
 session.results.graphics.contour["contour-1"] = {
@@ -235,45 +208,32 @@ session.results.graphics.contour["contour-1"] = {
 }
 
 
-session.tui.display.objects.create(
-    "contour",
-    "temperature",
-    "field",
-    "temperature",
-    "surface-list",
-    "wall*",
-    "()",
-    "color-map",
-    "format",
-    "%0.1f",
-    "q",
-    "range-option",
-    "auto-range-off",
-    "minimum",
-    300,
-    "maximum",
-    400,
-    "q",
-    "q",
-)
+session.results.graphics.contour["temperature"] = {
+    "field": "temperature",
+    "surfaces_list": "wall*",
+    "color_map": {
+        "format": "%0.1f",
+    },
+    "range_option": {
+        "option": "auto-range-off",
+        "auto_range_off": {
+            "minimum": 300.0,
+            "maximum": 400.0,
+        },
+    },
+}
 
+views = session.results.graphics.views
+views.restore_view(view_name="top")
+views.camera.zoom(factor=2)
+views.save_view(view_name="animation-view")
 
-session.tui.display.views.restore_view("top")
-session.tui.display.views.camera.zoom_camera(2)
-session.tui.display.views.save_view("animation-view")
-
-session.tui.solve.animate.objects.create(
-    "animate-temperature",
-    "animate-on",
-    "temperature",
-    "frequency-of",
-    "flow-time",
-    "flow-time-frequency",
-    0.05,
-    "view",
-    "animation-view",
-    "q",
-)
+session.solution.calculation_activity.solution_animations["animate-temperature"] = {
+    "animate_on": "temperature",
+    "frequency_of": "flow-time",
+    "flow_time_frequency": 0.05,
+    "view": "animation-view",
+}
 
 ###############################################
 # Run simulation
@@ -282,15 +242,19 @@ session.tui.solve.animate.objects.create(
 # * Set time step size
 # * Set number of time steps and maximum number of iterations per time step
 
-session.tui.solve.set.transient_controls.time_step_size(0.01)
-session.tui.solve.dual_time_iterate(200, 5)
+run_calculation = session.solution.run_calculation
+run_calculation.transient_controls.time_step_size = 0.01
+run_calculation.dual_time_iterate(
+    time_step_count=200,
+    max_iter_per_step=5,
+)
 
 ###############################################
 # Save simulation data
 # --------------------
 # Write case and data files
 save_case_data_as = Path(save_path) / "brake-final.cas.h5"
-session.tui.file.write_case_data(save_case_data_as)
+session.file.write_case_data(file_name=save_case_data_as)
 
 ###############################################
 # Post processing with PyVista (3D visualization)
@@ -370,7 +334,6 @@ with open(report_file_path, "r") as datafile:
 ###############################################
 # Plot graph
 # ----------
-
 
 plt.title("Maximum Temperature", fontdict={"color": "darkred", "size": 20})
 plt.plot(X, Z, label="Max. Pad Temperature", color="red")
