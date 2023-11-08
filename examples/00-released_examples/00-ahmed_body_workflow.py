@@ -234,11 +234,11 @@ inlet_area = 0.11203202
 #######################################################################################
 # Define Materials
 # =====================================================================================
-session.setup.materials.fluid['air'].density.value = density
+session.setup.materials.fluid["air"].density.value = density
 
 viscous = session.setup.models.viscous
-viscous.model = 'k-epsilon'
-viscous.k_epsilon_model = 'realizable'
+viscous.model = "k-epsilon"
+viscous.k_epsilon_model = "realizable"
 viscous.options.curvature_correction = True
 
 #######################################################################################
@@ -263,32 +263,39 @@ session.setup.reference_values.velocity = inlet_velocity
 #######################################################################################
 # Define Solver Settings
 # =====================================================================================
-session.solution.methods.p_v_coupling.flow_scheme = 'Coupled'
+session.solution.methods.p_v_coupling.flow_scheme = "Coupled"
 
 discretization_scheme = session.solution.methods.discretization_scheme
-discretization_scheme['pressure'] = 'second-order'
-discretization_scheme['k'] = 'second-order-upwind'
-discretization_scheme['epsilon'] = 'second-order-upwind'
+discretization_scheme["pressure"] = "second-order"
+discretization_scheme["k"] = "second-order-upwind"
+discretization_scheme["epsilon"] = "second-order-upwind"
 
-session.solution.initialization.defaults['k'] = 1e-6
+session.solution.initialization.defaults["k"] = 1e-6
 
-for criterion in ['continuity', 'x-velocity', 'y-velocity', 'z-velocity', 'k', 'epsilon']:
+for criterion in [
+    "continuity",
+    "x-velocity",
+    "y-velocity",
+    "z-velocity",
+    "k",
+    "epsilon",
+]:
     session.solution.monitor.residual.equations[criterion].absolute_criteria = 0.0001
 
 #######################################################################################
 # Define Report Definitions
 # =====================================================================================
 
-session.solution.report_definitions.drag['cd-mon1'] = {
-    'zones': '*ahmed*',
-    'scaled': True,
-    'force_vector': [0, 0, 1],
+session.solution.report_definitions.drag["cd-mon1"] = {
+    "zones": "*ahmed*",
+    "scaled": True,
+    "force_vector": [0, 0, 1],
 }
-session.parameters.output_parameters.report_definitions['cd-mon1-op'] = {
-    'report_definition': 'cd-mon1',
+session.parameters.output_parameters.report_definitions["cd-mon1-op"] = {
+    "report_definition": "cd-mon1",
 }
-session.solution.monitor.report_plots['cd-mon1'] = {
-    'report_defs': ['cd-mon1'],
+session.solution.monitor.report_plots["cd-mon1"] = {
+    "report_defs": ["cd-mon1"],
 }
 
 #######################################################################################
@@ -296,7 +303,7 @@ session.solution.monitor.report_plots['cd-mon1'] = {
 # =====================================================================================
 
 initialization = session.solution.initialization
-initialization.initialization_type = 'standard'
+initialization.initialization_type = "standard"
 initialization.standard_initialize()
 
 session.solution.run_calculation.iterate(iter_count=5)
@@ -304,9 +311,9 @@ session.solution.run_calculation.iterate(iter_count=5)
 #######################################################################################
 # Post-Processing Workflow
 # =====================================================================================
-session.results.surfaces.iso_surface['xmid'] = {
-    'field': 'x-coordinate',
-    'iso_values': [0.],
+session.results.surfaces.iso_surface["xmid"] = {
+    "field": "x-coordinate",
+    "iso_values": [0.0],
 }
 
 graphics_session1 = pv.Graphics(session)
