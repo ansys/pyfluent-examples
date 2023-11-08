@@ -24,18 +24,16 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
-import ansys.fluent.visualization.pyvista as pv
-import matplotlib.pyplot as plt
 
 ###############################################################################
 # PyVista
 # --------------------
-
+import ansys.fluent.visualization.pyvista as pv
 
 ##############################################################################
 # Matplotlib
 # --------------------
-
+import matplotlib.pyplot as plt
 
 ###############################################################################
 # Specifying save path
