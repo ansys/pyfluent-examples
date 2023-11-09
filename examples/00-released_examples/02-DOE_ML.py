@@ -29,6 +29,7 @@ Design of Experiments and Machine Learning model building
 # =================================
 
 from pathlib import Path
+import re
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
@@ -65,12 +66,11 @@ import_filename = examples.download_file(
 # ======================================
 
 solver = pyfluent.launch_fluent(
-    product_version="23.1.0",
     mode="solver",
     show_gui=False,
-    version="3d",
     precision="double",
     processor_count=2,
+    cwd=save_path,
 )
 solver.health_check_service.check_health()
 
@@ -79,7 +79,7 @@ solver.health_check_service.check_health()
 # Read case
 # =========
 
-solver.tui.file.read_case(import_filename)
+solver.file.read_case(file_name=import_filename)
 
 ###############################################################################
 # Design of Experiments
@@ -90,31 +90,31 @@ solver.tui.file.read_case(import_filename)
 
 coldVelArr = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
 hotVelArr = np.array([0.8, 1, 1.2, 1.4, 1.6, 1.8, 2.0])
-resArr = np.zeros((coldVelArr.shape[0], hotVelArr.shape[0]))
+resIdx = np.zeros((coldVelArr.shape[0], hotVelArr.shape[0]), dtype=np.int64)
 
+# Create outlet temperature data file and erase contents
+open(save_path / "outlet_temp.txt", "w").close()
+
+resCount = 0
 for idx1, coldVel in np.ndenumerate(coldVelArr):
     for idx2, hotVel in np.ndenumerate(hotVelArr):
-        solver.setup.boundary_conditions.velocity_inlet["cold-inlet"].vmag = {
-            "option": "value",
-            "value": coldVel,
-        }
+        inlets = solver.setup.boundary_conditions.velocity_inlet
+        inlets["cold-inlet"].momentum.velocity.value = coldVel
+        inlets["hot-inlet"].momentum.velocity.value = hotVel
 
-        solver.setup.boundary_conditions.velocity_inlet["hot-inlet"].vmag = {
-            "option": "value",
-            "value": hotVel,
-        }
+        solver.solution.initialization.standard_initialize()
+        solver.solution.run_calculation.iterate(iter_count=200)
 
-        solver.tui.solve.initialize.initialize_flow("yes")
-        solver.tui.solve.iterate(200)
-
-        res_tui = solver.scheme_eval.exec(
-            (
-                "(ti-menu-load-string "
-                '"/report/surface-integrals/mass-weighted-avg outlet () '
-                'temperature no")',
-            )
+        # Write mass-weighted average outlet temperature to file
+        solver.results.report.surface_integrals.mass_weighted_avg(
+            surface_names=["outlet"],
+            report_of="temperature",
+            write_to_file=True,
+            file_name="outlet_temp.txt",
+            append_data=True,
         )
-        resArr[idx1][idx2] = eval(res_tui.split(" ")[-1])
+        resIdx[idx1][idx2] = resCount
+        resCount += 1
 
 
 ####################################################################
@@ -122,6 +122,18 @@ for idx1, coldVel in np.ndenumerate(coldVelArr):
 # =================
 
 solver.exit()
+
+####################################################################
+# Read in Outlet Temperatures
+# ===========================
+
+# Extract numbers from file
+with open(save_path / "outlet_temp.txt", "r") as f:
+    data = f.read()
+dataNumbers = np.array(re.findall(r"\d+\.\d+", data), dtype=np.float64)
+
+# Put results into array by index
+resArr = dataNumbers[resIdx]
 
 ####################################
 # Plot Response Surface using Plotly
