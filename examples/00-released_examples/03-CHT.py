@@ -504,20 +504,11 @@ solver.setup.models.viscous.model = "laminar"
 # Change a few material properties of default Air
 # ===============================================
 
-solver.setup.materials.fluid["air"] = {
-    "density": {
-        "value": 1.2,
-    },
-    "viscosity": {
-        "value": 1.5e-5,
-    },
-    "thermal_conductivity": {
-        "value": 0.026,
-    },
-    "specific_heat": {
-        "value": 1006.0,
-    },
-}
+air_matl = solver.setup.materials.fluid["air"]
+air_matl.density.value = 1.2
+air_matl.viscosity.value = 1.5e-5
+air_matl.thermal_conductivity.value = 0.026
+air_matl.specific_heat.value = 1006.0
 
 #############################################################################
 # Change a few material properties of default Aluminum
@@ -658,7 +649,7 @@ report_files["avg-pressure-inlet-file"] = {
     "file_name": "avg-pressure-inlet.out",
 }
 report_files["max-vel-louvers4-file"] = {
-    "report_defs": ["max-vel-louvers4-file"],
+    "report_defs": ["max-vel-louvers4"],
     "file_name": "max-vel-louvers4.out",
 }
 report_files["wall-shear-int-file"] = {
@@ -814,9 +805,10 @@ p.add_scalar_bar(
 # Create Iso-Surface of X=0.012826 m
 # ==================================
 
-solver.tui.surface.iso_surface(
-    "x-coordinate", "x=0.012826", "()", "()", "0.012826", "()"
-)
+solver.results.surfaces.iso_surface['x=0.012826'] = {
+    'field': 'x-coordinate',
+    'iso_values': [0.012826],
+}
 
 #############################################################################
 # Vector Plot
