@@ -805,9 +805,9 @@ p.add_scalar_bar(
 # Create Iso-Surface of X=0.012826 m
 # ==================================
 
-solver.results.surfaces.iso_surface['x=0.012826'] = {
-    'field': 'x-coordinate',
-    'iso_values': [0.012826],
+solver.results.surfaces.iso_surface["x=0.012826"] = {
+    "field": "x-coordinate",
+    "iso_values": [0.012826],
 }
 
 #############################################################################
