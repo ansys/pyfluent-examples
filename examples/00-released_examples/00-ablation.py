@@ -13,7 +13,7 @@ Modeling Ablation
 # the damaging effects of external high temperatures caused by shock wave and viscous
 # heating. The ablative material is chipped away due to surface reactions that remove a
 # significant amount of heat and keep the vehicle surface temperature below the melting
-# point. In this tutorial, Fluent ablation model is demonstrated for a reendtry vehicle
+# point. In this tutorial, Fluent ablation model is demonstrated for a reentry vehicle
 # geometry simplified as a 3D wedge.
 #
 # This tutorial demonstrates how to do the following:
@@ -32,16 +32,15 @@ Modeling Ablation
 # (displayed in yellow). As the ablative coating chips away, the surface of the wall
 # moves. The moving of the surface is modeled using dynamic meshes. The surface moving
 # rate is estimated by Vieille's empirical law:
-#
-# where r is the surface moving rate, p is the absolute pressure, and A and n are model
-# parameters. In the considered case, A = 5 and n = 0.1.
 
-
-####################################################################################
+###############################################################################
 # .. math::
 #
 #    r = A \cdot p^n
 
+###############################################################################
+# where r is the surface moving rate, p is the absolute pressure, and A and n are model
+# parameters. In the considered case, A = 5 and n = 0.1.
 
 #%%
 # .. image:: ../../_static/ablation-problem-schematic.png
@@ -81,29 +80,35 @@ import_filename = examples.download_file(
 
 from ansys.fluent.visualization import set_config
 
-set_config(blocking=True, set_view_on_display="isometric")
+set_config(blocking=True, set_view_on_display="xz")
 
 ####################################################################################
 # Launch Fluent session with solver mode
 # ==================================================================================
 
-session = pyfluent.launch_fluent(version="3d", precision="double", processor_count=4)
+session = pyfluent.launch_fluent(
+    precision="double",
+    processor_count=12,
+)
 
 ####################################################################################
 # Import mesh
 # ==================================================================================
 
-session.tui.file.read_case(import_filename)
+session.file.read_case(file_name=import_filename)
 
 ####################################################################################
 # Define models
 # ==================================================================================
 
-session.tui.define.models.solver.density_based_implicit("yes")
-session.tui.define.models.unsteady_1st_order("yes")
-session.tui.define.operating_conditions.operating_pressure("0")
-session.tui.define.models.energy("yes")
-session.tui.define.models.ablation("yes")
+general = session.setup.general
+general.solver.type = "density-based-implicit"
+general.solver.time = "unsteady-1st-order"
+general.operating_conditions.operating_pressure = 0
+
+models = session.setup.models
+models.energy.enabled = True
+# models.ablation.enabled = True
 
 ###################################################################
 # Define material
@@ -123,26 +128,28 @@ session.setup.materials.fluid["air"] = {"density": {"option": "ideal-gas"}}
 # Define boundary conditions
 # ==========================
 
-session.setup.boundary_conditions.change_type(
-    zone_list=["inlet"], new_type="pressure-far-field"
+bc = session.setup.boundary_conditions
+bc.set_zone_type(
+    zone_list=["inlet"],
+    new_type="pressure-far-field",
 )
-session.setup.boundary_conditions.pressure_far_field["inlet"] = {
-    "gauge_pressure": 13500,
-    "t": 4500,
-    "m": 3,
-    "turb_intensity": 0.001,
-}
-session.setup.boundary_conditions.pressure_outlet["outlet"] = {
-    "gauge_pressure": 13500,
-    "prevent_reverse_flow": True,
-}
+
+inlet_bc = bc.pressure_far_field["inlet"]
+inlet_bc.gauge_pressure.value = 13500
+inlet_bc.t.value = 4500
+inlet_bc.m.value = 3
+inlet_bc.turbulent_intensity = 0.001
+
+outlet_bc = bc.pressure_outlet["outlet"]
+outlet_bc.momentum.gauge_pressure.value = 13500
+outlet_bc.momentum.prevent_reverse_flow = True
 
 #############################################
 # Ablation boundary condition (Vielles Model)
 # ++++++++++++++++++++++++++++++++++++++++++++
 # Once you have specified the ablation boundary conditions for the wall,
 # Ansys Fluent automatically enables the Dynamic Mesh model with the Smoothing and
-# Remeshing options, #creates the wall-ablation dynamic mesh zone, and configure
+# Remeshing options, creates the wall-ablation dynamic mesh zone, and configure
 # appropriate dynamic mesh settings.
 
 session.setup.boundary_conditions.wall["wall_ablation"] = {
@@ -240,111 +247,152 @@ session.tui.define.dynamic_mesh.zones.create(
 # Define solver settings
 # =======================
 
-session.tui.define.models.unsteady_2nd_order("yes")
-session.tui.solve.set.limits(
-    "1", "5e+10", "1", "25000", "1e-14", "1e-20", "100000", "0.2"
-)
-session.tui.solve.monitors.residual.convergence_criteria(
-    "1e-3", "1e-3", "1e-3", "1e-3", "1e-6", "1e-3", "1e-3"
-)
+session.setup.general.solver.time = "unsteady-2nd-order"
+
+session.solution.controls.limits = {
+    "min_pressure": 1,
+    "max_pressure": 5e10,
+    "min_temperature": 1,
+    "max_temperature": 25000,
+    "min_tke": 1e-14,
+    "min_omega": 1e-20,
+    "max_turb_visc_ratio": 100000,
+    "positivity_rate": 0.2,
+}
+
+eqns = session.solution.monitor.residual.equations
+eqns["continuity"].absolute_criteria = 1e-3
+eqns["x-velocity"].absolute_criteria = 1e-3
+eqns["y-velocity"].absolute_criteria = 1e-3
+eqns["z-velocity"].absolute_criteria = 1e-3
+eqns["energy"].absolute_criteria = 1e-6
+eqns["k"].absolute_criteria = 1e-3
+eqns["omega"].absolute_criteria = 1e-3
 
 ############################################
 # Create report definitions
 # ==========================
 
-session.tui.solve.report_definitions.add(
-    "drag_force_x", "drag", "thread-names", "wall_ablation", "()", "scaled?", "no", "q"
-)
-session.tui.solve.report_plots.add(
-    "drag_force_x", "report-defs", "drag_force_x", "()", "q"
-)
-session.tui.solve.report_plots.axes(
-    "drag_force_x", "numbers", "float", "4", "exponential", "2", "q"
-)
-session.tui.solve.report_files.add(
-    "drag_force_x",
-    "report-defs",
-    "drag_force_x",
-    "()",
-    "file-name",
-    "drag_force_x.out",
-    "q",
-)
-session.tui.solve.report_definitions.add(
-    "pressure_avg_abl_wall",
-    "surface-areaavg",
-    "field",
-    "pressure",
-    "surface-names",
-    "wall_ablation",
-    "()",
-    "q",
-)
-session.tui.solve.report_plots.add(
-    "pressure_avg_abl_wall", "report-defs", "pressure_avg_abl_wall", "()", "q"
-)
-session.tui.solve.report_plots.axes(
-    "pressure_avg_abl_wall", "numbers", "float", "4", "exponential", "2", "q"
-)
-session.tui.solve.report_files.add(
-    "pressure_avg_abl_wall",
-    "report-defs",
-    "pressure_avg_abl_wall",
-    "()",
-    "file-name",
-    "pressure_avg_abl_wall.out",
-    "q",
-)
-session.tui.solve.report_definitions.add(
-    "recede_point",
-    "surface-vertexmax",
-    "field",
-    "z-coordinate",
-    "surface-names",
-    "wall_ablation",
-    "()",
-    "q",
-)
-session.tui.solve.report_plots.add(
-    "recede_point", "report-defs", "recede_point", "()", "q"
-)
-session.tui.solve.report_plots.axes(
-    "recede_point", "numbers", "float", "4", "exponential", "2", "q"
-)
-session.tui.solve.report_files.add(
-    "recede_point",
-    "report-defs",
-    "recede_point",
-    "()",
-    "file-name",
-    "recede_point.out",
-    "q",
-)
+report_defs = session.solution.report_definitions
+report_defs.drag["drag_force_x"] = {
+    "zones": ["wall_ablation"],
+    "scaled": False,
+}
+report_defs.surface["pressure_avg_abl_wall"] = {
+    "report_type": "surface-areaavg",
+    "field": "pressure",
+    "surface_names": ["wall_ablation"],
+}
+report_defs.surface["recede_point"] = {
+    "report_type": "surface-vertexmax",
+    "field": "z-coordinate",
+    "surface_names": ["wall_ablation"],
+}
+
+############################################
+# Create report plots
+# ===================
+
+report_plots = session.solution.monitor.report_plots
+report_plots["drag_force_x"] = {
+    "report_defs": ["drag_force_x"],
+    "axes": {
+        "x": {
+            "number_format": {
+                "format_type": "float",
+                "precision": 4,
+            },
+        },
+        "y": {
+            "number_format": {
+                "format_type": "exponential",
+                "precision": 2,
+            },
+        },
+    },
+}
+report_plots["pressure_avg_abl_wall"] = {
+    "report_defs": ["pressure_avg_abl_wall"],
+    "axes": {
+        "x": {
+            "number_format": {
+                "format_type": "float",
+                "precision": 4,
+            },
+        },
+        "y": {
+            "number_format": {
+                "format_type": "exponential",
+                "precision": 2,
+            },
+        },
+    },
+}
+report_plots["recede_point"] = {
+    "report_defs": ["recede_point"],
+    "axes": {
+        "x": {
+            "number_format": {
+                "format_type": "float",
+                "precision": 4,
+            },
+        },
+        "y": {
+            "number_format": {
+                "format_type": "exponential",
+                "precision": 2,
+            },
+        },
+    },
+}
+
+############################################
+# Create report files
+# ===================
+
+report_files = session.solution.monitor.report_files
+report_files["drag_force_x"] = {
+    "report_defs": ["drag_force_x"],
+    "file_name": "drag_force_x.out",
+}
+report_files["pressure_avg_abl_wall"] = {
+    "report_defs": ["pressure_avg_abl_wall"],
+    "file_name": "pressure_avg_abl_wall.out",
+}
+report_files["recede_point"] = {
+    "report_defs": ["recede_point"],
+    "file_name": "recede_point.out",
+}
 
 ############################################
 # Initialize and Save case
 # ========================
 
-session.tui.solve.initialize.compute_defaults.pressure_far_field("inlet")
-session.tui.solve.initialize.initialize_flow()
-session.tui.solve.set.transient_controls.time_step_size("1e-6")
+session.solution.initialization.compute_defaults(
+    from_zone_type="pressure-far-field",
+    from_zone_name="inlet",
+)
+session.solution.initialization.standard_initialize()
+session.solution.run_calculation.transient_controls.time_step_size = 1e-6
 
-save_case_data_as = Path(save_path) / "ablation.cas.h5"
-session.tui.file.write_case(save_case_data_as)
+session.file.write_case(file_name=save_path / "ablation.cas.h5")
 
 ############################################
 # Run the calculation
 # ===================
 # Note: It may take about half an hour to finish the calculation.
 
-session.tui.solve.dual_time_iterate(100, 20)
+session.solution.run_calculation.dual_time_iterate(
+    time_step_count=100,
+    max_iter_per_step=20,
+)
 
 ###############################################
 # Save simulation data
 # ====================
 # Write case and data files
-save_case_data_as = Path(save_path) / "ablation_Solved.cas.h5"
-session.tui.file.write_case_data(save_case_data_as)
+
+session.file.write_case_data(file_name=save_path / "ablation_Solved.cas.h5")
 
 ####################################################################################
 # Post Processing
@@ -381,7 +429,7 @@ session.tui.file.write_case_data(save_case_data_as)
 #%%
 # .. image:: ../../_static/ablation-recede_point.png
 #    :align: center
-#    :alt: Recede point (albation)
+#    :alt: Recede point (ablation)
 
 #%%
 #    Recede point (deformation due to ablation)
@@ -391,19 +439,24 @@ session.tui.file.write_case_data(save_case_data_as)
 # ================
 # Following contours are displayed in the Fluent GUI:
 
-session.tui.display.surface.plane_surface("mid_plane", "zx-plane", "0")
+results = session.results
 
-session.results.graphics.contour["contour_pressure"] = {
+results.surfaces.plane_surface["mid_plane"] = {
+    "method": "zx-plane",
+    "y": 0,
+}
+
+results.graphics.contour["contour_pressure"] = {
     "field": "pressure",
     "surfaces_list": ["mid_plane"],
 }
-session.results.graphics.contour.display(object_name="contour_pressure")
+results.graphics.contour.display(object_name="contour_pressure")
 
-session.results.graphics.contour["contour_mach"] = {
+results.graphics.contour["contour_mach"] = {
     "field": "mach-number",
     "surfaces_list": ["mid_plane"],
 }
-session.results.graphics.contour.display(object_name="contour_mach")
+results.graphics.contour.display(object_name="contour_mach")
 
 ###############################################
 # Post processing with PyVista (3D visualization)
