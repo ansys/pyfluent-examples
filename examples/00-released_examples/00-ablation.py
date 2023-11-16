@@ -108,7 +108,7 @@ general.operating_conditions.operating_pressure = 0
 
 models = session.setup.models
 models.energy.enabled = True
-# models.ablation.enabled = True
+models.ablation.enabled = True
 
 ###################################################################
 # Define material
