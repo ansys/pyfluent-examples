@@ -88,7 +88,7 @@ set_config(blocking=True, set_view_on_display="xz")
 
 session = pyfluent.launch_fluent(
     precision="double",
-    processor_count=12,
+    processor_count=4,
 )
 
 ####################################################################################
