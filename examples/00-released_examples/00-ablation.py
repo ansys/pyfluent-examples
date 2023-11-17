@@ -122,7 +122,11 @@ session.tui.define.materials.change_create(
 # Following is alternative Settings API method to define material properties
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 session.setup.materials.fluid["air"]()
-session.setup.materials.fluid["air"] = {"density": {"option": "ideal-gas"}}
+session.setup.materials.fluid["air"] = {
+    "density": {
+        "option": "ideal-gas",
+    },
+}
 
 ############################
 # Define boundary conditions
@@ -152,7 +156,7 @@ outlet_bc.momentum.prevent_reverse_flow = True
 # Remeshing options, creates the wall-ablation dynamic mesh zone, and configure
 # appropriate dynamic mesh settings.
 
-session.setup.boundary_conditions.wall["wall_ablation"] = {
+session.setup.boundary_conditions.wall["wall_ablation"].ablation = {
     "ablation_select_model": "Vielle's Model",
     "ablation_vielle_a": 5,
     "ablation_vielle_n": 0.1,
@@ -276,7 +280,7 @@ eqns["omega"].absolute_criteria = 1e-3
 report_defs = session.solution.report_definitions
 report_defs.drag["drag_force_x"] = {
     "zones": ["wall_ablation"],
-    "scaled": False,
+    "report_output_type": "Drag Force",
 }
 report_defs.surface["pressure_avg_abl_wall"] = {
     "report_type": "surface-areaavg",
