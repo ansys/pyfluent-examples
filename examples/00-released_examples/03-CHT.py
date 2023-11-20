@@ -489,14 +489,9 @@ p.add_light(light)
 ###############################################################################
 # Temperature, Energy, Laminar Viscous Model
 # ==========================================
-# * Set Temperature Unit
 # * Enable Energy Equation
 # * Enable Laminar Viscous Model
 
-solver.setup.general.units.set_units(
-    quantity="temperature",
-    units_name="C",
-)
 solver.setup.models.energy.enabled = True
 solver.setup.models.viscous.model = "laminar"
 
