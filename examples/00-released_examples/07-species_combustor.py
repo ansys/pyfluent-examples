@@ -79,14 +79,12 @@ solver = pyfluent.launch_fluent(
 #
 # Load mesh
 # ~~~~~~~~~
-# Load the mesh.
 
 solver.file.read_mesh(file_name=mesh_path)
 
 ###############################################################################
-# Check mesh
-# ~~~~~~~~~~
-# Check the mesh's quality.
+# Check mesh quality
+# ~~~~~~~~~~~~~~~~~~
 
 solver.mesh.check()
 
@@ -102,8 +100,8 @@ solver.mesh.scale(
 )
 
 ###############################################################################
-# Check mesh
-# ~~~~~~~~~~
+# Check mesh quality again
+# ~~~~~~~~~~~~~~~~~~~~~~~~
 # Check the mesh's quality again after scaling.
 
 solver.mesh.check()
@@ -119,18 +117,20 @@ solver.setup.general.solver.two_dim_space = "axisymmetric"
 # Models
 # ------
 #
-# Enable energy equation
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Enable the energy transport equation.
+# Enable energy transport equation
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 solver.setup.models.energy.enabled = True
 
 ###############################################################################
 # Enable species transport equation
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Enable the species transport equation. Enable volumetric reactions, set the
-# mixture material to 'methane-air', and set the 'turbulence-chemistry'
-# interaction model to 'eddy-dissipation'.
+# Enable the species transport equation. Configure it to model volumetric
+# reactions, set the mixture material to ``methane-air``, and set the
+# ``turbulence-chemistry`` interaction model to ``eddy-dissipation``.
+#
+# Setting the mixture to ``methane-air`` will import the species relevant to
+# methane-air combustion: methane, oxygen, nitrogen, carbon dioxide, and steam.
 
 species = solver.setup.models.species
 species.model.option = "species-transport"
@@ -276,7 +276,6 @@ run_calc.calculate()
 ###############################################################################
 # Write case and data files
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
-# Write the case and data files.
 
 solver.file.write_case_data(file_name="gascomb1.cas.h5")
 
@@ -286,8 +285,8 @@ solver.file.write_case_data(file_name="gascomb1.cas.h5")
 #
 # Report total sensible heat flux
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Calculate the total sensible heat flux and report it. Compare it to the heat
-# of the reaction source.
+# Calculate the total sensible heat flux and report it in the file
+# ``heat_transfer_report.txt``. Compare it to the heat of the reaction source.
 #
 # We expect a net total sensible heat transfer rate of 1.5 W, which is small in
 # comparison to the expected heat of the reaction source of 204,390.7 W.
@@ -389,8 +388,8 @@ for species in ("ch4", "o2", "co2", "h2o"):
 ###############################################################################
 # Report mass-weighted average outlet temperature
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Calculate the mass-weighted average of the outlet temperature and report it.
-# It should be approximately 1840 K.
+# Calculate the mass-weighted average of the outlet temperature and report it
+# in the file ``avg-exit-temp.txt``. It should be approximately 1840 K.
 
 solver.results.report.surface_integrals.mass_weighted_avg(
     surface_names=["pressure-outlet-9"],
@@ -398,7 +397,7 @@ solver.results.report.surface_integrals.mass_weighted_avg(
     write_to_file=True,
     file_name="avg-exit-temp.txt",
 )
-with open(working_dir / "heat_transfer_report.txt", "r") as f:
+with open(working_dir / "avg-exit-temp.txt", "r") as f:
     txt = f.read()
     print(txt)
 
@@ -406,7 +405,7 @@ with open(working_dir / "heat_transfer_report.txt", "r") as f:
 # Report area-weighted average outlet flow velocity
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Calculate the area-weighted average of the outlet flow velocity and report
-# it. It should be approximately 3.3 m/s.
+# it in the file ``avg-exit-vel.txt``. It should be approximately 3.3 m/s.
 
 solver.results.report.surface_integrals.area_weighted_avg(
     surface_names=["pressure-outlet-9"],
@@ -414,11 +413,13 @@ solver.results.report.surface_integrals.area_weighted_avg(
     write_to_file=True,
     file_name="avg-exit-vel.txt",
 )
+with open(working_dir / "avg-exit-vel.txt", "r") as f:
+    txt = f.read()
+    print(txt)
 
 ###############################################################################
 # Write case file
 # ~~~~~~~~~~~~~~~
-# Write the case file.
 
 solver.file.write_case(file_name="gascomb1.cas.h5")
 
@@ -431,7 +432,6 @@ solver.file.write_case(file_name="gascomb1.cas.h5")
 #
 # Activate NOx model
 # ~~~~~~~~~~~~~~~~~~
-# Activate the NOx model.
 
 solver.tui.define.models.nox("yes")
 
@@ -471,11 +471,11 @@ solver.tui.define.models.nox_parameters.nox_chemistry(
 # Set the following NOx-turbulence interaction settings:
 #
 # - Configure PDF
-#    - Set mode to 'temperature'
+#    - Set mode to ``temperature``
 #    - Set number of points to 20
-#    - Set type to 'beta'
-# - Set temperature variance to 'transported'
-# - Set Tmax option to 'global-tmax'
+#    - Set type to ``beta``
+# - Set temperature variance to ``transported``
+# - Set Tmax option to ``global-tmax``
 
 solver.tui.define.models.nox_parameters.nox_turbulence_interaction(
     "yes",  # Enable NOx-turbulence interaction
@@ -520,7 +520,6 @@ solver.solution.run_calculation.iterate(iter_count=25)
 ###############################################################################
 # Write case and data files
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
-# Write the case and data files.
 
 solver.file.write_case_data(file_name="gascomb2.cas.h5")
 
@@ -548,7 +547,8 @@ graphics.picture.save_picture(
 # Report mass-weighted average outlet nitric oxide mass fraction
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Calculate the mass-weighted average of the outlet mass fraction of nitric
-# oxide and report it. It should be approximately 0.00445.
+# oxide and report it in the file ``avg-exit-no-mf.txt``. It should be
+# approximately 0.00445.
 
 solver.results.report.surface_integrals.mass_weighted_avg(
     surface_names=["pressure-outlet-9"],
@@ -563,7 +563,6 @@ with open(working_dir / "avg-exit-no-mf.txt", "r") as f:
 ###############################################################################
 # Write case file
 # ~~~~~~~~~~~~~~~
-# Write the case file.
 
 solver.file.write_case(file_name="gascomb2.cas.h5")
 
@@ -611,8 +610,8 @@ graphics.picture.save_picture(
 # Report mass-weighted average outlet nitric oxide mass fraction
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Calculate the mass-weighted average of the outlet mass fraction of nitric
-# oxide with only thermal NOx and report it. It should be approximately
-# 0.00441.
+# oxide with only thermal NOx and report it in the file
+# ``avg-exit-thermal-no-mf.txt``. It should be approximately 0.00441.
 
 solver.results.report.surface_integrals.mass_weighted_avg(
     surface_names=["pressure-outlet-9"],
@@ -678,7 +677,9 @@ graphics.picture.save_picture(
 # Report mass-weighted average outlet nitric oxide mass fraction
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Calculate the mass-weighted average of the outlet mass fraction of nitric
-# oxide with only prompt NOx and report it. It should be approximately 9.87E-5.
+# oxide with only prompt NOx and report it in the file
+# ``avg-exit-prompt-no-mf.txt``. It should be approximately
+# :math:`9.87 \times 10^{-5}`.
 
 solver.results.report.surface_integrals.mass_weighted_avg(
     surface_names=["pressure-outlet-9"],
@@ -731,6 +732,5 @@ solver.file.write_case_data(file_name="gascomb2-prompt.cas.h5")
 ###############################################################################
 # Exit Fluent
 # -----------
-# Shut down Fluent.
 
 solver.exit()
