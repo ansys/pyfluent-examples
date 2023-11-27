@@ -81,7 +81,7 @@ solver = pyfluent.launch_fluent(
 # ~~~~~~~~~
 # Load the mesh.
 
-solver.file.read_mesh(file_name="gascomb.msh")
+solver.file.read_mesh(file_name=mesh_path)
 
 ###############################################################################
 # Check mesh
