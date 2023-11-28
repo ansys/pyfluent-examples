@@ -104,7 +104,7 @@ solver.mesh.check()
 ###############################################################################
 # Specify that the mesh is axisymmetric
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Specify that the mesh is axisymmetric by changing the '2D Space' setting.
+# Specify that the mesh is axisymmetric by changing the "2D Space" setting.
 
 solver.setup.general.solver.two_dim_space = "axisymmetric"
 
