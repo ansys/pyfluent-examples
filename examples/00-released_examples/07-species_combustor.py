@@ -91,18 +91,13 @@ solver.mesh.check()
 ###############################################################################
 # Scale mesh
 # ~~~~~~~~~~
-# The mesh was created in units of millimeters, so it must be scaled into
-# meters.
+# Since the mesh was created in units of millimeters and Fluent operates in
+# meters, scale the mesh by a factor of 0.001. Then, check the mesh again.
 
 solver.mesh.scale(
     x_scale=1e-3,
     y_scale=1e-3,
 )
-
-###############################################################################
-# Check mesh quality again
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-# Check the mesh's quality again after scaling.
 
 solver.mesh.check()
 
