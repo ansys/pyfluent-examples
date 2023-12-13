@@ -299,7 +299,8 @@ with open(working_dir / "heat_transfer_report.txt", "r") as f:
 # Configure graphics picture export
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Since Fluent is being run without the GUI, we will need to export plots as
-# picture files.
+# picture files. Edit the picture settings to use a custom resolution so that
+# the images are large enough.
 
 graphics = solver.results.graphics
 graphics.picture.use_window_resolution = False
