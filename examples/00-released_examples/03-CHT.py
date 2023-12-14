@@ -31,13 +31,23 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
-import ansys.fluent.visualization as viz  # noqa: F401
+from ansys.fluent.visualization import set_config
 from ansys.fluent.visualization.matplotlib import Plots  # noqa: F401
-from ansys.fluent.visualization.matplotlib import matplot_windows_manager  # noqa: F401
-from ansys.fluent.visualization.pyvista import Graphics, pyvista_windows_manager
-from ansys.fluent.visualization.pyvista.pyvista_windows_manager import PyVistaWindow
+from ansys.fluent.visualization.pyvista import Graphics
 import matplotlib.pyplot as plt
-import pyvista as pv
+
+###########################################################################
+# Configure PyFluent Visualization
+# ================================
+# Set the following options:
+#
+# * ``blocking=True``: Block the execution thread when a plot is displayed.
+#   This will allow you to inspect it before proceeding. To proceed, close the
+#   plot.
+# * ``set_view_on_display="isometric"``: Set the default view in a plot to
+#   isometric.
+
+set_config(blocking=True, set_view_on_display="isometric")
 
 ###########################################################################
 # Specifying save path
@@ -479,12 +489,14 @@ for item in mesh1.surfaces_list.allowed_values:
 mesh1.show_edges = True
 mesh1.surfaces_list = wall_list
 mesh1.display("window-1")
-p = pyvista_windows_manager.get_plotter("window-1")
-p.view_isometric()
-p.add_axes()
-p.add_floor(offset=1, show_edges=False)
-light = pv.Light(light_type="headlight")
-p.add_light(light)
+
+#%%
+# .. image:: ../../_static/cht_mesh.png
+#    :align: center
+#    :alt: Mesh
+
+#%%
+#    Mesh
 
 ###############################################################################
 # Temperature, Energy, Laminar Viscous Model
@@ -591,22 +603,12 @@ report_defs.volume["max-vel-louvers4"] = {
 report_defs.surface["wall-shear-int"] = {
     "report_type": "surface-integral",
     "field": "wall-shear",
-    # === NOTE: NEED REVIEW BY OTHER DEVS. ===
-    # Suspect that the original example had the wrong surfaces selected
-    # (commented out) because they were giving a shear stress of 0. I've
-    # selected the opposite surfaces here, which result in non-zero shear
-    # stress.
     "surface_names": [
-        # "wall-fluid-sweep-fin-solid-sweep-fin-shadow",
-        "wall-fluid-sweep-fin-solid-sweep-fin",
-        # "wall-fluid-tet-1-solid-tet-1",
-        "wall-fluid-tet-1-solid-tet-1-shadow",
-        # "wall-fluid-tet-2-solid-tet-2",
-        "wall-fluid-tet-2-solid-tet-2-shadow",
-        # "wall-fluid-tet-3-solid-tet-3",
-        "wall-fluid-tet-3-solid-tet-3-shadow",
-        # "wall-fluid-tet-4-solid-tet-4",
-        "wall-fluid-tet-4-solid-tet-4-shadow",
+        "wall-fluid-sweep-fin-solid-sweep-fin-shadow",
+        "wall-fluid-tet-1-solid-tet-1",
+        "wall-fluid-tet-2-solid-tet-2",
+        "wall-fluid-tet-3-solid-tet-3",
+        "wall-fluid-tet-4-solid-tet-4",
     ],
 }
 
@@ -774,27 +776,13 @@ contour1.field = "temperature"
 contour1.surfaces_list = wall_list
 contour1.display("window-2")
 
-p = pyvista_windows_manager.get_plotter("window-2")
-p.view_isometric()
-p.add_axes()
-p.add_floor(offset=1, show_edges=False)
-p.add_title(
-    "Contour of Temperature on Walls", font="courier", color="grey", font_size=10
-)
-light = pv.Light(light_type="headlight")
-p.add_light(light)
+#%%
+# .. image:: ../../_static/cht_temp_contour.png
+#    :align: center
+#    :alt: Temperature Contour
 
-p.remove_scalar_bar()
-p.add_scalar_bar(
-    "Temperature [K]",
-    interactive=True,
-    vertical=False,
-    title_font_size=20,
-    label_font_size=15,
-    outline=False,
-    position_x=0.5,
-    fmt="%10.1f",
-)
+#%%
+#    Temperature Contour
 
 #############################################################################
 # Create Iso-Surface of X=0.012826 m
@@ -816,29 +804,13 @@ vector1.scale = 2.0
 vector1.skip = 5
 vector1.display("window-3")
 
-p = pyvista_windows_manager.get_plotter("window-3")
-p.view_isometric()
-p.add_axes()
-# p.add_floor( offset=1, show_edges=False)
-p.add_title("Vector Plot", font="courier", color="grey", font_size=10)
-light = pv.Light(light_type="headlight")
-p.add_light(light)
+#%%
+# .. image:: ../../_static/cht_vector.png
+#    :align: center
+#    :alt: Vector Plot
 
-p.remove_scalar_bar()
-p.add_scalar_bar(
-    "Velocity [m/s]",
-    interactive=True,
-    vertical=False,
-    title_font_size=20,
-    label_font_size=15,
-    outline=False,
-    position_x=0.5,
-    fmt="%10.1f",
-)
-
-o = PyVistaWindow(None, None)
-o._fetch_mesh(mesh1)
-o._display_mesh(mesh1, p)
+#%%
+#    Vector Plot
 
 #############################################################################
 # XY Plot of Pressure
