@@ -24,6 +24,7 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+from ansys.fluent.visualization import set_config
 
 ###############################################################################
 # PyVista
@@ -34,6 +35,19 @@ import ansys.fluent.visualization.pyvista as pv
 # Matplotlib
 # --------------------
 import matplotlib.pyplot as plt
+
+###########################################################################
+# Configure PyFluent Visualization
+# ================================
+# Set the following options:
+#
+# * ``blocking=True``: Block the execution thread when a plot is displayed.
+#   This will allow you to inspect it before proceeding. To proceed, close the
+#   plot.
+# * ``set_view_on_display="isometric"``: Set the default view in a plot to
+#   isometric.
+
+set_config(blocking=True, set_view_on_display="isometric")
 
 ###############################################################################
 # Specifying save path
@@ -59,7 +73,10 @@ import_filename = examples.download_file(
 # --------------------------------------
 
 session = pyfluent.launch_fluent(
-    mode="solver", show_gui=False, precision="double", processor_count=2
+    mode="solver",
+    show_gui=False,
+    precision="double",
+    processor_count=4,
 )
 session.health_check_service.status()
 
