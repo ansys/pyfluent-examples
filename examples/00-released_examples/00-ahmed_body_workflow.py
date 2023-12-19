@@ -56,12 +56,15 @@ save_path = Path(pyfluent.EXAMPLES_PATH)
 #######################################################################################
 # Configure specific settings for this example
 # =====================================================================================
-set_config(blocking=True, set_view_on_display="isometric")
+set_config(blocking=True, set_view_on_display="zy")
 
 #######################################################################################
 # Launch Fluent session with meshing mode
 # =====================================================================================
-session = pyfluent.launch_fluent(mode="meshing", cleanup_on_exit=True)
+session = pyfluent.launch_fluent(
+    mode="meshing",
+    processor_count=4,
+)
 session.health_check_service.status()
 
 #######################################################################################
@@ -288,8 +291,7 @@ for criterion in [
 
 session.solution.report_definitions.drag["cd-mon1"] = {
     "zones": "*ahmed*",
-    "scaled": True,
-    "force_vector": [0, 0, 1],
+    "force_vector": [0, 0, -1],
 }
 session.parameters.output_parameters.report_definitions["cd-mon1-op"] = {
     "report_definition": "cd-mon1",
@@ -302,11 +304,8 @@ session.solution.monitor.report_plots["cd-mon1"] = {
 # Initialize and Run Solver
 # =====================================================================================
 
-initialization = session.solution.initialization
-initialization.initialization_type = "standard"
-initialization.standard_initialize()
-
-session.solution.run_calculation.iterate(iter_count=5)
+session.solution.initialization.standard_initialize()
+session.solution.run_calculation.iterate(iter_count=100)
 
 #######################################################################################
 # Post-Processing Workflow
