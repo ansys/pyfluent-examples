@@ -286,12 +286,6 @@ graphics_session1 = pv.Graphics(session)
 contour1 = graphics_session1.Contours["temperature"]
 
 ###############################################
-# Check available options for contour object
-# -------------------------------------------
-
-contour1()
-
-###############################################
 # Set contour properties
 # ----------------------
 
@@ -307,7 +301,6 @@ contour1.surfaces_list = [
     "wall-geom-1-outerpad",
 ]
 contour1.range.option = "auto-range-off"
-contour1()
 contour1.range.auto_range_off.minimum = 300
 contour1.range.auto_range_off.maximum = 400
 
