@@ -27,18 +27,27 @@ Conjugate Heat Transfer
 # =================================
 
 import csv
-import os
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
-import ansys.fluent.visualization as viz  # noqa: F401
+from ansys.fluent.visualization import set_config
 from ansys.fluent.visualization.matplotlib import Plots  # noqa: F401
-from ansys.fluent.visualization.matplotlib import matplot_windows_manager  # noqa: F401
-from ansys.fluent.visualization.pyvista import Graphics, pyvista_windows_manager
-from ansys.fluent.visualization.pyvista.pyvista_windows_manager import PyVistaWindow
+from ansys.fluent.visualization.pyvista import Graphics
 import matplotlib.pyplot as plt
-import pyvista as pv
+
+###########################################################################
+# Configure PyFluent Visualization
+# ================================
+# Set the following options:
+#
+# * ``blocking=True``: Block the execution thread when a plot is displayed.
+#   This will allow you to inspect it before proceeding. To proceed, close the
+#   plot.
+# * ``set_view_on_display="isometric"``: Set the default view in a plot to
+#   isometric.
+
+set_config(blocking=True, set_view_on_display="isometric")
 
 ###########################################################################
 # Specifying save path
@@ -64,12 +73,11 @@ geom_filename = examples.download_file(
 # =======================================
 
 meshing = pyfluent.launch_fluent(
-    product_version="23.2.0",
     mode="meshing",
-    version="3d",
     precision="double",
     show_gui=True,
     processor_count=4,
+    cwd=save_path,
 )
 
 meshing.health_check_service.check_health()
@@ -335,11 +343,12 @@ meshing.workflow.TaskObject["Describe Geometry"].InsertNextTask(
 meshing.workflow.TaskObject["Run Custom Journal"].Rename(NewName=r"set-periodicity")
 meshing.workflow.TaskObject["set-periodicity"].Arguments.update_dict(
     {
-        r"JournalString": r"""/bo rps translational semi-auto periodic-1-high periodic-2-high periodic-3-high periodic-4-high , 0 0 -2.3  # noqa: E501
-/bo rps translational semi-auto periodic-5* , 0 0 -2.3
-/bo rps translational semi-auto periodic-6-high , 0 0 -2.3
-/bo rps translational semi-auto periodic-7-high , 0 0 -2.3
-""",
+        r"JournalString": r"""/bo rps translational semi-auto periodic-1-high """
+        + r"""periodic-2-high periodic-3-high periodic-4-high , 0 0 -2.3
+            /bo rps translational semi-auto periodic-5* , 0 0 -2.3
+            /bo rps translational semi-auto periodic-6-high , 0 0 -2.3
+            /bo rps translational semi-auto periodic-7-high , 0 0 -2.3
+            """,
     }
 )
 
@@ -452,7 +461,7 @@ solver.tui.define.mesh_interfaces.create("int", "yes", "no")
 # Mesh Check; Review Fluent transcript for errors
 # ===============================================
 
-solver.tui.mesh.check()
+solver.mesh.check()
 
 #############################################################################
 # Create a few boundary list for display and post-processing
@@ -480,98 +489,88 @@ for item in mesh1.surfaces_list.allowed_values:
 mesh1.show_edges = True
 mesh1.surfaces_list = wall_list
 mesh1.display("window-1")
-p = pyvista_windows_manager.get_plotter("window-1")
-p.view_isometric()
-p.add_axes()
-p.add_floor(offset=1, show_edges=False)
-light = pv.Light(light_type="headlight")
-p.add_light(light)
+
+#%%
+# .. image:: ../../_static/cht_mesh.png
+#    :align: center
+#    :alt: Mesh
+
+#%%
+#    Mesh
 
 ###############################################################################
 # Temperature, Energy, Laminar Viscous Model
 # ==========================================
-# * Set Temperature Unit
 # * Enable Energy Equation
 # * Enable Laminar Viscous Model
 
-solver.tui.define.units("temperature", "C")
 solver.setup.models.energy.enabled = True
-solver.setup.models.viscous.model.set_state("laminar")
+solver.setup.models.viscous.model = "laminar"
 
 #############################################################################
 # Change a few material properties of default Air
 # ===============================================
 
-air_dict = solver.setup.materials.fluid["air"].get_state()
-air_dict["density"]["value"] = 1.2
-air_dict["viscosity"]["value"] = 1.5e-5
-air_dict["thermal_conductivity"]["value"] = 0.026
-air_dict["specific_heat"]["value"] = 1006.0
-solver.setup.materials.fluid["air"].set_state(air_dict)
+air_matl = solver.setup.materials.fluid["air"]
+air_matl.density.value = 1.2
+air_matl.viscosity.value = 1.5e-5
+air_matl.thermal_conductivity.value = 0.026
+air_matl.specific_heat.value = 1006.0
 
 #############################################################################
 # Change a few material properties of default Aluminum
 # ====================================================
 
-al_dict = solver.setup.materials.solid["aluminum"].get_state()
-al_dict["density"]["value"] = 2719.0
-al_dict["thermal_conductivity"]["value"] = 200.0
-al_dict["specific_heat"]["value"] = 871.0
-solver.setup.materials.solid["aluminum"].set_state(al_dict)
+al_matl = solver.setup.materials.solid["aluminum"]
+al_matl.density.value = 2719.0
+al_matl.thermal_conductivity.value = 200.0
+al_matl.specific_heat.value = 871.0
 
 #############################################################################
 # Copy Copper and change a few material properties of default Copper
 # ==================================================================
 
-solver.tui.define.materials.copy("solid", "copper")
-cu_dict = solver.setup.materials.solid["copper"].get_state()
-cu_dict["density"]["value"] = 8978.0
-cu_dict["thermal_conductivity"]["value"] = 340.0
-cu_dict["specific_heat"]["value"] = 381.0
-solver.setup.materials.solid["copper"].set_state(cu_dict)
+solver.setup.materials.database.copy_by_name(
+    type="solid",
+    name="copper",
+)
+
+cu_matl = solver.setup.materials.solid["copper"]
+cu_matl.density.value = 8978.0
+cu_matl.thermal_conductivity.value = 340.0
+cu_matl.specific_heat.value = 381.0
 
 #############################################################################
 # Set Tube Cell Zone Material as Copper
 # =====================================
 
-tube_dict = solver.setup.cell_zone_conditions.solid["solid-tube-1"].get_state()
-tube_dict["material"] = "copper"
-solver.setup.cell_zone_conditions.solid["solid-tube-1"].set_state(tube_dict)
-
-tube_dict = solver.setup.cell_zone_conditions.solid["solid-tube-2"].get_state()
-tube_dict["material"] = "copper"
-solver.setup.cell_zone_conditions.solid["solid-tube-2"].set_state(tube_dict)
+solid_cellzone_conds = solver.setup.cell_zone_conditions.solid
+solid_cellzone_conds["solid-tube-1"].material = "copper"
+solid_cellzone_conds["solid-tube-2"].material = "copper"
 
 #############################################################################
 # Set Boundary Condition for Inlet and Outlet
 # ===========================================
 
-inlet_dict = solver.setup.boundary_conditions.velocity_inlet["inlet"].get_state()
-inlet_dict["vmag"]["value"] = 4.0
-inlet_dict["t"]["value"] = 293.15  # Need to specify in Kelvin
-solver.setup.boundary_conditions.velocity_inlet["inlet"].set_state(inlet_dict)
+bc = solver.setup.boundary_conditions
 
-outlet_dict = solver.setup.boundary_conditions.pressure_outlet["outlet"].get_state()
-outlet_dict["t0"]["value"] = 293.15
-solver.setup.boundary_conditions.pressure_outlet["outlet"].set_state(outlet_dict)
+bc.velocity_inlet["inlet"].momentum.velocity.value = 4.0
+bc.velocity_inlet["inlet"].thermal.t.value = 293.15  # Need to specify in Kelvin
+
+bc.pressure_outlet["outlet"].thermal.t0.value = 293.15
 
 #############################################################################
 # Set Thermal Boundary Condition for Wall Inner Tube
 # ==================================================
 
-wall_dict = solver.setup.boundary_conditions.wall["wall-inner-tube-1"].get_state()
-wall_dict["thermal_bc"] = "Convection"
-solver.setup.boundary_conditions.wall["wall-inner-tube-1"].set_state(
-    wall_dict
-)  # This step is necessary as 'h' is not available in Adiabatic Dictionary
+inner_tube_bc = solver.setup.boundary_conditions.wall["wall-inner-tube-1"]
+inner_tube_bc.thermal.thermal_bc = "Convection"
+inner_tube_bc.thermal.h.value = 1050.0
+inner_tube_bc.thermal.tinf.value = 353.15
 
-wall_dict = solver.setup.boundary_conditions.wall["wall-inner-tube-1"].get_state()
-wall_dict["h"]["value"] = 1050.0
-wall_dict["tinf"]["value"] = 353.15
-solver.setup.boundary_conditions.wall["wall-inner-tube-1"].set_state(wall_dict)
-
-solver.tui.define.boundary_conditions.copy_bc(
-    "wall-inner-tube-1", "wall-inner-tube-2", "()"
+solver.setup.boundary_conditions.copy(
+    from_="wall-inner-tube-1",
+    to="wall-inner-tube-2",
 )
 
 #############################################################################
@@ -584,137 +583,120 @@ solver.solution.methods.high_order_term_relaxation.enable = True
 # Define Report Definitions
 # =========================
 
-solver.tui.solve.report_definitions.add(
-    "outlet-enthalpy-flow",
-    "surface-flowrate",
-    "field",
-    "enthalpy",
-    "surface-names",
-    "outlet",
-    "()",
-    "q",
-)
-solver.tui.solve.report_definitions.add(
-    "avg-pressure-inlet",
-    "surface-areaavg",
-    "field",
-    "pressure",
-    "surface-names",
-    "inlet",
-    "()",
-    "q",
-)
-solver.tui.solve.report_definitions.add(
-    "max-vel-louvers4",
-    "volume-max",
-    "field",
-    "velocity-magnitude",
-    "zone-names",
-    "fluid-tet-4",
-    "()",
-    "q",
-)
-solver.tui.solve.report_definitions.add(
-    "wall-shear-int",
-    "surface-integral",
-    "field",
-    "wall-shear",
-    "surface-names",
-    "wall-fluid-sweep-fin-solid-sweep-fin-shadow",
-    "wall-fluid-tet-1-solid-tet-1",
-    "wall-fluid-tet-2-solid-tet-2",
-    "wall-fluid-tet-3-solid-tet-3",
-    "wall-fluid-tet-4-solid-tet-4",
-    "()",
-    "q",
-)
+report_defs = solver.solution.report_definitions
 
-solver.tui.solve.report_plots.add(
-    "outlet-enthalpy-flow-plot", "report-defs", "outlet-enthalpy-flow", "()", "q"
-)
-solver.tui.solve.report_files.add(
-    "outlet-enthalpy-flow-file",
-    "report-defs",
-    "outlet-enthalpy-flow",
-    "()",
-    "file-name",
-    "outlet-enthalpy-flow.out",
-    "q",
-)
+report_defs.surface["outlet-enthalpy-flow"] = {
+    "report_type": "surface-flowrate",
+    "field": "enthalpy",
+    "surface_names": ["outlet"],
+}
+report_defs.surface["avg-pressure-inlet"] = {
+    "report_type": "surface-areaavg",
+    "field": "pressure",
+    "surface_names": ["inlet"],
+}
+report_defs.volume["max-vel-louvers4"] = {
+    "report_type": "volume-max",
+    "field": "velocity-magnitude",
+    "cell_zones": ["fluid-tet-4"],
+}
+report_defs.surface["wall-shear-int"] = {
+    "report_type": "surface-integral",
+    "field": "wall-shear",
+    "surface_names": [
+        "wall-fluid-sweep-fin-solid-sweep-fin-shadow",
+        "wall-fluid-tet-1-solid-tet-1",
+        "wall-fluid-tet-2-solid-tet-2",
+        "wall-fluid-tet-3-solid-tet-3",
+        "wall-fluid-tet-4-solid-tet-4",
+    ],
+}
 
-solver.tui.solve.report_plots.add(
-    "avg-pressure-inlet-plot", "report-defs", "avg-pressure-inlet", "()", "q"
-)
-solver.tui.solve.report_files.add(
-    "avg-pressure-inlet-file",
-    "report-defs",
-    "avg-pressure-inlet",
-    "()",
-    "file-name",
-    "avg-pressure-inlet.out",
-    "q",
-)
+#############################################################################
+# Define Report Plots
+# ===================
 
-solver.tui.solve.report_plots.add(
-    "max-vel-louvers4-plot", "report-defs", "max-vel-louvers4", "()", "q"
-)
-solver.tui.solve.report_files.add(
-    "max-vel-louvers4-file",
-    "report-defs",
-    "max-vel-louvers4",
-    "()",
-    "file-name",
-    "max-vel-louvers4.out",
-    "q",
-)
+report_plots = solver.solution.monitor.report_plots
 
-solver.tui.solve.report_plots.add(
-    "wall-shear-int-plot", "report-defs", "wall-shear-int", "()", "q"
-)
-solver.tui.solve.report_files.add(
-    "wall-shear-int-file",
-    "report-defs",
-    "wall-shear-int",
-    "()",
-    "file-name",
-    "wall-shear-int.out",
-    "q",
-)
+report_plots["outlet-enthalpy-flow-plot"] = {
+    "report_defs": ["outlet-enthalpy-flow"],
+}
+report_plots["avg-pressure-inlet-plot"] = {
+    "report_defs": ["avg-pressure-inlet"],
+}
+report_plots["max-vel-louvers4-plot"] = {
+    "report_defs": ["max-vel-louvers4"],
+}
+report_plots["wall-shear-int-plot"] = {
+    "report_defs": ["wall-shear-int"],
+}
+
+#############################################################################
+# Define Report Files
+# ===================
+
+report_files = solver.solution.monitor.report_files
+
+report_files["outlet-enthalpy-flow-file"] = {
+    "report_defs": ["outlet-enthalpy-flow"],
+    "file_name": "outlet-enthalpy-flow.out",
+}
+report_files["avg-pressure-inlet-file"] = {
+    "report_defs": ["avg-pressure-inlet"],
+    "file_name": "avg-pressure-inlet.out",
+}
+report_files["max-vel-louvers4-file"] = {
+    "report_defs": ["max-vel-louvers4"],
+    "file_name": "max-vel-louvers4.out",
+}
+report_files["wall-shear-int-file"] = {
+    "report_defs": ["wall-shear-int"],
+    "file_name": "wall-shear-int.out",
+}
 
 #############################################################################
 # Hybrid Initialization; Slit Interior between Solid Zones; Save Case
 # ===================================================================
 
-solver.tui.solve.initialize.hyb_initialization()
-solver.tui.mesh.modify_zones.slit_interior_between_diff_solids()
-save_case_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.cas.h5")
-solver.tui.file.write_case(save_case_as)
-solver.tui.solve.initialize.hyb_initialization()
+solver.solution.initialization.hybrid_initialize()
+solver.setup.boundary_conditions.slit_interior_between_diff_solids()
+save_case_as = Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.cas.h5"
+solver.file.write_case(file_name=save_case_as)
 
 #############################################################################
 # Set Aggressive Length Scale Method; Run Calculation & Save Data
 # ===============================================================
 
-solver.tui.solve.set.pseudo_time_method.global_time_step_settings(
-    "yes", "0", "1", "yes", "1"
-)
-solver.tui.solve.iterate("250")
-save_case_data_as = str(Path(pyfluent.EXAMPLES_PATH) / "hx-fin-2mm.dat.h5")
-solver.tui.file.write_case_data(save_case_data_as)
+time_step_method = solver.solution.run_calculation.pseudo_time_settings.time_step_method
+
+time_step_method.time_step_method = "automatic"
+time_step_method.length_scale_methods = "aggressive"
+
+solver.solution.run_calculation.iterate(iter_count=250)
+solver.file.write_case_data(file_name=save_case_as)
 
 #############################################################################
 # Post-Processing Mass Balance Report
 # ===================================
 
-inlet_mfr = solver.scheme_eval.exec(
-    ('(ti-menu-load-string "/report/fluxes/mass-flow no inlet () no")',)
-).split(" ")[-1]
-outlet_mfr = solver.scheme_eval.exec(
-    ('(ti-menu-load-string "/report/fluxes/mass-flow no outlet () no")',)
-).split(" ")[-1]
-net_mfr = solver.scheme_eval.exec(
-    ('(ti-menu-load-string "/report/fluxes/mass-flow no inlet outlet () no")',)
-).split(" ")[-1]
+fluxes = solver.results.report.fluxes
+
+inlet_mfr = fluxes.mass_flow(
+    all_boundary_zones=False,
+    zones=["inlet"],
+    write_to_file=False,
+)
+outlet_mfr = fluxes.mass_flow(
+    all_boundary_zones=False,
+    zones=["outlet"],
+    write_to_file=False,
+)
+net_mfr = fluxes.mass_flow(
+    all_boundary_zones=False,
+    zones=["inlet", "outlet"],
+    write_to_file=False,
+)
+
 print("Mass Balance Report\n")
 print("Inlet (kg/s): ", inlet_mfr)
 print("Outlet (kg/s): ", outlet_mfr)
@@ -724,9 +706,11 @@ print("Net (kg/s): ", net_mfr)
 # Heat Balance Report
 # ===================
 
-htr = solver.scheme_eval.exec(
-    ('(ti-menu-load-string "/report/fluxes/heat-transfer yes no")',)
-).split(" ")[-1]
+htr = fluxes.heat_transfer(
+    all_boundary_zones=True,
+    write_to_file=False,
+)
+
 print("Heat Balance Report\n")
 print("Net Imbalance (Watt): ", htr)
 
@@ -737,13 +721,15 @@ print("Net Imbalance (Watt): ", htr)
 fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 fig.suptitle("Monitor Plots")
 
-outFilesList = []
-fileList = os.listdir(os.getcwd())
-for tempFile in fileList:
-    fName, ext = os.path.splitext(tempFile)
-    if ext == ".out":
-        outFilesList.append(tempFile)
-outFilesList.sort()
+rFilesList = [
+    "avg-pressure-inlet.out",
+    "max-vel-louvers4.out",
+    "outlet-enthalpy-flow.out",
+    "wall-shear-int.out",
+]
+
+# Append current working directory to each filename
+outFilesList = [save_path / fName for fName in rFilesList]
 
 index = 0
 for ax in axs.flat:
@@ -790,39 +776,26 @@ contour1.field = "temperature"
 contour1.surfaces_list = wall_list
 contour1.display("window-2")
 
-p = pyvista_windows_manager.get_plotter("window-2")
-p.view_isometric()
-p.add_axes()
-p.add_floor(offset=1, show_edges=False)
-p.add_title(
-    "Contour of Temperature on Walls", font="courier", color="grey", font_size=10
-)
-light = pv.Light(light_type="headlight")
-p.add_light(light)
+#%%
+# .. image:: ../../_static/cht_temp_contour.png
+#    :align: center
+#    :alt: Temperature Contour
 
-p.remove_scalar_bar()
-p.add_scalar_bar(
-    "Temperature [K]",
-    interactive=True,
-    vertical=False,
-    title_font_size=20,
-    label_font_size=15,
-    outline=False,
-    position_x=0.5,
-    fmt="%10.1f",
-)
+#%%
+#    Temperature Contour
 
 #############################################################################
 # Create Iso-Surface of X=0.012826 m
 # ==================================
 
-solver.tui.surface.iso_surface(
-    "x-coordinate", "x=0.012826", "()", "()", "0.012826", "()"
-)
+solver.results.surfaces.iso_surface["x=0.012826"] = {
+    "field": "x-coordinate",
+    "iso_values": [0.012826],
+}
 
 #############################################################################
-# Vecotor Plot
-# ============
+# Vector Plot
+# ===========
 
 graphics_session1 = Graphics(solver)
 vector1 = graphics_session1.Vectors["vector-1"]
@@ -831,29 +804,13 @@ vector1.scale = 2.0
 vector1.skip = 5
 vector1.display("window-3")
 
-p = pyvista_windows_manager.get_plotter("window-3")
-p.view_isometric()
-p.add_axes()
-# p.add_floor( offset=1, show_edges=False)
-p.add_title("Vector Plot", font="courier", color="grey", font_size=10)
-light = pv.Light(light_type="headlight")
-p.add_light(light)
+#%%
+# .. image:: ../../_static/cht_vector.png
+#    :align: center
+#    :alt: Vector Plot
 
-p.remove_scalar_bar()
-p.add_scalar_bar(
-    "Velocity [m/s]",
-    interactive=True,
-    vertical=False,
-    title_font_size=20,
-    label_font_size=15,
-    outline=False,
-    position_x=0.5,
-    fmt="%10.1f",
-)
-
-o = PyVistaWindow(None, None)
-o._fetch_mesh(mesh1)
-o._display_mesh(mesh1, p)
+#%%
+#    Vector Plot
 
 #############################################################################
 # XY Plot of Pressure
