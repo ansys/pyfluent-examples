@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_Separator-Collection-Efficiency:
+
+Separator-Collection-Efficiency
+===============================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Separator-Collection-Efficiency">
+
+.. only:: html
+
+  .. image:: /examples/Separator-Collection-Efficiency/images/thumb/sphx_glr_oil_separator_thumb.png
+    :alt: Separator-Collection-Efficiency
+
+  :ref:`sphx_glr_examples_Separator-Collection-Efficiency_oil_separator.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Separator-Collection-Efficiency</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Separator-Collection-Efficiency/oil_separator
+

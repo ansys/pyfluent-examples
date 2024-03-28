@@ -1,0 +1,657 @@
+:orphan:
+
+Simulation Examples
+=====================
+These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent's meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent's
+postprocessing capabilities.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    </div>
+
+Ablation-tutorial
+=================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Ablation-tutorial">
+
+.. only:: html
+
+  .. image:: /examples/Ablation-tutorial/images/thumb/sphx_glr_ablation_thumb.png
+    :alt: Ablation-tutorial
+
+  :ref:`sphx_glr_examples_Ablation-tutorial_ablation.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Ablation-tutorial</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Ahmed-Body-Simulation
+=====================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Objective ===============">
+
+.. only:: html
+
+  .. image:: /examples/Ahmed-Body-Simulation/images/thumb/sphx_glr_ahmed_body_workflow_thumb.png
+    :alt: Ahmed Body External Aerodynamics Simulation
+
+  :ref:`sphx_glr_examples_Ahmed-Body-Simulation_ahmed_body_workflow.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Ahmed Body External Aerodynamics Simulation</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+AnsysLab-exhaust-manifold
+=========================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="AnsysLab-exhaust-manifold">
+
+.. only:: html
+
+  .. image:: /examples/AnsysLab-exhaust-manifold/images/thumb/sphx_glr_exhaust_system11_thumb.png
+    :alt: AnsysLab-exhaust-manifold
+
+  :ref:`sphx_glr_examples_AnsysLab-exhaust-manifold_exhaust_system11.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">AnsysLab-exhaust-manifold</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Brake-Thermal-PyVista-Matplotlib
+================================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Brake-Thermal-PyVista-Matplotlib">
+
+.. only:: html
+
+  .. image:: /examples/Brake-Thermal-PyVista-Matplotlib/images/thumb/sphx_glr_brake_thumb.png
+    :alt: Brake-Thermal-PyVista-Matplotlib
+
+  :ref:`sphx_glr_examples_Brake-Thermal-PyVista-Matplotlib_brake.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Brake-Thermal-PyVista-Matplotlib</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+CHT-Demo
+========
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="CHT-Demo">
+
+.. only:: html
+
+  .. image:: /examples/CHT/images/thumb/sphx_glr_CHT_Demo_thumb.png
+    :alt: CHT-Demo
+
+  :ref:`sphx_glr_examples_CHT_CHT_Demo.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">CHT-Demo</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+DOE-ML-Mixing-Elbow
+===================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="DOE-ML-Mixing-Elbow">
+
+.. only:: html
+
+  .. image:: /examples/DOE-ML-Mixing-Elbow/images/thumb/sphx_glr_FluentDOE_thumb.png
+    :alt: DOE-ML-Mixing-Elbow
+
+  :ref:`sphx_glr_examples_DOE-ML-Mixing-Elbow_FluentDOE.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">DOE-ML-Mixing-Elbow</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Part-1-Create-PPTX-Part-2-Dash-App-for-Post-processing
+======================================================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Part-1-Create-PPTX">
+
+.. only:: html
+
+  .. image:: /examples/Dash-App-for-Post-processing/images/thumb/sphx_glr_CreatePPTX_thumb.png
+    :alt: Part-1-Create-PPTX
+
+  :ref:`sphx_glr_examples_Dash-App-for-Post-processing_CreatePPTX.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Part-1-Create-PPTX</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Part-2-Dash-App-for-Post-processing">
+
+.. only:: html
+
+  .. image:: /examples/Dash-App-for-Post-processing/images/thumb/sphx_glr_DashApp_thumb.png
+    :alt: Part-2-Dash-App-for-Post-processing
+
+  :ref:`sphx_glr_examples_Dash-App-for-Post-processing_DashApp.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Part-2-Dash-App-for-Post-processing</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Excel-Monitor-Points
+====================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Excel-Monitor-Points">
+
+.. only:: html
+
+  .. image:: /examples/Excel-Monitor-Points/images/thumb/sphx_glr_excelCustomization_thumb.png
+    :alt: Excel-Monitor-Points
+
+  :ref:`sphx_glr_examples_Excel-Monitor-Points_excelCustomization.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Excel-Monitor-Points</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Fluent-Parametric
+=================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Fluent-Parametric">
+
+.. only:: html
+
+  .. image:: /examples/Fluent-Parametric/images/thumb/sphx_glr_parametric_thumb.png
+    :alt: Fluent-Parametric
+
+  :ref:`sphx_glr_examples_Fluent-Parametric_parametric.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fluent-Parametric</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Graphics-Demo
+=============
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Graphics-Demo">
+
+.. only:: html
+
+  .. image:: /examples/Graphics-Demo/images/thumb/sphx_glr_pyFluentGraphics_thumb.png
+    :alt: Graphics-Demo
+
+  :ref:`sphx_glr_examples_Graphics-Demo_pyFluentGraphics.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Graphics-Demo</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Gravity-Separator-PID
+=====================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Gravity-Separator-PID">
+
+.. only:: html
+
+  .. image:: /examples/Gravity-Separator-PID/images/thumb/sphx_glr_gravitySeparatorPID_thumb.png
+    :alt: Gravity-Separator-PID
+
+  :ref:`sphx_glr_examples_Gravity-Separator-PID_gravitySeparatorPID.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Gravity-Separator-PID</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+MixingTank-DOE
+==============
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="MixingTank-DOE">
+
+.. only:: html
+
+  .. image:: /examples/MixingTank-DOE/images/thumb/sphx_glr_mixingTankDOE_thumb.png
+    :alt: MixingTank-DOE
+
+  :ref:`sphx_glr_examples_MixingTank-DOE_mixingTankDOE.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">MixingTank-DOE</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+MixingTank-WorkFlow
+===================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="MixingTank-WorkFlow">
+
+.. only:: html
+
+  .. image:: /examples/MixingTank-WorkFlow/images/thumb/sphx_glr_mixingTank_thumb.png
+    :alt: MixingTank-WorkFlow
+
+  :ref:`sphx_glr_examples_MixingTank-WorkFlow_mixingTank.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">MixingTank-WorkFlow</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+PPTX-report-generation
+======================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="PPTX-report-generation">
+
+.. only:: html
+
+  .. image:: /examples/PPTX-report-generation/images/thumb/sphx_glr_powerPointReport_thumb.png
+    :alt: PPTX-report-generation
+
+  :ref:`sphx_glr_examples_PPTX-report-generation_powerPointReport.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">PPTX-report-generation</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+PyFluent-ACE-Training-at-22R2
+=============================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="PyFluent-ACE-Training-at-22R2">
+
+.. only:: html
+
+  .. image:: /examples/PyFluent-ACE-Training-at-22R2/images/thumb/sphx_glr_demo22R2_thumb.png
+    :alt: PyFluent-ACE-Training-at-22R2
+
+  :ref:`sphx_glr_examples_PyFluent-ACE-Training-at-22R2_demo22R2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">PyFluent-ACE-Training-at-22R2</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Remote-Execution-in-Cluster
+===========================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Remote-Execution-in-Cluster">
+
+.. only:: html
+
+  .. image:: /examples/Remote-Execution-in-Cluster/images/thumb/sphx_glr_remote_parallel_thumb.png
+    :alt: Remote-Execution-in-Cluster
+
+  :ref:`sphx_glr_examples_Remote-Execution-in-Cluster_remote_parallel.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Remote-Execution-in-Cluster</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Separator-Collection-Efficiency
+===============================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Separator-Collection-Efficiency">
+
+.. only:: html
+
+  .. image:: /examples/Separator-Collection-Efficiency/images/thumb/sphx_glr_oil_separator_thumb.png
+    :alt: Separator-Collection-Efficiency
+
+  :ref:`sphx_glr_examples_Separator-Collection-Efficiency_oil_separator.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Separator-Collection-Efficiency</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Steady-Vortex-VOF
+=================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Steady-Vortex-VOF">
+
+.. only:: html
+
+  .. image:: /examples/Steady-Vortex-VOF/images/thumb/sphx_glr_steady_vortex_thumb.png
+    :alt: Steady-Vortex-VOF
+
+  :ref:`sphx_glr_examples_Steady-Vortex-VOF_steady_vortex.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Steady-Vortex-VOF</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+Tyler-Sofrin-Modes-Compressor
+=============================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Tyler-Sofrin-Modes-Compressor">
+
+.. only:: html
+
+  .. image:: /examples/Tyler-Sofrin-Modes-Compressor/images/thumb/sphx_glr_TylerSofrinModes_thumb.png
+    :alt: Tyler-Sofrin-Modes-Compressor
+
+  :ref:`sphx_glr_examples_Tyler-Sofrin-Modes-Compressor_TylerSofrinModes.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Tyler-Sofrin-Modes-Compressor</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+   /examples/Ablation-tutorial/index.rst
+   /examples/Ahmed-Body-Simulation/index.rst
+   /examples/AnsysLab-exhaust-manifold/index.rst
+   /examples/Brake-Thermal-PyVista-Matplotlib/index.rst
+   /examples/CHT/index.rst
+   /examples/DOE-ML-Mixing-Elbow/index.rst
+   /examples/Dash-App-for-Post-processing/index.rst
+   /examples/Excel-Monitor-Points/index.rst
+   /examples/Fluent-Parametric/index.rst
+   /examples/Graphics-Demo/index.rst
+   /examples/Gravity-Separator-PID/index.rst
+   /examples/MixingTank-DOE/index.rst
+   /examples/MixingTank-WorkFlow/index.rst
+   /examples/PPTX-report-generation/index.rst
+   /examples/PyFluent-ACE-Training-at-22R2/index.rst
+   /examples/Remote-Execution-in-Cluster/index.rst
+   /examples/Separator-Collection-Efficiency/index.rst
+   /examples/Steady-Vortex-VOF/index.rst
+   /examples/Tyler-Sofrin-Modes-Compressor/index.rst
+
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

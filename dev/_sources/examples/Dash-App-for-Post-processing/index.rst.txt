@@ -1,0 +1,59 @@
+
+
+.. _sphx_glr_examples_Dash-App-for-Post-processing:
+
+Part-1-Create-PPTX-Part-2-Dash-App-for-Post-processing
+======================================================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Part-1-Create-PPTX">
+
+.. only:: html
+
+  .. image:: /examples/Dash-App-for-Post-processing/images/thumb/sphx_glr_CreatePPTX_thumb.png
+    :alt: Part-1-Create-PPTX
+
+  :ref:`sphx_glr_examples_Dash-App-for-Post-processing_CreatePPTX.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Part-1-Create-PPTX</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Part-2-Dash-App-for-Post-processing">
+
+.. only:: html
+
+  .. image:: /examples/Dash-App-for-Post-processing/images/thumb/sphx_glr_DashApp_thumb.png
+    :alt: Part-2-Dash-App-for-Post-processing
+
+  :ref:`sphx_glr_examples_Dash-App-for-Post-processing_DashApp.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Part-2-Dash-App-for-Post-processing</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Dash-App-for-Post-processing/CreatePPTX
+   /examples/Dash-App-for-Post-processing/DashApp
+

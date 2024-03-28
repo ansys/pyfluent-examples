@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_Brake-Thermal-PyVista-Matplotlib:
+
+Brake-Thermal-PyVista-Matplotlib
+================================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Brake-Thermal-PyVista-Matplotlib">
+
+.. only:: html
+
+  .. image:: /examples/Brake-Thermal-PyVista-Matplotlib/images/thumb/sphx_glr_brake_thumb.png
+    :alt: Brake-Thermal-PyVista-Matplotlib
+
+  :ref:`sphx_glr_examples_Brake-Thermal-PyVista-Matplotlib_brake.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Brake-Thermal-PyVista-Matplotlib</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Brake-Thermal-PyVista-Matplotlib/brake
+

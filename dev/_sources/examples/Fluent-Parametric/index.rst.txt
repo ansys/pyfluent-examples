@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_Fluent-Parametric:
+
+Fluent-Parametric
+=================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Fluent-Parametric">
+
+.. only:: html
+
+  .. image:: /examples/Fluent-Parametric/images/thumb/sphx_glr_parametric_thumb.png
+    :alt: Fluent-Parametric
+
+  :ref:`sphx_glr_examples_Fluent-Parametric_parametric.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fluent-Parametric</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Fluent-Parametric/parametric
+
