@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_Graphics-Demo:
+
+Graphics-Demo
+=============
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Graphics-Demo">
+
+.. only:: html
+
+  .. image:: /examples/Graphics-Demo/images/thumb/sphx_glr_pyFluentGraphics_thumb.png
+    :alt: Graphics-Demo
+
+  :ref:`sphx_glr_examples_Graphics-Demo_pyFluentGraphics.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Graphics-Demo</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Graphics-Demo/pyFluentGraphics
+

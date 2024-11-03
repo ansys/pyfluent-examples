@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_PPTX-report-generation:
+
+PPTX-report-generation
+======================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="PPTX-report-generation">
+
+.. only:: html
+
+  .. image:: /examples/PPTX-report-generation/images/thumb/sphx_glr_powerPointReport_thumb.png
+    :alt: PPTX-report-generation
+
+  :ref:`sphx_glr_examples_PPTX-report-generation_powerPointReport.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">PPTX-report-generation</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/PPTX-report-generation/powerPointReport
+

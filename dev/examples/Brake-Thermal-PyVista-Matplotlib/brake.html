@@ -1,0 +1,1011 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Brake-Thermal-PyVista-Matplotlib &#8212; PyFluent Examples</title>
+    
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    
+        <link href="../../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <link rel="shortcut icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CHT-Demo" href="../CHT/index.html" />
+    <link rel="prev" title="Brake-Thermal-PyVista-Matplotlib" href="index.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    <img src="../../_static/pyansys-logo-black-cropped.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/pyansys-logo-black-cropped.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Simulation Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../contributing.html">
+  Contributing
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.12  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables examples/Brake-Thermal-PyVista-Matplotlib/brake and {'json_url': 'https://examples.fluent.docs.pyansys.com/release/versions.json', 'version_match': '0.12'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "examples/Brake-Thermal-PyVista-Matplotlib/brake.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://examples.fluent.docs.pyansys.com/release/versions.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "examples/Brake-Thermal-PyVista-Matplotlib/brake.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.12.5 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.12") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/pyansys/pyfluent-examples" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+     
+<div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+
+    
+        <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://docs.pyansys.com/">PyAnsys</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyFluent Examples</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Simulation Examples</a> » </li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Brake-Thermal-PyVista-Matplotlib</a> » </li>
+        <li class="nav-item nav-item-this"><a href="">Brake-Thermal-PyVista-Matplotlib</a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Ablation-tutorial/index.html">
+   Ablation-tutorial
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Ablation-tutorial/ablation.html">
+     Ablation-tutorial
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Ahmed-Body-Simulation/index.html">
+   Ahmed-Body-Simulation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Ahmed-Body-Simulation/ahmed_body_workflow.html">
+     Ahmed Body External Aerodynamics Simulation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../AnsysLab-exhaust-manifold/index.html">
+   AnsysLab-exhaust-manifold
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../AnsysLab-exhaust-manifold/exhaust_system11.html">
+     AnsysLab-exhaust-manifold
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Brake-Thermal-PyVista-Matplotlib
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Brake-Thermal-PyVista-Matplotlib
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../CHT/index.html">
+   CHT-Demo
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../CHT/CHT_Demo.html">
+     CHT-Demo
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../DOE-ML-Mixing-Elbow/index.html">
+   DOE-ML-Mixing-Elbow
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../DOE-ML-Mixing-Elbow/FluentDOE.html">
+     DOE-ML-Mixing-Elbow
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Dash-App-for-Post-processing/index.html">
+   Part-1-Create-PPTX-Part-2-Dash-App-for-Post-processing
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Dash-App-for-Post-processing/CreatePPTX.html">
+     Part-1-Create-PPTX
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Dash-App-for-Post-processing/DashApp.html">
+     Part-2-Dash-App-for-Post-processing
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Excel-Monitor-Points/index.html">
+   Excel-Monitor-Points
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Excel-Monitor-Points/excelCustomization.html">
+     Excel-Monitor-Points
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Fluent-Parametric/index.html">
+   Fluent-Parametric
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Fluent-Parametric/parametric.html">
+     Fluent-Parametric
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Graphics-Demo/index.html">
+   Graphics-Demo
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Graphics-Demo/pyFluentGraphics.html">
+     Graphics-Demo
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Gravity-Separator-PID/index.html">
+   Gravity-Separator-PID
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Gravity-Separator-PID/gravitySeparatorPID.html">
+     Gravity-Separator-PID
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../MixingTank-DOE/index.html">
+   MixingTank-DOE
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+  <label for="toctree-checkbox-12">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../MixingTank-DOE/mixingTankDOE.html">
+     MixingTank-DOE
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../MixingTank-WorkFlow/index.html">
+   MixingTank-WorkFlow
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+  <label for="toctree-checkbox-13">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../MixingTank-WorkFlow/mixingTank.html">
+     MixingTank-WorkFlow
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../PPTX-report-generation/index.html">
+   PPTX-report-generation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+  <label for="toctree-checkbox-14">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../PPTX-report-generation/powerPointReport.html">
+     PPTX-report-generation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../PyFluent-ACE-Training-at-22R2/index.html">
+   PyFluent-ACE-Training-at-22R2
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+  <label for="toctree-checkbox-15">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../PyFluent-ACE-Training-at-22R2/demo22R2.html">
+     PyFluent-ACE-Training-at-22R2
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Remote-Execution-in-Cluster/index.html">
+   Remote-Execution-in-Cluster
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/>
+  <label for="toctree-checkbox-16">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Remote-Execution-in-Cluster/remote_parallel.html">
+     Remote-Execution-in-Cluster
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Separator-Collection-Efficiency/index.html">
+   Separator-Collection-Efficiency
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/>
+  <label for="toctree-checkbox-17">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Separator-Collection-Efficiency/oil_separator.html">
+     Separator-Collection-Efficiency
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Steady-Vortex-VOF/index.html">
+   Steady-Vortex-VOF
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/>
+  <label for="toctree-checkbox-18">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Steady-Vortex-VOF/steady_vortex.html">
+     Steady-Vortex-VOF
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Tyler-Sofrin-Modes-Compressor/index.html">
+   Tyler-Sofrin-Modes-Compressor
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/>
+  <label for="toctree-checkbox-19">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Tyler-Sofrin-Modes-Compressor/TylerSofrinModes.html">
+     Tyler-Sofrin-Modes-Compressor
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+
+<nav id="bd-toc-nav">
+    
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-brake-thermal-pyvista-matplotlib-brake-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="brake-thermal-pyvista-matplotlib">
+<span id="sphx-glr-examples-brake-thermal-pyvista-matplotlib-brake-py"></span><h1>Brake-Thermal-PyVista-Matplotlib<a class="headerlink" href="#brake-thermal-pyvista-matplotlib" title="Permalink to this heading">#</a></h1>
+<p>These examples show you how you can use Fluent capabilities from Python to perform
+Fluent simulations. This includes geometry import, Fluent’s meshing workflows,
+setting up and running the solver, and reviewing the results using Fluent’s
+postprocessing capabilities.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Brake Thermal Example</span>
+
+<span class="c1"># Objective</span>
+<span class="c1"># Demonstrate:</span>
+<span class="c1"># Fluent setup and simulation using PyFluent</span>
+<span class="c1"># Post processing using PyVista and Matplotlib</span>
+
+<span class="c1"># Problem Description</span>
+<span class="c1"># Braking surface temperature assessment is vey important for safety</span>
+<span class="c1"># Brake fade, Vapor lock</span>
+<span class="c1"># Brake pad wear</span>
+<span class="c1"># Braking performance</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <a href="https://docs.python.org/dev/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a>
+
+<span class="c1"># import modules</span>
+<span class="kn">import</span> <span class="nn">ansys.fluent.core</span> <span class="k">as</span> <span class="nn">pyfluent</span>
+<span class="kn">from</span> <span class="nn">ansys.fluent.core</span> <span class="kn">import</span> <span class="n">examples</span>
+
+<span class="n">import_filename</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+    <span class="s2">&quot;brake.msh&quot;</span><span class="p">,</span> <span class="s2">&quot;pyfluent/examples/Brake-Thermal-PyVista-Matplotlib&quot;</span>
+<span class="p">)</span>  <span class="c1"># noqa: E501</span>
+
+<span class="c1"># Set log level</span>
+<span class="c1"># pyfluent.set_log_level(&quot;DEBUG&quot;)</span>
+
+<span class="c1"># Open Fluent in GUI mode</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">pyfluent</span><span class="o">.</span><span class="n">launch_fluent</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;3ddp&quot;</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="n">processor_count</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Check server status</span>
+<span class="n">session</span><span class="o">.</span><span class="n">check_health</span><span class="p">()</span>
+
+
+<span class="c1"># Read mesh file</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read_case</span><span class="p">(</span><span class="n">import_filename</span><span class="p">)</span>
+
+
+<span class="c1"># Define models and material</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">define</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">define</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">unsteady_2nd_order_bounded</span><span class="p">(</span><span class="s2">&quot;Yes&quot;</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">define</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span> <span class="s2">&quot;steel&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Solve only energy equation (conduction)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">equations</span><span class="p">(</span><span class="s2">&quot;flow&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;kw&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Define disc rotation</span>
+<span class="c1"># (15.79 rps corresponds to 100 km/h car speed</span>
+<span class="c1"># with 0.28 m of axis height from ground)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">define</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">solid</span><span class="p">(</span>
+    <span class="s2">&quot;disc1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;disc2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;()&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;solid-motion?&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;solid-omega&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">15.79</span><span class="p">,</span>
+    <span class="s2">&quot;solid-x-origin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">0.035</span><span class="p">,</span>
+    <span class="s2">&quot;solid-y-origin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="o">-</span><span class="mf">0.821</span><span class="p">,</span>
+    <span class="s2">&quot;solid-z-origin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="mf">0.045</span><span class="p">,</span>
+    <span class="s2">&quot;solid-ai&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;solid-aj&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;solid-ak&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># ### Apply frictional heating on pad-disc surfaces</span>
+<span class="c1"># (wall thickness 0f 2 mm has been assumed and</span>
+<span class="c1"># 2e9 w/m3 is the heat generation which has been</span>
+<span class="c1"># calculated from kinetic energy change due to braking)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">define</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">wall</span><span class="p">(</span>
+    <span class="s2">&quot;wall_pad-disc1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-pad-disc2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;()&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-thickness&quot;</span><span class="p">,</span>
+    <span class="mf">0.002</span><span class="p">,</span>
+    <span class="s2">&quot;q-dot&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="mf">2e9</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Outer surfaces are applied a constant htc of 100 W/(m2 K)</span>
+<span class="c1"># and 300 K free stream temperature</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">define</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">wall</span><span class="p">(</span>
+    <span class="s2">&quot;wall-disc*&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-geom*&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;()&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;thermal-bc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;convection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;convective-heat-transfer-coefficient&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Initialize with 300 K temperature</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">initialize</span><span class="o">.</span><span class="n">initialize_flow</span><span class="p">()</span>
+
+
+<span class="c1"># ### Report definitions, monitor plots and animation setup</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">report_definitions</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="s2">&quot;max-pad-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;volume-max&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zone-names&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;geom-1-innerpad&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;geom-1-outerpad&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">report_definitions</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="s2">&quot;max-disc-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;volume-max&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zone-names&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;disc1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;disc2&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">report_plots</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="s2">&quot;max-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;report-defs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max-pad-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max-disc-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;()&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">report_file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/dev/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a><span class="p">(</span><span class="n">pyfluent</span><span class="o">.</span><span class="n">EXAMPLES_PATH</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;max-temperature.out&quot;</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">report_files</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="s2">&quot;max-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;report-defs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max-pad-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max-disc-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;()&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file-name&quot;</span><span class="p">,</span>
+    <span class="n">report_file</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Set contour properties</span>
+<span class="n">session</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">contour</span><span class="p">[</span><span class="s2">&quot;contour-1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;boundary_values&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;color_map&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;field-velocity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;font_automatic&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;font_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Helvetica&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;font_size&quot;</span><span class="p">:</span> <span class="mf">0.032</span><span class="p">,</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%0.2e</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="mf">0.54</span><span class="p">,</span>
+        <span class="s2">&quot;log_scale&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;show_all&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s2">&quot;user_skip&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+        <span class="s2">&quot;visible&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mf">6.0</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;coloring&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;smooth&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="s2">&quot;contour_lines&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;display_state_name&quot;</span><span class="p">:</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;draw_mesh&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;mesh_object&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;node_values&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;range_option&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;auto_range_on&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;global_range&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}},</span>
+<span class="p">}</span>
+
+
+<span class="c1"># Create a graphic object</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="s2">&quot;contour&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;surface-list&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall*&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;()&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;color-map&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;format&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;</span><span class="si">%0.1f</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;range-option&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;auto-range-off&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;minimum&quot;</span><span class="p">,</span>
+    <span class="mi">300</span><span class="p">,</span>
+    <span class="s2">&quot;maximum&quot;</span><span class="p">,</span>
+    <span class="mi">400</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Select property to display</span>
+<span class="c1"># session.tui.display.objects.display(&quot;temperature&quot;)</span>
+
+<span class="c1"># Set views properties</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">restore_view</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">zoom_camera</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Save the animation</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">save_view</span><span class="p">(</span><span class="s2">&quot;animation-view&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create animation</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">animate</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="s2">&quot;animate-temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;animate-on&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;frequency-of&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;flow-time&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;flow-time-frequency&quot;</span><span class="p">,</span>
+    <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s2">&quot;view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;animation-view&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;q&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Run simulation for 2 seconds flow time</span>
+<span class="c1"># Set time step</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">set</span><span class="o">.</span><span class="n">transient_controls</span><span class="o">.</span><span class="n">time_step_size</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="c1"># Set number of iterations</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">solve</span><span class="o">.</span><span class="n">dual_time_iterate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># 200, 5</span>
+
+<span class="c1"># Write and save case file data</span>
+<span class="n">save_case_data_as</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/dev/library/pathlib.html#pathlib.Path" title="pathlib.Path" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Path</span></a><span class="p">(</span><span class="n">pyfluent</span><span class="o">.</span><span class="n">EXAMPLES_PATH</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;brake-final.cas.h5&quot;</span><span class="p">)</span>
+<span class="n">session</span><span class="o">.</span><span class="n">tui</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write_case_data</span><span class="p">(</span><span class="n">save_case_data_as</span><span class="p">)</span>
+
+
+<span class="c1"># PyVista post processing</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ansys.fluent.visualization.pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ansys.fluent.post.pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+
+
+<span class="c1"># Create a graphics session</span>
+<span class="n">graphics_session1</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Graphics</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
+
+<span class="c1"># Temperature contour</span>
+<span class="n">contour1</span> <span class="o">=</span> <span class="n">graphics_session1</span><span class="o">.</span><span class="n">Contours</span><span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># Following command shows setting/control options available</span>
+<span class="n">contour1</span><span class="p">()</span>
+
+<span class="c1"># Setting contour properties</span>
+<span class="n">contour1</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="s2">&quot;temperature&quot;</span>
+<span class="n">contour1</span><span class="o">.</span><span class="n">surfaces_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;wall-disc1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-disc2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-pad-disc2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall_pad-disc1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-geom-1-bp_inner&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-geom-1-bp_outer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-geom-1-innerpad&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wall-geom-1-outerpad&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">contour1</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">option</span> <span class="o">=</span> <span class="s2">&quot;auto-range-off&quot;</span>
+<span class="n">contour1</span><span class="p">()</span>
+<span class="n">contour1</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">auto_range_off</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">contour1</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">auto_range_off</span><span class="o">.</span><span class="n">maximum</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="c1"># contour1.display()</span>
+
+
+<span class="kn">import</span> <span class="nn">csv</span>
+
+<span class="c1"># Matplotlib: Reads Fluent monitor file and shows imbeded plot</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">datafile</span><span class="p">:</span>
+    <span class="n">plotting</span> <span class="o">=</span> <a href="https://docs.python.org/dev/library/csv.html#csv.reader" title="csv.reader" class="sphx-glr-backref-module-csv sphx-glr-backref-type-py-function"><span class="n">csv</span><span class="o">.</span><span class="n">reader</span></a><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">rows</span> <span class="ow">in</span> <span class="n">plotting</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+            <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">Z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.title.html#matplotlib.pyplot.title" title="matplotlib.pyplot.title" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">title</span></a><span class="p">(</span><span class="s2">&quot;Maximum Temperature&quot;</span><span class="p">,</span> <span class="n">fontdict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;darkred&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">})</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Max. Pad Temperature&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Max. Disc Temperature&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s2">&quot;Time (sec)&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s2">&quot;Max Temperature (K)&quot;</span><span class="p">)</span>
+    <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-large&quot;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-brake-thermal-pyvista-matplotlib-brake-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/815d4c980e4d18a60fb8e931e72d200e/brake.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">brake.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fb03e9b6d7d49e87d7bdece313105f58/brake.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">brake.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+              </article>
+              
+
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright (c) 2023 ANSYS, Inc. All rights reserved.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

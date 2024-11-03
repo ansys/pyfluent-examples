@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_Tyler-Sofrin-Modes-Compressor:
+
+Tyler-Sofrin-Modes-Compressor
+=============================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Tyler-Sofrin-Modes-Compressor">
+
+.. only:: html
+
+  .. image:: /examples/Tyler-Sofrin-Modes-Compressor/images/thumb/sphx_glr_TylerSofrinModes_thumb.png
+    :alt: Tyler-Sofrin-Modes-Compressor
+
+  :ref:`sphx_glr_examples_Tyler-Sofrin-Modes-Compressor_TylerSofrinModes.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Tyler-Sofrin-Modes-Compressor</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Tyler-Sofrin-Modes-Compressor/TylerSofrinModes
+

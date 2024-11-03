@@ -1,0 +1,41 @@
+
+
+.. _sphx_glr_examples_Excel-Monitor-Points:
+
+Excel-Monitor-Points
+====================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Excel-Monitor-Points">
+
+.. only:: html
+
+  .. image:: /examples/Excel-Monitor-Points/images/thumb/sphx_glr_excelCustomization_thumb.png
+    :alt: Excel-Monitor-Points
+
+  :ref:`sphx_glr_examples_Excel-Monitor-Points_excelCustomization.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Excel-Monitor-Points</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/Excel-Monitor-Points/excelCustomization
+
